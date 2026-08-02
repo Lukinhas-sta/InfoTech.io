@@ -1,0 +1,10 @@
+INFOTECH.IO — VERSÃO 5.0.5
+
+- Arquivos migrados para Supabase Storage (até 10 MB).
+- Chat online com atualização em tempo real.
+- Histórico automático de solicitações, mensagens, arquivos e andamento.
+- Notificações no painel do cliente e do administrador.
+- Prazo e etapas do projeto persistidos no Supabase e sincronizados com o cliente.
+- Mensagem de confirmação deixa claro que o andamento foi disponibilizado ao cliente.
+
+Antes de testar, execute CONFIGURAR-V5.0.5-SUPABASE.sql no SQL Editor.
