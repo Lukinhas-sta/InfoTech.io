@@ -14,7 +14,8 @@
 <link href="css/dashboard-v41.css" rel="stylesheet"/>
 <link href="css/refinement-v46.css" rel="stylesheet"/>
 <link href="css/admin-dashboard-v471.css" rel="stylesheet"/>
-<link href="css/refinement-v472.css" rel="stylesheet"/></head>
+<link href="css/refinement-v472.css" rel="stylesheet"/>
+<link href="css/dashboard-v510.css" rel="stylesheet"/></head>
 <body>
 <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
 <header class="site-header"><nav aria-label="Navegação principal" class="navbar"><div class="logo"><a href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a></div><a class="btn btn-outline admin-header-link" href="painel-cliente.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"></path></svg>Ver área do cliente</a></nav></header>
@@ -29,6 +30,31 @@
 <section class="dashboard-welcome admin-welcome" id="resumo">
 <div><span class="eyebrow">Central de atendimento</span><h2>Olá, <span data-admin-name="">Lucas</span>! <span aria-hidden="true">👋</span></h2><p>Acompanhe os pedidos, encontre clientes e priorize os próximos atendimentos.</p></div>
 <a class="btn btn-outline" href="painel-cliente.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"></path></svg>Testar como cliente</a>
+</section>
+<section aria-label="Indicadores profissionais" class="dashboard-kpis">
+<article class="dashboard-kpi"><span>Clientes cadastrados</span><strong data-v510-clients>0</strong><small>Contas no Supabase</small></article>
+<article class="dashboard-kpi"><span>Projetos ativos</span><strong data-v510-active>0</strong><small>Em execução agora</small></article>
+<article class="dashboard-kpi"><span>Mensagens registradas</span><strong data-v510-messages>0</strong><small>Conversas das solicitações</small></article>
+<article class="dashboard-kpi"><span>Arquivos enviados</span><strong data-v510-files>0</strong><small>Anexos no atendimento</small></article>
+</section>
+<section class="dashboard-v510-grid">
+<article class="dashboard-v510-panel">
+<span class="eyebrow">Pesquisa global</span><h3>Encontre clientes e solicitações</h3><p>Pesquise por nome, e-mail, protocolo, serviço ou título.</p>
+<label class="dashboard-global-search" for="dashboard-global-search"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9.5 3a6.5 6.5 0 1 0 4.1 11.55L19.05 20 20.5 18.55l-5.45-5.45A6.5 6.5 0 0 0 9.5 3zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"></path></svg><input id="dashboard-global-search" autocomplete="off" placeholder="Digite para pesquisar..." type="search"/></label>
+<div class="dashboard-search-results" data-v510-search-results><div class="dashboard-recent-item"><span>Comece a digitar para pesquisar no sistema.</span></div></div>
+</article>
+<article class="dashboard-v510-panel">
+<span class="eyebrow">Distribuição</span><h3>Solicitações por status</h3><p>Visão rápida da carga de trabalho atual.</p>
+<div class="dashboard-status-chart" data-v510-status-chart></div>
+</article>
+<article class="dashboard-v510-panel">
+<span class="eyebrow">Atividade recente</span><h3>Últimas movimentações</h3><p>Alterações mais recentes nas solicitações.</p>
+<div class="dashboard-recent-list" data-v510-recent></div>
+</article>
+<article class="dashboard-v510-panel">
+<span class="eyebrow">Saúde do sistema</span><h3>Conexão e dados</h3><p>Resumo da disponibilidade dos recursos principais.</p>
+<div class="dashboard-health" data-v510-health><span class="dashboard-health-dot"></span><div><strong>Verificando Supabase...</strong><span data-v510-health-text></span></div></div>
+</article>
 </section>
 <div aria-label="Resumo das solicitações. Selecione um card para filtrar a lista." class="dashboard-stats admin-stats admin-smart-stats">
 <button aria-pressed="true" class="admin-stat-card is-active" data-dashboard-filter="all" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 4v2h10V7H7zm0 4v2h10v-2H7zm0 4v2h6v-2H7z"></path></svg></span><strong data-admin-total="">0</strong><span>Solicitações</span><small>Todos os pedidos</small></button>
@@ -69,5 +95,5 @@
 
 
 
-<script src="css/jss/notifications-supabase.js"></script><script src="css/jss/refinement-v46.js"></script></body>
+<script src="css/jss/notifications-supabase.js"></script><script src="css/jss/dashboard-v510.js"></script><script src="css/jss/refinement-v46.js"></script></body>
 </html>
