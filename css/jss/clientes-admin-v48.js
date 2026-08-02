@@ -35,6 +35,15 @@
     if (error) throw error;
   };
 
+  const setClientBlocked = async (id, blocked) => {
+    const { data, error } = await client.rpc('admin_set_client_blocked', {
+      p_client_id: id,
+      p_blocked: Boolean(blocked)
+    });
+    if (error) throw error;
+    return data;
+  };
+
   const list = document.getElementById('admin-clients-list');
   if (list) {
     const search = document.getElementById('admin-client-search');
@@ -57,6 +66,7 @@
 
       list.innerHTML = rows.map(user => {
         const confirmed = Boolean(user.email_confirmed_at);
+        const blocked = Boolean(user.is_blocked);
         const roleLabel = user.role === 'admin' ? 'Administrador' : 'Cliente';
         return `<article class="client-card">
           <div class="client-avatar" aria-hidden="true">${escapeHtml(initials(user.full_name))}</div>
@@ -66,7 +76,8 @@
             <div class="client-meta"><span>${escapeHtml(roleLabel)}</span><span>Cadastro: ${formatDate(user.created_at)}</span><span>Último login: ${formatDate(user.last_sign_in_at)}</span></div>
           </div>
           <div class="client-actions">
-            <span class="client-status ${confirmed ? '' : 'is-blocked'}">${confirmed ? 'Confirmado' : 'Pendente'}</span>
+            <span class="client-status ${blocked || !confirmed ? 'is-blocked' : ''}">${blocked ? 'Bloqueado' : (confirmed ? 'Ativo' : 'Pendente')}</span>
+            ${user.role !== 'admin' ? `<button class="btn btn-outline" type="button" data-toggle-block="${escapeHtml(user.id)}" data-blocked="${blocked ? '1' : '0'}">${blocked ? 'Reativar' : 'Bloquear'}</button>` : ''}
             <button class="btn btn-outline" type="button" data-reset-password="${escapeHtml(user.email)}">Redefinir senha</button>
             <a class="btn btn-outline" href="cliente-admin.html?id=${encodeURIComponent(user.id)}">Ver perfil</a>
           </div>
@@ -76,6 +87,28 @@
 
     search?.addEventListener('input', render);
     list.addEventListener('click', async event => {
+      const blockButton = event.target.closest('[data-toggle-block]');
+      if (blockButton) {
+        const id = blockButton.dataset.toggleBlock;
+        const currentlyBlocked = blockButton.dataset.blocked === '1';
+        const action = currentlyBlocked ? 'reativar' : 'bloquear';
+        if (!window.confirm(`Deseja ${action} esta conta?`)) return;
+        blockButton.disabled = true;
+        const original = blockButton.textContent;
+        blockButton.textContent = currentlyBlocked ? 'Reativando...' : 'Bloqueando...';
+        try {
+          await setClientBlocked(id, !currentlyBlocked);
+          users = users.map(user => String(user.id) === String(id) ? {...user, is_blocked: !currentlyBlocked} : user);
+          render();
+          window.alert(currentlyBlocked ? 'Conta reativada.' : 'Conta bloqueada. O cliente não poderá entrar no sistema.');
+        } catch (error) {
+          console.error(error);
+          blockButton.disabled = false;
+          blockButton.textContent = original;
+          window.alert('Não foi possível alterar o bloqueio. Execute o SQL da versão 5.1.1 no Supabase.');
+        }
+        return;
+      }
       const button = event.target.closest('[data-reset-password]');
       if (!button) return;
       const email = button.dataset.resetPassword;
@@ -130,9 +163,23 @@
       document.querySelectorAll('[data-client-message-count]').forEach(el => el.textContent = String(messages));
       document.querySelectorAll('[data-client-confirmation-status]').forEach(el => {
         const confirmed = Boolean(user.email_confirmed_at);
-        el.textContent = confirmed ? 'E-mail confirmado' : 'Confirmação pendente';
-        el.classList.toggle('is-blocked', !confirmed);
+        const blocked = Boolean(user.is_blocked);
+        el.textContent = blocked ? 'Conta bloqueada' : (confirmed ? 'Conta ativa' : 'Confirmação pendente');
+        el.classList.toggle('is-blocked', blocked || !confirmed);
       });
+      const blockControl = document.querySelector('[data-client-block-toggle]');
+      if (blockControl && user.role !== 'admin') {
+        const syncBlockLabel = () => { blockControl.textContent = user.is_blocked ? 'Reativar conta' : 'Bloquear conta'; };
+        syncBlockLabel();
+        blockControl.addEventListener('click', async () => {
+          const next = !Boolean(user.is_blocked);
+          if (!window.confirm(next ? 'Bloquear esta conta?' : 'Reativar esta conta?')) return;
+          blockControl.disabled = true;
+          try { await setClientBlocked(user.id, next); user.is_blocked = next; syncBlockLabel(); document.querySelectorAll('[data-client-confirmation-status]').forEach(el=>{el.textContent=next?'Conta bloqueada':'Conta ativa';el.classList.toggle('is-blocked',next);}); window.alert(next?'Conta bloqueada.':'Conta reativada.'); }
+          catch(error){ console.error(error); window.alert('Não foi possível alterar o bloqueio.'); }
+          finally { blockControl.disabled = false; }
+        });
+      } else if (blockControl) blockControl.hidden = true;
       const reset = document.querySelector('[data-send-password-reset]');
       reset?.addEventListener('click', async () => {
         if (!window.confirm(`Enviar um link de redefinição de senha para ${user.email}?`)) return;

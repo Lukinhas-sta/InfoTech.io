@@ -1,0 +1,8 @@
+Infotech.io — Versão 5.1.1
+
+- Corrigido o salvamento e a leitura do progresso do projeto.
+- Atualizado o cache do script de progresso no GitHub Pages.
+- Restaurado o botão Bloquear/Reativar na lista de clientes e no perfil.
+- Bloqueio armazenado no Supabase.
+- Contas bloqueadas não conseguem entrar nem manter sessão ativa.
+- Conta administrativa não pode ser bloqueada pela interface.

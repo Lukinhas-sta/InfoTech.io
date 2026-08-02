@@ -84,6 +84,13 @@
   });
   window.infotechSupabase = client;
 
+  const getOnlineProfile = async userId => {
+    if (!userId) return null;
+    const { data, error } = await client.from('profiles').select('role,is_blocked').eq('id', userId).maybeSingle();
+    if (error) console.warn('Não foi possível verificar o status da conta:', error.message);
+    return data || null;
+  };
+
   document.querySelectorAll('[data-toggle-password]').forEach(button => {
     button.addEventListener('click', () => {
       const input = document.getElementById(button.dataset.togglePassword);
@@ -118,11 +125,12 @@
       return;
     }
     const localAccount = readAccounts().find(a => a.id === data.user.id || normalizeEmail(a.email) === normalizeEmail(data.user.email));
-    if (localAccount?.status === 'blocked') {
+    const onlineProfile = await getOnlineProfile(data.user.id);
+    if (onlineProfile?.is_blocked || localAccount?.status === 'blocked') {
       await client.auth.signOut();
       clearCurrentUser();
       setBusy(loginForm, false);
-      setMessage(message, 'Esta conta está bloqueada neste ambiente administrativo.');
+      setMessage(message, 'Esta conta foi bloqueada pela Infotech. Entre em contato para solicitar a reativação.');
       return;
     }
     mirrorUser(data.user);
@@ -358,7 +366,8 @@
     const user = session?.user || null;
     if (user) {
       const localAccount = readAccounts().find(a => a.id === user.id || normalizeEmail(a.email) === normalizeEmail(user.email));
-      if (localAccount?.status === 'blocked') {
+      const onlineProfile = await getOnlineProfile(user.id);
+      if (onlineProfile?.is_blocked || localAccount?.status === 'blocked') {
         await client.auth.signOut();
         clearCurrentUser();
         if (protectedPage) redirectToLogin(); else renderNavigation(null);
