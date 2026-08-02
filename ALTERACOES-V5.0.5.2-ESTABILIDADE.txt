@@ -1,0 +1,9 @@
+INFOTECH.IO — VERSÃO 5.0.5.2 — REVISÃO DE ESTABILIDADE
+
+- Revisado o salvamento do andamento do projeto.
+- A função SQL agora atualiza updated_at e solicita a recarga do cache da API.
+- O JavaScript aceita corretamente retorno em objeto ou lista do Supabase.
+- Mensagem mais clara quando a função ainda não entrou no cache do Supabase.
+- Adicionado identificador de versão ao script de projeto para evitar cache antigo no GitHub Pages.
+- Verificados links locais, arquivos HTML, CSS e JavaScript.
+- Mantidas as funções existentes de cadastro, login, clientes, solicitações, chat, arquivos e notificações.

@@ -170,7 +170,8 @@ begin
 
   update public.requests
   set project = coalesce(p_project, project),
-      status = coalesce(nullif(p_status, ''), status)
+      status = coalesce(nullif(p_status, ''), status),
+      updated_at = now()
   where id = p_request_id
   returning * into v_request;
 
@@ -184,3 +185,7 @@ $$;
 
 revoke all on function public.admin_update_request_project(uuid,jsonb,text) from public;
 grant execute on function public.admin_update_request_project(uuid,jsonb,text) to authenticated;
+
+
+-- Atualiza imediatamente o cache de funções da API do Supabase.
+notify pgrst, 'reload schema';

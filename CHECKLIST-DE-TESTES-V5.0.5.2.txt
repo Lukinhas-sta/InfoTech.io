@@ -1,0 +1,14 @@
+CHECKLIST DE TESTES — V5.0.5.2
+
+1. Cadastro e confirmação de e-mail.
+2. Login e logout do cliente.
+3. Login do administrador.
+4. Criação de uma solicitação.
+5. Visualização da solicitação nos dois painéis.
+6. Alteração do status pelo administrador.
+7. Previsão e etapas do projeto salvas pelo administrador.
+8. Progresso visível na conta do cliente.
+9. Mensagem enviada nos dois sentidos.
+10. Arquivo enviado e baixado nos dois sentidos.
+11. Notificações e histórico.
+12. Teste em computador e celular.
