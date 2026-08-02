@@ -1,0 +1,14 @@
+Infotech.io — Versão 4.7.1
+
+Dashboard Administrativo Inteligente:
+- Saudação e resumo administrativo no topo do painel.
+- Indicadores automáticos de solicitações, análise, andamento, conclusão e prioridade alta.
+- Cards do resumo clicáveis e sincronizados com a lista.
+- Pesquisa em tempo real por cliente, protocolo, serviço e empresa.
+- Filtros rápidos para todos, em análise, em andamento, concluídos e cancelados.
+- Prioridade alta calculada para solicitações ativas com prazo de até 7 dias ou prioridade explícita.
+- Layout responsivo para desktop, tablet e celular, sem rolagem horizontal.
+
+Preservado:
+- Chat, arquivos, projeto, histórico, notificações e orçamentos.
+- Login, área do cliente e fluxo atual de solicitações.

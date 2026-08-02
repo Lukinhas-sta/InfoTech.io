@@ -1,0 +1,48 @@
+Infotech.io — Versão 4.7.2
+Sprint de Refinamento
+
+RESPONSIVIDADE
+- Revisadas as 16 páginas HTML em desktop e celular.
+- Eliminados riscos de rolagem horizontal em cards, formulários, arquivos, projeto e painéis.
+- Navegação lateral dos painéis cliente e administrativo reorganizada em grade compacta no celular.
+- Cards administrativos mantidos em duas colunas nos celulares compatíveis, com fallback de uma coluna apenas em telas muito estreitas.
+- Filtros administrativos reorganizados em duas colunas no celular.
+- Ajustados espaçamentos, larguras, quebras de texto e áreas de toque.
+- Cabeçalhos administrativos passam a usar ação compacta em celulares estreitos, evitando sobreposição com a marca.
+
+DASHBOARD ADMINISTRATIVO
+- Contadores, cards, gráfico de distribuição e filtros passaram a usar os mesmos agrupamentos de status.
+- O grupo "Em análise" reúne as etapas de avaliação e aprovação do orçamento.
+- O grupo "Em andamento" inclui solicitações aprovadas e projetos já iniciados.
+- Corrigida a concordância do total de resultados: "1 solicitação encontrada" e "N solicitações encontradas".
+- Mantidas pesquisa em tempo real, prioridade automática, notificações e cards clicáveis.
+
+PROJETO E HISTÓRICO
+- Data prevista de entrega passou a ser exibida no padrão brasileiro, sem alterar o valor salvo pelo formulário administrativo.
+- Revisados barra de progresso, etapas, mudança automática de status e histórico.
+- Confirmada a atualização do progresso entre as visões administrativa e do cliente.
+
+ARQUIVOS E CHAT
+- Revisados upload, limite de arquivos, prévia de imagens, nome do download, exclusão, leitura e notificações.
+- Revisados envio de mensagens, marcação de leitura e notificações entre cliente e administrador.
+- Melhoradas quebras de nomes de arquivo, organização dos cards e espaçamento dos formulários no celular.
+
+PADRONIZAÇÃO VISUAL
+- Todas as páginas agora carregam css/refinement-v472.css como camada única de refinamento.
+- Padronizados títulos das abas no formato "Infotech.io | Página".
+- Favicon confirmado em todas as páginas; adicionado à confirmação de solicitação, onde estava ausente.
+- Unificados sombras, alturas de campos, espaçamentos e comportamento de foco sem alterar as cores da marca.
+- Respeitada a preferência do sistema por redução de movimento.
+
+CÓDIGO E ESTABILIDADE
+- Reaproveitados os módulos existentes, sem duplicar a lógica de login, solicitações, orçamento, chat, arquivos, projeto ou histórico.
+- Agrupamentos de status centralizados no script do dashboard para evitar divergência entre contadores e filtros.
+- Mantida a estrutura HTML, CSS e JavaScript existente.
+- Sintaxe, referências de arquivos, IDs e recursos locais verificados.
+
+FUNCIONALIDADES PRESERVADAS
+- Site institucional, cadastro, login e perfil.
+- Área do cliente e painel administrativo.
+- Solicitações, pesquisa, filtros e dashboard.
+- Chat, notificações, orçamentos e aprovação.
+- Arquivos, projeto, progresso e histórico.

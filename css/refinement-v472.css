@@ -1,0 +1,275 @@
+/* Infotech.io — Versão 4.7.2 | Sprint de refinamento */
+
+:root {
+  --surface-shadow: 0 18px 48px rgba(0, 0, 0, .2);
+}
+
+body,
+main,
+.site-header,
+.site-footer {
+  max-width: 100%;
+}
+
+:where(button, input, select, textarea, .btn) {
+  max-width: 100%;
+}
+
+:where(.dashboard-welcome, .request-section, .detail-card, .request-workspace, .attachments-card, .project-card, .chat-card, .profile-form-card, .profile-info-card) {
+  box-shadow: var(--surface-shadow);
+}
+
+:where(.request-card, .attachment-item, .project-stage, .project-stage-admin) {
+  min-width: 0;
+}
+
+:where(.request-owner, .admin-request-company, .attachment-info, .project-stage > div, .activity-content) {
+  overflow-wrap: anywhere;
+}
+
+.request-form input,
+.request-form select,
+.auth-form input,
+.auth-form select,
+.profile-form-card input {
+  min-height: 48px;
+}
+
+.request-form textarea,
+.auth-form textarea,
+.chat-form textarea {
+  line-height: 1.55;
+}
+
+.project-progress {
+  border: 1px solid rgba(255, 255, 255, .04);
+}
+
+.project-progress span {
+  min-width: 0;
+}
+
+.file-drop,
+.attachment-item,
+.project-stage,
+.admin-list-toolbar {
+  transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+@media (hover: hover) {
+  .file-drop:hover,
+  .attachment-item:hover,
+  .project-stage:hover {
+    border-color: rgba(50, 230, 255, .26);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .14);
+  }
+}
+
+@media (max-width: 760px) {
+  .dashboard-shell {
+    gap: 18px;
+  }
+
+  .dashboard-sidebar,
+  .admin-dashboard .dashboard-sidebar {
+    display: block;
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .dashboard-sidebar h1 {
+    margin-bottom: 4px;
+    font-size: 1.25rem;
+  }
+
+  .dashboard-sidebar > div > p {
+    font-size: .82rem;
+  }
+
+  .dashboard-sidebar nav,
+  .admin-dashboard .dashboard-sidebar nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin: 16px 0 10px;
+  }
+
+  .dashboard-sidebar nav a,
+  .dashboard-exit,
+  .admin-dashboard .dashboard-exit {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    margin: 0;
+    padding: 10px 11px;
+    border-radius: 10px;
+  }
+
+  .admin-dashboard .dashboard-sidebar nav a:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .dashboard-exit,
+  .admin-dashboard .dashboard-exit {
+    justify-content: center;
+    border: 1px solid rgba(255, 88, 105, .14);
+    background: rgba(255, 88, 105, .045);
+  }
+
+  .dashboard-welcome {
+    padding: 22px;
+    border-radius: 18px;
+  }
+
+  .dashboard-stats {
+    gap: 10px;
+    margin: 16px 0 24px;
+  }
+
+  .dashboard-stats article {
+    padding: 18px;
+  }
+
+  .dashboard-two-column {
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .request-section,
+  .profile-preview,
+  .timeline-card {
+    margin-top: 16px;
+  }
+
+  .request-workspace {
+    margin-top: 18px;
+  }
+
+  .request-tabs {
+    position: static;
+  }
+
+  .request-tab {
+    white-space: nowrap;
+  }
+
+  .activity-card,
+  .quick-overview-card {
+    border-radius: 18px;
+  }
+
+  .prototype-warning {
+    padding: 13px 15px;
+    font-size: .9rem;
+  }
+
+  .attachment-info strong {
+    white-space: normal;
+  }
+
+  .project-stage-admin input[type="text"] {
+    flex: 1 1 190px;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .dashboard-sidebar > div > p {
+    display: none;
+  }
+
+  .dashboard-welcome h2 {
+    line-height: 1.2;
+  }
+
+  .admin-smart-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-stat-card {
+    min-height: 148px;
+    padding: 16px;
+  }
+
+  .admin-stat-card:last-child {
+    grid-column: 1 / -1;
+    min-height: 132px;
+  }
+
+  .admin-filter-chips {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-filter-chip:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .admin-list-toolbar {
+    padding: 12px;
+  }
+
+  .admin-search input {
+    padding-right: 12px;
+    font-size: .9rem;
+  }
+
+  .attachments-heading,
+  .project-heading,
+  .chat-card-heading {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar {
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+
+  .admin-header-link {
+    flex: 0 0 44px;
+    width: 44px !important;
+    min-width: 44px;
+    padding: 10px !important;
+    gap: 0;
+    overflow: hidden;
+    font-size: 0 !important;
+    white-space: nowrap;
+  }
+
+  .admin-header-link svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 330px) {
+  .dashboard-sidebar nav,
+  .admin-dashboard .dashboard-sidebar nav,
+  .admin-smart-stats,
+  .admin-filter-chips {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard .dashboard-sidebar nav a:last-child,
+  .admin-stat-card:last-child,
+  .admin-filter-chip:first-child {
+    grid-column: auto;
+  }
+
+  .admin-stat-card,
+  .admin-stat-card:last-child {
+    min-height: 132px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .file-drop,
+  .attachment-item,
+  .project-stage,
+  .project-stage-admin,
+  .admin-list-toolbar {
+    transition: none;
+  }
+}

@@ -1,0 +1,12 @@
+Infotech.io / Segurança — Versão 4.9.1
+
+- Cliente pode alterar a senha no Meu Perfil informando a senha atual.
+- Troca de senha encerra outras sessões da conta.
+- Login registra último acesso e atividade recente.
+- Administrador pode encerrar todas as sessões sem bloquear a conta.
+- Perfil administrativo mostra último login, alteração de senha e encerramento de sessões.
+- Bloqueio e reativação passam a invalidar sessões antigas.
+- Ações de segurança ficam registradas em um histórico local.
+- Link de redefinição abre com o e-mail do cliente preenchido.
+
+Observação: demonstração local baseada em localStorage; não substitui autenticação real em servidor.

@@ -1,0 +1,249 @@
+/* Infotech.io — Versão 4.6 | Refinamento global */
+
+:root {
+  --tap-size: 44px;
+  --content-gutter: clamp(16px, 4vw, 28px);
+  --focus-ring: 0 0 0 3px rgba(0, 229, 255, .28);
+}
+
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
+}
+
+body {
+  min-width: 0;
+  overflow-x: clip;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+*, *::before, *::after { min-width: 0; }
+
+img, svg, video, canvas {
+  max-width: 100%;
+}
+
+button, input, select, textarea, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button:not(:disabled),
+select:not(:disabled),
+input[type="checkbox"]:not(:disabled),
+input[type="radio"]:not(:disabled) {
+  cursor: pointer;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid #00e5ff;
+  outline-offset: 3px;
+  box-shadow: var(--focus-ring);
+}
+
+:where(.btn, .auth-primary, .auth-secondary, .request-tab, .file-action, .notification-button) {
+  min-height: var(--tap-size);
+}
+
+.btn,
+.auth-primary,
+.auth-secondary {
+  line-height: 1.2;
+  text-align: center;
+  justify-content: center;
+  white-space: normal;
+}
+
+/* Evita estouro com e-mails, protocolos e nomes de arquivo. */
+:where(p, dd, td, .request-id, .file-name, .notification-text, .message-bubble, .activity-item) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.container {
+  width: min(100% - (var(--content-gutter) * 2), 1180px);
+}
+
+.site-header {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.logo a,
+.footer-logo {
+  letter-spacing: -.02em;
+}
+
+/* Abas: uso confortável no celular sem sair da tela. */
+.request-tabs {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.request-tab {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+.request-tab[aria-selected="true"] {
+  box-shadow: inset 0 -2px 0 #00e5ff;
+}
+
+.request-tab-panel[hidden] { display: none !important; }
+
+/* Formulários mais consistentes. */
+:where(.auth-form, .request-form, .chat-form, .project-admin-form) input,
+:where(.auth-form, .request-form, .chat-form, .project-admin-form) select,
+:where(.auth-form, .request-form, .chat-form, .project-admin-form) textarea {
+  width: 100%;
+  max-width: 100%;
+}
+
+textarea { resize: vertical; }
+
+input:disabled,
+select:disabled,
+textarea:disabled,
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* Cards e painéis: alturas e espaçamentos mais regulares. */
+:where(.feature-card, .service-card, .detail-card, .timeline-card, .attachment-card, .project-card, .dashboard-card, .stat-card) {
+  max-width: 100%;
+}
+
+:where(.detail-card, .timeline-card, .project-card, .attachment-card) {
+  scroll-margin-top: 92px;
+}
+
+.attachment-card img,
+.file-preview img {
+  object-fit: cover;
+  aspect-ratio: 16 / 10;
+}
+
+/* Mensagens: leitura mais confortável. */
+.message-bubble,
+.chat-message {
+  max-width: min(86%, 720px);
+}
+
+/* Rodapé compacto e sem quebra estranha em telas pequenas. */
+.footer-simple,
+.footer-bottom {
+  gap: 10px;
+}
+
+.footer-bottom p { margin: 0; }
+
+/* Tablets e celulares */
+@media (max-width: 760px) {
+  :root { --content-gutter: 16px; }
+
+  /* O cabeçalho passa a ocupar espaço no fluxo no celular.
+     Remove o recuo antigo usado quando ele era fixo. */
+  body { padding-top: 0; }
+
+  .site-header { position: sticky; top: 0; }
+
+  .hero,
+  .section,
+  .detail-shell,
+  .dashboard-shell,
+  .auth-shell {
+    max-width: 100%;
+  }
+
+  .hero-actions,
+  .cta,
+  .chat-form-footer,
+  .form-actions,
+  .project-actions {
+    align-items: stretch;
+  }
+
+  .hero-actions .btn,
+  .cta .btn,
+  .form-actions .btn,
+  .chat-form-footer .btn,
+  .project-actions .btn {
+    width: 100%;
+  }
+
+  .request-tabs {
+    margin-inline: calc(var(--content-gutter) * -1);
+    padding-inline: var(--content-gutter);
+  }
+
+  .request-tab {
+    padding-inline: 14px;
+    font-size: .9rem;
+  }
+
+  .detail-header {
+    align-items: flex-start;
+  }
+
+  .message-bubble,
+  .chat-message { max-width: 94%; }
+
+  .footer-simple { padding-block: 28px 18px; }
+  .footer-bottom {
+    padding-block: 16px 22px;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .request-tab {
+    gap: 6px;
+    padding: 10px 12px;
+  }
+
+  .request-tab svg { width: 17px; height: 17px; }
+
+  .status,
+  .request-id { font-size: .78rem; }
+
+  .footer-break { display: none; }
+}
+
+/* Respeita usuários que preferem menos movimento. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Impressão útil para orçamento/detalhes. */
+@media print {
+  .site-header,
+  .site-footer,
+  .request-tabs,
+  .chat-form,
+  .attachment-upload,
+  button,
+  .btn { display: none !important; }
+
+  body { background: #fff !important; color: #111 !important; }
+  .request-tab-panel[hidden] { display: block !important; }
+  .detail-card, .timeline-card, .project-card { break-inside: avoid; box-shadow: none !important; }
+}
