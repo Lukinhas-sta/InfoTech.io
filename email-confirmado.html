@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#050816" name="theme-color"/>
+<meta content="Confirmação de e-mail da Infotech.io." name="description"/>
+<meta content="noindex, nofollow" name="robots"/>
+<title>Infotech.io | E-mail confirmado</title>
+<link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22&gt;&lt;rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23050816%22/&gt;&lt;path d=%22M18 18h28v8H36v20h10v8H18v-8h10V26H18z%22 fill=%22%2300e5ff%22/&gt;&lt;/svg&gt;" rel="icon"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/responsivo.css" rel="stylesheet"/>
+<link href="css/auth.css" rel="stylesheet"/>
+<link href="css/refinement-v46.css" rel="stylesheet"/>
+<link href="css/refinement-v472.css" rel="stylesheet"/>
+<style>
+.confirmation-card{max-width:620px;margin-inline:auto;text-align:center;padding:clamp(2rem,5vw,3.5rem)}
+.confirmation-icon{width:88px;height:88px;margin:0 auto 1.4rem;border-radius:50%;display:grid;place-items:center;background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.45);box-shadow:0 0 38px rgba(0,229,255,.18)}
+.confirmation-icon svg{width:48px;height:48px;fill:#00e5ff}
+.confirmation-card h1{margin-bottom:.8rem}
+.confirmation-card p{max-width:48ch;margin-inline:auto}
+.confirmation-actions{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap;margin-top:1.5rem}
+.confirmation-countdown{margin-top:1rem;font-size:.95rem;opacity:.8}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<header class="site-header">
+<nav aria-label="Navegação principal" class="navbar">
+<div class="logo"><a href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a></div>
+<button aria-controls="menu-principal" aria-expanded="false" aria-label="Abrir menu" class="menu-mobile" type="button"><span></span><span></span><span></span></button>
+<ul class="menu" id="menu-principal"><li><a href="index.html">Início</a></li><li><a href="servicos.html">Serviços</a></li><li><a href="solicitacoes.html">Solicitações</a></li><li><a href="projetos.html">Projetos</a></li><li><a href="contato.html">Contato</a></li><li><a href="sobre.html">Sobre Nós</a></li></ul>
+</nav>
+</header>
+<main id="conteudo">
+<section class="auth-shell container">
+<div class="auth-card confirmation-card">
+<div class="confirmation-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg></div>
+<span class="eyebrow">Cadastro concluído</span>
+<h1>Bem-vindo à Infotech.io!</h1>
+<p>Seu e-mail foi confirmado com sucesso. Sua conta já está pronta para acessar a área do cliente.</p>
+<div class="confirmation-actions">
+<a class="btn auth-primary" id="confirmation-login-link" href="login.html">Entrar na plataforma</a>
+<a class="btn btn-outline" href="index.html">Voltar ao início</a>
+</div>
+<p class="confirmation-countdown" aria-live="polite">Você será direcionado para o login em <strong id="confirmation-countdown">5</strong> segundos.</p>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="footer-simple container"><a class="footer-logo" href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a><p>Transformando ideias em soluções digitais úteis,<br class="footer-break"/> modernas e acessíveis.</p></div>
+<div class="footer-bottom container"><p>© 2026 Infotech.io</p><p>Tecnologia • Inovação • Soluções</p></div>
+</footer>
+<script src="css/jss/script.js"></script>
+<script>
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  const allowed = new Set(['painel-cliente.html', 'nova-solicitacao.html', 'perfil.html']);
+  const destino = allowed.has(params.get('destino')) ? params.get('destino') : '';
+  const loginUrl = destino ? `login.html?destino=${encodeURIComponent(destino)}` : 'login.html';
+  const link = document.getElementById('confirmation-login-link');
+  const counter = document.getElementById('confirmation-countdown');
+  if (link) link.href = loginUrl;
+  let seconds = 5;
+  const timer = window.setInterval(() => {
+    seconds -= 1;
+    if (counter) counter.textContent = String(Math.max(seconds, 0));
+    if (seconds <= 0) {
+      window.clearInterval(timer);
+      window.location.href = loginUrl;
+    }
+  }, 1000);
+})();
+</script>
+<script src="css/jss/refinement-v46.js"></script>
+</body>
+</html>

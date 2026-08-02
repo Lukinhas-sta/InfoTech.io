@@ -157,7 +157,7 @@
       password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: new URL(`login.html${destinationQuery}`, window.location.href).href
+        emailRedirectTo: new URL(`email-confirmado.html${destinationQuery}`, window.location.href).href
       }
     });
     if (error) {
