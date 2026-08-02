@@ -1,0 +1,7 @@
+INFOTECH.IO — VERSÃO 5.1.4
+
+CORREÇÕES
+- Removido o uso obrigatório de crypto.randomUUID().
+- Adicionado gerador de UUID compatível com navegadores antigos.
+- Corrigidos andamento do projeto, chat e upload de arquivos que podiam falhar com esse erro.
+- Mantido fallback com crypto.getRandomValues e, em último caso, Math.random.

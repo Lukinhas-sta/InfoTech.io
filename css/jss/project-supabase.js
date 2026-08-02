@@ -1,5 +1,14 @@
 (() => {
   'use strict';
+  const makeId=()=>{
+    if(globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function')return globalThis.makeId();
+    const bytes=new Uint8Array(16);
+    if(globalThis.crypto&&typeof globalThis.crypto.getRandomValues==='function')globalThis.crypto.getRandomValues(bytes);
+    else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);
+    bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;
+    const hex=[...bytes].map(b=>b.toString(16).padStart(2,'0'));
+    return `${hex.slice(0,4).join('')}-${hex.slice(4,6).join('')}-${hex.slice(6,8).join('')}-${hex.slice(8,10).join('')}-${hex.slice(10).join('')}`;
+  };
   const cfg=window.INFOTECH_SUPABASE_CONFIG;
   if(!cfg||!window.supabase)return;
   const db=window.infotechSupabase||window.supabase.createClient(cfg.url,cfg.publishableKey);
@@ -48,7 +57,7 @@
             const nameInput=stages.querySelector(`[data-stage-name="${i}"]`);
             const done=Boolean(checkbox?.checked);
             const name=(nameInput?.value||'').trim()||s.name;
-            if(done!==s.done)p.history.unshift({id:crypto.randomUUID(),text:done?`Etapa “${name}” concluída.`:`Etapa “${name}” reaberta.`,at:now});
+            if(done!==s.done)p.history.unshift({id:makeId(),text:done?`Etapa “${name}” concluída.`:`Etapa “${name}” reaberta.`,at:now});
             s.done=done;s.name=name;s.doneAt=done?(s.doneAt||now):null;
           });
           const pct=progress(p);
