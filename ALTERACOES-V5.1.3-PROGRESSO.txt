@@ -1,0 +1,8 @@
+Infotech.io — Versão 5.1.3
+
+- O botão Salvar andamento deixou de enviar formulário e não pode mais redirecionar para a lista de solicitações.
+- Criada a função admin_save_request_project_v2 com um único payload JSON, evitando incompatibilidade de parâmetros no cache do Supabase.
+- O painel só informa sucesso depois que o banco confirma o request_id salvo.
+- O andamento é lido diretamente da tabela request_projects pelo administrador e pelo cliente.
+- Atualização em tempo real do progresso do cliente sem recarregar ou sair da solicitação.
+- Cache do JavaScript atualizado para v5.1.3.
