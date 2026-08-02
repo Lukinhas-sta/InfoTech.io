@@ -71,3 +71,17 @@ to authenticated using (
 
 grant select, insert, update on public.requests to authenticated;
 grant usage, select on sequence public.request_protocol_seq to authenticated;
+
+-- Versão 5.0.4.1: andamento do projeto salvo no Supabase
+alter table public.requests add column if not exists project jsonb not null default jsonb_build_object(
+  'deadline','',
+  'stages',jsonb_build_array(
+    jsonb_build_object('id','stage-1','name','Planejamento','done',false,'doneAt',null),
+    jsonb_build_object('id','stage-2','name','Design','done',false,'doneAt',null),
+    jsonb_build_object('id','stage-3','name','Desenvolvimento','done',false,'doneAt',null),
+    jsonb_build_object('id','stage-4','name','Testes','done',false,'doneAt',null),
+    jsonb_build_object('id','stage-5','name','Entrega','done',false,'doneAt',null)
+  ),
+  'history','[]'::jsonb,
+  'updatedAt',null
+);

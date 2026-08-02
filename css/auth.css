@@ -192,3 +192,7 @@
 
 /* Proteção visual durante a validação administrativa pelo Supabase. */
 html.admin-auth-checking body { visibility: hidden; }
+
+/* v5.0.4.1 */
+.auth-shell:has(.auth-card-centered){grid-template-columns:minmax(0,560px);justify-content:center;}
+.auth-card-centered{width:100%;}
