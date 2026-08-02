@@ -142,3 +142,45 @@ exception when duplicate_object then null; end $$;
 do $$ begin
   alter publication supabase_realtime add table public.request_events;
 exception when duplicate_object then null; end $$;
+
+
+-- Correção 5.0.5.1: salvamento administrativo confiável do andamento
+create or replace function public.admin_update_request_project(
+  p_request_id uuid,
+  p_project jsonb,
+  p_status text
+)
+returns public.requests
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_is_admin boolean;
+  v_request public.requests;
+begin
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role = 'admin'
+  ) into v_is_admin;
+
+  if not v_is_admin then
+    raise exception 'Acesso administrativo não autorizado';
+  end if;
+
+  update public.requests
+  set project = coalesce(p_project, project),
+      status = coalesce(nullif(p_status, ''), status)
+  where id = p_request_id
+  returning * into v_request;
+
+  if v_request.id is null then
+    raise exception 'Solicitação não encontrada';
+  end if;
+
+  return v_request;
+end;
+$$;
+
+revoke all on function public.admin_update_request_project(uuid,jsonb,text) from public;
+grant execute on function public.admin_update_request_project(uuid,jsonb,text) to authenticated;

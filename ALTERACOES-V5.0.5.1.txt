@@ -1,0 +1,7 @@
+Infotech.io — Versão 5.0.5.1
+
+- Corrigido o salvamento do andamento do projeto.
+- O administrador agora salva prazo, etapas e porcentagem por uma função segura do Supabase.
+- O painel só mostra sucesso depois que o banco confirma a atualização.
+- Mensagens de erro do Supabase são exibidas para facilitar o diagnóstico.
+- O cliente continua lendo o mesmo campo project da solicitação.
