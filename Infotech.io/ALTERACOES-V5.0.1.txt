@@ -1,0 +1,30 @@
+INFOTECH.IO — VERSÃO 5.0.1 — AUTENTICAÇÃO SUPABASE
+
+IMPLEMENTADO
+- Cadastro real com e-mail e senha no Supabase Auth.
+- Login real com sessão persistente.
+- Logout real.
+- Proteção das páginas do cliente usando a sessão Supabase.
+- Nome salvo em user_metadata.full_name.
+- Edição de nome/e-mail pelo perfil.
+- Troca de senha real pelo perfil.
+- Recuperação de senha por e-mail.
+- Espelho local temporário do usuário para manter compatibilidade com as solicitações da versão 4.x.
+
+IMPORTANTE
+- Use Live Server ou hospedagem HTTP; não abra apenas com file://.
+- Se a confirmação de e-mail estiver ativa no Supabase, o usuário precisa confirmar o e-mail antes do primeiro login.
+- Em Authentication > URL Configuration, adicione as URLs usadas no teste, por exemplo:
+  http://127.0.0.1:5500/**
+  http://localhost:5500/**
+- A chave secreta/service_role NÃO foi usada no projeto.
+- Nesta 5.0.1 apenas a autenticação é online. Solicitações, mensagens, arquivos e painel administrativo ainda usam localStorage e serão migrados nas próximas etapas.
+
+TESTE RÁPIDO
+1. Abra a pasta com Live Server.
+2. Crie uma conta em cadastro.html.
+3. Confirme o e-mail, se solicitado.
+4. Entre em login.html.
+5. Atualize a página e confirme que a sessão permanece.
+6. Abra o mesmo endereço em outro dispositivo após publicar/hospedar e entre com a mesma conta.
+7. Veja o usuário em Supabase > Authentication > Users.

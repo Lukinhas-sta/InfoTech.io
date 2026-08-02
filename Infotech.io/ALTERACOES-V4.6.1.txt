@@ -1,0 +1,7 @@
+Infotech.io — Versão 4.6.1
+
+Correções:
+- Títulos das abas administrativas padronizados com a marca Infotech.io.
+- Favicon adicionado às páginas administrativas.
+- Removido o espaço extra antes do banner principal no celular.
+- Cabeçalho móvel continua fixo de forma natural pelo modo sticky.

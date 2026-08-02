@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#050816" name="theme-color"/>
+<meta content="noindex, nofollow" name="robots"/>
+<title>Infotech.io | Gerenciar solicitação</title>
+<link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22&gt;&lt;rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23050816%22/&gt;&lt;path d=%22M18 18h28v8H36v20h10v8H18v-8h10V26H18z%22 fill=%22%2300e5ff%22/&gt;&lt;/svg&gt;" rel="icon"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/responsivo.css" rel="stylesheet"/>
+<link href="css/auth.css" rel="stylesheet"/>
+<link href="css/dashboard-v41.css" rel="stylesheet"/>
+<link href="css/attachments.css" rel="stylesheet"/>
+<link href="css/project.css" rel="stylesheet"/><link href="css/request-tabs.css" rel="stylesheet"/><link href="css/refinement-v46.css" rel="stylesheet"/><link href="css/refinement-v472.css" rel="stylesheet"/></head>
+<body>
+<header class="site-header"><nav class="navbar"><div class="logo"><a href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a></div><a class="btn btn-outline admin-header-link" href="painel-admin.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M20 11H7.8l4.6-4.6L11 5l-7 7 7 7 1.4-1.4L7.8 13H20v-2z"></path></svg>Voltar ao painel</a></nav></header>
+<main id="conteudo">
+<section class="detail-shell container" id="admin-request-detail">
+<a class="back-link" href="painel-admin.html">← Voltar para todas as solicitações</a>
+<div class="detail-header"><div><span class="request-id" data-admin-id="">#INF-0000</span><h1 data-admin-title="">Solicitação</h1><p>Visualização administrativa do pedido.</p></div><span class="status status-sent" data-admin-status-badge="">Enviada</span></div>
+<div class="detail-grid admin-detail-grid">
+<section class="detail-card"><h2>Dados enviados pelo cliente</h2><dl class="detail-list"><div><dt>Serviço</dt><dd data-admin-service=""></dd></div><div><dt>Descrição</dt><dd data-admin-description=""></dd></div><div><dt>Prazo desejado</dt><dd data-admin-deadline=""></dd></div><div><dt>Orçamento informado</dt><dd data-admin-budget=""></dd></div><div><dt>Contato preferido</dt><dd data-admin-contact=""></dd></div><div><dt>Referência</dt><dd data-admin-reference=""></dd></div><div><dt>Criada em</dt><dd data-admin-date=""></dd></div></dl></section>
+<section class="detail-card"><h2>Responder ao cliente</h2><div class="admin-client-decision" id="admin-client-decision"></div><div class="admin-decision-actions" id="admin-decision-actions"></div><form class="auth-form admin-response-form" id="admin-response-form">
+<label for="admin-request-viability">Viabilidade</label>
+<select id="admin-request-viability" name="viability"><option value="">Selecione</option><option>Projeto possível</option><option>Possível com ajustes</option><option>Precisa de mais informações</option><option>Não é possível no momento</option></select>
+<label for="admin-response-text">Resposta da Infotech</label>
+<textarea id="admin-response-text" name="response" placeholder="Explique a análise, as sugestões e como a Infotech poderá ajudar." rows="7"></textarea>
+<div class="admin-form-grid">
+<div><label for="admin-response-value">Valor do orçamento</label><input id="admin-response-value" inputmode="decimal" name="value" placeholder="Ex.: R$ 1.200,00" type="text"/></div>
+<div><label for="admin-response-deadline">Prazo estimado</label><input id="admin-response-deadline" name="estimatedDeadline" placeholder="Ex.: 15 dias úteis" type="text"/></div>
+</div>
+<label for="admin-response-notes">Observações</label>
+<textarea id="admin-response-notes" name="notes" placeholder="Ex.: inclui versão para celular e integração com WhatsApp." rows="4"></textarea>
+<label for="admin-request-status">Status após salvar</label>
+<select id="admin-request-status" name="status"><option>Enviada</option><option>Lida</option><option>Em análise</option><option>Orçamento enviado</option><option>Aguardando aprovação</option><option>Alteração solicitada</option><option>Aprovada</option><option>Em andamento</option><option>Concluída</option><option>Cancelada</option></select>
+<p class="field-help">Ao preencher uma resposta ou orçamento, o cliente verá essas informações na própria solicitação.</p>
+<p aria-live="polite" class="form-message" id="admin-response-message"></p>
+<button class="btn auth-primary" type="submit"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 3h12l4 4v14H3V3h2zm0 2v14h14V8h-3V5H5zm3 0h6v5H8V5zm0 9h8v5H8v-5z"></path></svg>Salvar resposta e orçamento</button>
+</form></section>
+</div>
+<section aria-labelledby="admin-workspace-title" class="request-workspace">
+<div class="workspace-heading">
+<div><span class="eyebrow">Central administrativa</span><h2 id="admin-workspace-title">Gerencie a solicitação</h2><p>Converse, envie arquivos, atualize o projeto e consulte o histórico.</p></div>
+</div>
+<div aria-label="Áreas administrativas da solicitação" class="request-tabs" role="tablist">
+<button aria-selected="true" class="request-tab" data-request-tab="conversation" role="tab" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 4h16v12H7l-3 3V4zm2 2v8.2L6.8 14H18V6H6z"></path></svg>Conversa</button>
+<button aria-selected="false" class="request-tab" data-request-tab="files" role="tab" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M10 4H4v16h16V8h-8l-2-4zm1.2 2 2 4H18v8H6V6h5.2z"></path></svg>Arquivos</button>
+<button aria-selected="false" class="request-tab" data-request-tab="project" role="tab" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 19h16v2H4v-2zm1-3 4-5 3 3 5-7 2 1.4-6.5 9.1-3.2-3.2L6.6 17.7 5 16z"></path></svg>Projeto</button>
+<button aria-selected="false" class="request-tab" data-request-tab="history" role="tab" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 3a9 9 0 1 1-8.5 6H1l3.5-4L8 9H5.6A7 7 0 1 0 12 5v4l3 2-1 1.7-4-2.7V3h2z"></path></svg>Histórico</button>
+</div>
+<div class="request-tab-panels">
+<div class="request-tab-panel" data-request-panel="conversation" role="tabpanel">
+<section class="chat-card"><div class="chat-card-heading"><div><span class="eyebrow">Atendimento</span><h2>Mensagens com o cliente</h2><p>Converse sem misturar a resposta oficial do orçamento.</p></div><span class="chat-count" data-admin-message-count="">0 mensagens</span></div><div class="chat-thread" id="admin-chat-thread"></div><form class="chat-form" id="admin-chat-form"><label for="admin-chat-message">Nova mensagem</label><textarea id="admin-chat-message" maxlength="1200" placeholder="Escreva uma mensagem para o cliente..." rows="4"></textarea><div class="chat-form-footer"><p aria-live="polite" class="form-message" id="admin-chat-feedback"></p><button class="btn auth-primary" type="submit">Enviar mensagem</button></div></form></section>
+</div>
+<div class="request-tab-panel" data-request-panel="files" hidden="" role="tabpanel">
+<section class="attachments-card" id="admin-files-area"><div class="attachments-heading"><div><span class="eyebrow">Central de arquivos</span><h2>Arquivos da solicitação</h2><p>Visualize os arquivos do cliente e envie materiais da Infotech.</p></div><strong data-attachment-count="">0 arquivos</strong></div><div class="attachments-list" id="admin-attachments-list"></div><form class="attachments-form" id="admin-attachments-form"><label class="file-drop" for="admin-attachments-input"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M11 4h2v7h3l-4 4-4-4h3V4zM5 18h14v2H5v-2z"></path></svg><span><strong>Adicionar arquivos da Infotech</strong><small>Até 3 arquivos, com no máximo 1 MB cada.</small></span></label><input accept="image/*,.pdf,.txt,.doc,.docx,.zip" hidden="" id="admin-attachments-input" multiple="" type="file"/><div class="attachments-actions"><p aria-live="polite" class="form-message" id="admin-attachments-feedback"></p><button class="btn auth-primary" type="submit">Enviar arquivos</button></div></form></section>
+</div>
+<div class="request-tab-panel" data-request-panel="project" hidden="" role="tabpanel">
+<section class="project-card" id="admin-project-area">
+<div class="project-heading"><div><span class="eyebrow">Gerenciamento</span><h2>Andamento do projeto</h2><p>Defina o prazo e marque as etapas concluídas.</p></div><strong class="project-progress-number" data-admin-project-progress="">0%</strong></div>
+<div class="project-progress"><span data-admin-project-bar="" style="width:0%"></span></div>
+<form class="project-admin-form" id="admin-project-form">
+<div><label for="admin-project-deadline">Previsão de entrega</label><input id="admin-project-deadline" type="date"/></div>
+<div><label>Etapas do projeto</label><div class="project-stages" id="admin-project-stages"></div></div>
+<p aria-live="polite" class="form-message" id="admin-project-feedback"></p>
+<button class="btn auth-primary" type="submit">Salvar andamento</button>
+</form>
+</section>
+</div>
+<div class="request-tab-panel" data-request-panel="history" hidden="" role="tabpanel">
+<section class="project-card"><div class="project-heading"><div><span class="eyebrow">Linha do tempo</span><h2>Histórico completo</h2><p>Registro automático das principais ações da solicitação.</p></div></div><div id="admin-project-history"></div></section>
+</div>
+</div>
+</section>
+</section>
+</main>
+<footer class="site-footer">
+<div class="footer-simple container">
+<a class="footer-logo" href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a>
+<p>Transformando ideias em soluções digitais úteis,<br class="footer-break"/> modernas e acessíveis.</p>
+</div>
+<div class="footer-bottom container">
+<p>© 2026 Infotech.io</p>
+<p>Tecnologia • Inovação • Soluções</p>
+</div>
+</footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="css/jss/supabase-config.js"></script>
+<script src="css/jss/admin-auth-supabase.js"></script>
+<script src="css/jss/admin-demo.js"></script>
+<script src="css/jss/dashboard-v41.js"></script>
+<script src="css/jss/attachments-demo.js"></script>
+<script src="css/jss/project-demo.js"></script><script src="css/jss/request-tabs.js"></script><script src="css/jss/refinement-v46.js"></script></body>
+</html>

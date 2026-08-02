@@ -1,0 +1,12 @@
+Infotech.io — Versão 4.8.1 (integrada à pasta Segurança)
+
+- Mantida a Área de Clientes no painel administrativo.
+- Mantidas as páginas clientes-admin.html e cliente-admin.html.
+- Adicionado o link “Esqueci minha senha” na tela de login.
+- Ativado o formulário recuperar-senha.html no JavaScript.
+- A recuperação valida se a conta existe no armazenamento local do navegador.
+- A nova senha precisa ser confirmada antes de ser salva.
+- A sessão ativa é encerrada quando a própria conta redefine a senha.
+- O login não cria mais uma conta acidentalmente ao informar um e-mail inexistente.
+- Mantidos os parâmetros de redirecionamento para nova solicitação, perfil ou painel.
+- Esta recuperação é somente uma demonstração local: não envia e-mail e não deve ser usada em produção.
