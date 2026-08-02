@@ -84,7 +84,7 @@
     let account = findAccount(email);
 
     if (!account) {
-      message.textContent = 'Conta não encontrada neste navegador. Crie uma conta de demonstração primeiro.';
+      message.textContent = 'Conta não encontrada na sua conta. Crie uma conta de demonstração primeiro.';
       message.className = 'form-message error';
       return;
     }
@@ -132,7 +132,7 @@
     const accounts = readAccounts();
     const accountIndex = accounts.findIndex(account => normalizeEmail(account.email) === email);
     if (accountIndex < 0) {
-      message.textContent = 'Nenhuma conta foi encontrada com este e-mail neste navegador.';
+      message.textContent = 'Nenhuma conta foi encontrada com este e-mail na sua conta.';
       message.className = 'form-message error';
       return;
     }
@@ -246,7 +246,7 @@
         try { localStorage.setItem('infotechDemoRequests', JSON.stringify(requests)); } catch {}
       }
       saveCurrentUser({ id: current.id, name: newName, email: newEmail });
-      message.textContent = 'Perfil atualizado neste navegador.';
+      message.textContent = 'Perfil atualizado na sua conta.';
       message.className = 'form-message success';
       document.querySelectorAll('[data-demo-name]').forEach(el => { el.textContent = newName; });
       document.querySelectorAll('[data-demo-email]').forEach(el => { el.textContent = newEmail; });
@@ -269,7 +269,7 @@
       const accounts = readAccounts();
       const index = accounts.findIndex(account => account.id === current.id || normalizeEmail(account.email) === normalizeEmail(current.email));
       if (index < 0) {
-        message.textContent = 'Conta não encontrada neste navegador.';
+        message.textContent = 'Conta não encontrada na sua conta.';
         message.className = 'form-message error';
         return;
       }

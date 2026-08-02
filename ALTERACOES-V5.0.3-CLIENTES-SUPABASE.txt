@@ -1,0 +1,16 @@
+Infotech.io — Versão 5.0.3 | Clientes no Supabase
+
+ALTERAÇÕES
+- Lista administrativa agora lê as contas reais de Authentication > Users.
+- Exibe nome, e-mail, tipo de conta, cadastro, confirmação e último login.
+- Administrador pode enviar link seguro de redefinição de senha ao cliente.
+- Nenhuma senha é exibida ou armazenada no painel.
+- Removidos avisos de protótipo, demonstração e armazenamento somente no navegador.
+- Incluído CONFIGURAR-CLIENTES-SUPABASE.sql.
+
+ATIVAÇÃO
+1. Abra Supabase > SQL Editor > New query.
+2. Cole todo o conteúdo de CONFIGURAR-CLIENTES-SUPABASE.sql.
+3. Clique em Run.
+4. Publique os arquivos desta versão no GitHub Pages.
+5. Entre como administrador e abra Clientes.
