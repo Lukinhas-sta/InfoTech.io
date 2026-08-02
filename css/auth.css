@@ -189,3 +189,6 @@
 /* Versão 4.9.1 — segurança do perfil */
 .security-profile-card { grid-column:1; }
 @media (min-width:900px){ .profile-layout{grid-template-columns:minmax(0,1fr) minmax(280px,.72fr)} .profile-info-card{grid-column:2;grid-row:1 / span 2} }
+
+/* Proteção visual durante a validação administrativa pelo Supabase. */
+html.admin-auth-checking body { visibility: hidden; }

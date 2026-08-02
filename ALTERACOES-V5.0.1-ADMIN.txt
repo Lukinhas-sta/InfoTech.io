@@ -1,0 +1,11 @@
+Ajustes no acesso administrativo
+
+- Removida a exibição pública do código administrativo.
+- Mensagem de erro agora informa apenas que o código é inválido.
+- Código administrativo alterado para o novo valor solicitado.
+- O código não fica escrito diretamente no JavaScript; somente o hash SHA-256 é armazenado.
+- Campo é limpo após tentativa incorreta.
+- Botão mostra estado de verificação durante o login.
+
+Observação de segurança:
+Este bloqueio ainda é apenas uma proteção de frontend. Para segurança real em produção, o painel administrativo deve usar autenticação Supabase com função de administrador e políticas RLS.

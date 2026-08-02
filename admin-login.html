@@ -18,20 +18,22 @@
 <main id="conteudo">
 <section class="auth-shell container">
 <div class="auth-intro">
-<span class="eyebrow">Versão 3.0 — Parte 3</span>
+<span class="eyebrow">Acesso seguro</span>
 <h1>Painel administrativo da Infotech.</h1>
 <p>Aqui você poderá visualizar todas as solicitações, filtrar por status e atualizar o andamento de cada atendimento.</p>
-<div class="privacy-note"><strong>Demonstração local:</strong> este acesso ainda não possui segurança real. Não publique esta versão como painel definitivo.</div>
+<div class="privacy-note"><strong>Acesso protegido:</strong> somente contas marcadas como administradoras no Supabase podem entrar.</div>
 </div>
 <div class="auth-card">
-<div class="demo-badge admin-badge">Acesso administrativo de demonstração</div>
+<div class="demo-badge admin-badge">Acesso administrativo restrito</div>
 <h2>Entrar como administrador</h2>
-<p>Use o código de teste <strong>admin123</strong>.</p>
-<form class="auth-form" id="demo-admin-login" novalidate="">
-<label for="admin-code">Código de acesso</label>
-<div class="password-field"><input id="admin-code" name="code" placeholder="Digite o código de teste" required="" type="password"/><button class="password-toggle" data-toggle-password="admin-code" type="button">Mostrar</button></div>
+<p>Entre com o e-mail e a senha da sua conta administrativa.</p>
+<form class="auth-form" id="supabase-admin-login" novalidate>
+<label for="admin-email">E-mail administrativo</label>
+<input id="admin-email" name="email" type="email" autocomplete="username" placeholder="seuemail@exemplo.com" required>
+<label for="admin-password">Senha</label>
+<div class="password-field"><input id="admin-password" name="password" type="password" autocomplete="current-password" minlength="6" placeholder="Digite sua senha" required><button class="password-toggle" data-toggle-password="admin-password" type="button">Mostrar</button></div>
 <p aria-live="polite" class="form-message" id="admin-login-message"></p>
-<button class="btn auth-primary" type="submit">Abrir painel administrativo</button>
+<button class="btn auth-primary" type="submit">Entrar no painel administrativo</button>
 </form>
 <p class="auth-switch"><a href="login.html">← Voltar para a área do cliente</a></p>
 </div>
@@ -48,7 +50,6 @@
 </div>
 </footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="css/jss/supabase-config.js"></script>
-<script src="css/jss/auth-demo.js"></script>
-<script src="css/jss/admin-demo.js"></script>
+<script src="css/jss/admin-auth-supabase.js"></script>
 <script src="css/jss/refinement-v46.js"></script></body>
 </html>

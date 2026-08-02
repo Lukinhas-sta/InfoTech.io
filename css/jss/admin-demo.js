@@ -1,13 +1,10 @@
 (() => {
   const requestsKey = 'infotechDemoRequests';
-  const adminKey = 'infotechDemoAdmin';
   const statuses = ['Enviada','Lida','Em análise','Orçamento enviado','Aguardando aprovação','Alteração solicitada','Aprovada','Em andamento','Concluída','Cancelada'];
   const readRequests = () => { try { return JSON.parse(localStorage.getItem(requestsKey)) || []; } catch { return []; } };
   const saveRequests = items => { try { localStorage.setItem(requestsKey, JSON.stringify(items)); } catch {} };
   const escapeHtml = (value='') => String(value).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const formatDate = iso => { try { return new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date(iso)); } catch { return 'Data não informada'; } };
-  const isAdmin = () => { try { return sessionStorage.getItem(adminKey) === 'true'; } catch { return false; } };
-  const setAdmin = value => { try { sessionStorage.setItem(adminKey, String(value)); } catch {} };
   const messageId = () => `MSG-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
   const installAdminReadTracking = (thread, item, items) => {
     if (!thread || !('IntersectionObserver' in window)) return;
@@ -61,25 +58,6 @@
     }).join('');
     requestAnimationFrame(() => { thread.scrollTop = thread.scrollHeight; });
   };
-
-  const login = document.getElementById('demo-admin-login');
-  if (login) login.addEventListener('submit', event => {
-    event.preventDefault();
-    const message = document.getElementById('admin-login-message');
-    const code = login.elements.code.value.trim();
-    if (code !== 'admin123') {
-      message.textContent = 'Código incorreto. Use admin123 nesta demonstração.';
-      message.className = 'form-message error';
-      return;
-    }
-    setAdmin(true);
-    message.textContent = 'Acesso liberado. Abrindo o painel...';
-    message.className = 'form-message success';
-    setTimeout(() => location.href = 'painel-admin.html', 350);
-  });
-
-  document.querySelectorAll('[data-admin-logout]').forEach(el => el.addEventListener('click', () => { try { sessionStorage.removeItem(adminKey); } catch {} }));
-  if ((document.body.querySelector('.admin-dashboard') || document.getElementById('admin-request-detail')) && !isAdmin()) location.href = 'admin-login.html';
 
   const statusClass = status => {
     if (status === 'Concluída') return 'status-done';
