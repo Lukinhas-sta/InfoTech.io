@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const makeId=()=>{
-    if(globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function')return globalThis.makeId();
+    if(globalThis.crypto&&typeof globalThis.crypto.randomUUID==='function')return globalThis.crypto.randomUUID();
     const bytes=new Uint8Array(16);
     if(globalThis.crypto&&typeof globalThis.crypto.getRandomValues==='function')globalThis.crypto.getRandomValues(bytes);
     else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);
