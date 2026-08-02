@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="#050816" name="theme-color"/>
-<meta content="Protótipo do painel de solicitações da Infotech." name="description"/>
+<meta content="Área de solicitações da Infotech." name="description"/>
 <meta content="noindex, nofollow" name="robots"/>
 <title>Infotech.io | Área do cliente</title>
 <link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22&gt;&lt;rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23050816%22/&gt;&lt;path d=%22M18 18h28v8H36v20h10v8H18v-8h10V26H18z%22 fill=%22%2300e5ff%22/&gt;&lt;/svg&gt;" rel="icon"/>
@@ -26,16 +26,15 @@
 <main id="conteudo">
 <section class="dashboard-shell container">
 <aside class="dashboard-sidebar">
-<div><span class="eyebrow">Área do cliente</span><h1>Olá, <span data-demo-name="">Cliente</span>!</h1><p>Este painel ainda usa informações de demonstração.</p></div>
+<div><span class="eyebrow">Área do cliente</span><h1>Olá, <span data-demo-name="">Cliente</span>!</h1><p>Acompanhe seus atendimentos e projetos.</p></div>
 <nav aria-label="Menu da área do cliente"><a class="active" href="#resumo">Resumo</a><a href="#solicitacoes">Minhas solicitações</a><a href="nova-solicitacao.html">Nova solicitação</a><a href="perfil.html">Meu perfil</a></nav>
-<a class="dashboard-exit" data-demo-logout="" href="login.html">Sair da demonstração</a>
+<a class="dashboard-exit" data-demo-logout="" href="login.html">Sair da conta</a>
 </aside>
 <div class="dashboard-content">
-<div class="prototype-warning"><strong>Protótipo:</strong> alterações feitas aqui ainda não são salvas online.</div>
-<section class="dashboard-welcome" id="resumo"><div><span class="eyebrow">Visão geral</span><h2>Suas solicitações e respostas</h2><p>Na versão real, esta área mostrará somente os dados da sua conta.</p></div><a class="btn auth-primary" href="nova-solicitacao.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm6 4v4H7v2h4v4h2v-4h4v-2h-4V7h-2z"></path></svg>Nova solicitação</a></section>
+<section class="dashboard-welcome" id="resumo"><div><span class="eyebrow">Visão geral</span><h2>Suas solicitações e respostas</h2><p>Aqui aparecem somente as solicitações da sua conta.</p></div><a class="btn auth-primary" href="nova-solicitacao.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm6 4v4H7v2h4v4h2v-4h4v-2h-4V7h-2z"></path></svg>Nova solicitação</a></section>
 <div class="dashboard-stats"><article><strong data-open-count="">1</strong><span>Solicitações abertas</span></article><article><strong data-response-count="">1</strong><span>Resposta recebida</span></article><article><strong data-progress-count="">0</strong><span>Projetos em andamento</span></article></div>
 <section class="request-section" id="solicitacoes"><div class="dashboard-section-title"><div><span class="eyebrow">Acompanhamento</span><h2>Minhas solicitações</h2></div><a class="btn btn-outline" href="nova-solicitacao.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm6 4v4H7v2h4v4h2v-4h4v-2h-4V7h-2z"></path></svg>Nova solicitação</a></div><div class="requests-list" id="demo-requests-list"></div></section>
-<section class="profile-preview" id="perfil"><div><span class="eyebrow">Perfil de demonstração</span><h2>Dados desta conta</h2></div><dl><div><dt>Nome</dt><dd data-demo-name="">Cliente</dd></div><div><dt>E-mail</dt><dd data-demo-email="">Não informado</dd></div></dl><a class="btn btn-outline" href="perfil.html">Editar perfil</a></section>
+<section class="profile-preview" id="perfil"><div><span class="eyebrow">Meu perfil</span><h2>Dados desta conta</h2></div><dl><div><dt>Nome</dt><dd data-demo-name="">Cliente</dd></div><div><dt>E-mail</dt><dd data-demo-email="">Não informado</dd></div></dl><a class="btn btn-outline" href="perfil.html">Editar perfil</a></section>
 </div>
 </section></main>
 <footer class="site-footer">
@@ -50,9 +49,9 @@
 </footer>
 <script src="css/jss/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="css/jss/supabase-config.js"></script>
+<script src="css/jss/supabase-config.js"></script><script src="css/jss/requests-supabase.js"></script>
 <script src="css/jss/auth-demo.js"></script>
-<script src="css/jss/request-demo.js"></script>
-<script src="css/jss/dashboard-v41.js"></script>
+
+
 <script src="css/jss/refinement-v46.js"></script></body>
 </html>

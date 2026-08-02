@@ -17,21 +17,16 @@
 <header class="site-header"><nav aria-label="Navegação principal" class="navbar"><div class="logo"><a href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a></div><a class="btn btn-outline admin-header-link" href="login.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"></path></svg>Área do cliente</a></nav></header>
 <main id="conteudo">
 <section class="auth-shell container">
-<div class="auth-intro">
-<span class="eyebrow">Acesso seguro</span>
-<h1>Painel administrativo da Infotech.</h1>
-<p>Aqui você poderá visualizar todas as solicitações, filtrar por status e atualizar o andamento de cada atendimento.</p>
-<div class="privacy-note"><strong>Acesso protegido:</strong> somente contas marcadas como administradoras no Supabase podem entrar.</div>
-</div>
+
 <div class="auth-card">
 <div class="demo-badge admin-badge">Acesso administrativo restrito</div>
 <h2>Entrar como administrador</h2>
 <p>Entre com o e-mail e a senha da sua conta administrativa.</p>
-<form class="auth-form" id="supabase-admin-login" novalidate>
+<form class="auth-form" id="supabase-admin-login" novalidate="">
 <label for="admin-email">E-mail administrativo</label>
-<input id="admin-email" name="email" type="email" autocomplete="username" placeholder="seuemail@exemplo.com" required>
+<input autocomplete="username" id="admin-email" name="email" placeholder="seuemail@exemplo.com" required="" type="email"/>
 <label for="admin-password">Senha</label>
-<div class="password-field"><input id="admin-password" name="password" type="password" autocomplete="current-password" minlength="6" placeholder="Digite sua senha" required><button class="password-toggle" data-toggle-password="admin-password" type="button">Mostrar</button></div>
+<div class="password-field"><input autocomplete="current-password" id="admin-password" minlength="6" name="password" placeholder="Digite sua senha" required="" type="password"/><button class="password-toggle" data-toggle-password="admin-password" type="button">Mostrar</button></div>
 <p aria-live="polite" class="form-message" id="admin-login-message"></p>
 <button class="btn auth-primary" type="submit">Entrar no painel administrativo</button>
 </form>

@@ -21,7 +21,7 @@
 <main id="conteudo">
 <section class="dashboard-shell container admin-dashboard">
 <aside class="dashboard-sidebar admin-sidebar">
-<div><span class="eyebrow">Administrador</span><h1>Infotech.io</h1><p>Gerencie as solicitações criadas na sua conta.</p></div>
+<div><span class="eyebrow">Administrador</span><h1>Infotech.io</h1><p>Gerencie todas as solicitações recebidas.</p></div>
 <nav aria-label="Menu administrativo"><a class="active" href="#resumo">Visão geral</a><a href="#solicitacoes">Solicitações</a><a href="clientes-admin.html">Clientes</a><a href="index.html">Ver site</a></nav>
 <a class="dashboard-exit" data-admin-logout="" href="admin-login.html">Sair do painel</a>
 </aside>
@@ -31,13 +31,12 @@
 <a class="btn btn-outline" href="painel-cliente.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"></path></svg>Testar como cliente</a>
 </section>
 <div aria-label="Resumo das solicitações. Selecione um card para filtrar a lista." class="dashboard-stats admin-stats admin-smart-stats">
-<button aria-pressed="true" class="admin-stat-card is-active" data-dashboard-filter="all" type="button"><span class="admin-stat-icon" aria-hidden="true"><svg viewbox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 4v2h10V7H7zm0 4v2h10v-2H7zm0 4v2h6v-2H7z"></path></svg></span><strong data-admin-total="">0</strong><span>Solicitações</span><small>Todos os pedidos</small></button>
-<button aria-pressed="false" class="admin-stat-card admin-stat-analysis" data-dashboard-filter="analysis" type="button"><span class="admin-stat-icon" aria-hidden="true"><svg viewbox="0 0 24 24"><path d="M11 7h2v6h-2V7zm0 8h2v2h-2v-2zm1-13a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path></svg></span><strong data-admin-new="">0</strong><span>Em análise</span><small>Aguardando avaliação</small></button>
-<button aria-pressed="false" class="admin-stat-card admin-stat-progress" data-dashboard-filter="progress" type="button"><span class="admin-stat-icon" aria-hidden="true"><svg viewbox="0 0 24 24"><path d="M13 2v8h8A9 9 0 1 1 13 2zm2 2.35V8h3.65A7 7 0 0 0 15 4.35z"></path></svg></span><strong data-admin-progress="">0</strong><span>Em andamento</span><small>Projetos ativos</small></button>
-<button aria-pressed="false" class="admin-stat-card admin-stat-done" data-dashboard-filter="done" type="button"><span class="admin-stat-icon" aria-hidden="true"><svg viewbox="0 0 24 24"><path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7l-1.4-1.4L9 16.2z"></path></svg></span><strong data-admin-done="">0</strong><span>Concluídas</span><small>Entregas finalizadas</small></button>
-<button aria-pressed="false" class="admin-stat-card admin-stat-priority" data-dashboard-filter="priority" type="button"><span class="admin-stat-icon" aria-hidden="true"><svg viewbox="0 0 24 24"><path d="M12 2 1 21h22L12 2zm0 5.8L18.6 19H5.4L12 7.8zM11 11h2v4h-2v-4zm0 5h2v2h-2v-2z"></path></svg></span><strong data-admin-priority="">0</strong><span>Prioridade alta</span><small>Prazo de até 7 dias</small></button>
+<button aria-pressed="true" class="admin-stat-card is-active" data-dashboard-filter="all" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 4v2h10V7H7zm0 4v2h10v-2H7zm0 4v2h6v-2H7z"></path></svg></span><strong data-admin-total="">0</strong><span>Solicitações</span><small>Todos os pedidos</small></button>
+<button aria-pressed="false" class="admin-stat-card admin-stat-analysis" data-dashboard-filter="analysis" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M11 7h2v6h-2V7zm0 8h2v2h-2v-2zm1-13a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path></svg></span><strong data-admin-new="">0</strong><span>Em análise</span><small>Aguardando avaliação</small></button>
+<button aria-pressed="false" class="admin-stat-card admin-stat-progress" data-dashboard-filter="progress" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M13 2v8h8A9 9 0 1 1 13 2zm2 2.35V8h3.65A7 7 0 0 0 15 4.35z"></path></svg></span><strong data-admin-progress="">0</strong><span>Em andamento</span><small>Projetos ativos</small></button>
+<button aria-pressed="false" class="admin-stat-card admin-stat-done" data-dashboard-filter="done" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7l-1.4-1.4L9 16.2z"></path></svg></span><strong data-admin-done="">0</strong><span>Concluídas</span><small>Entregas finalizadas</small></button>
+<button aria-pressed="false" class="admin-stat-card admin-stat-priority" data-dashboard-filter="priority" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M12 2 1 21h22L12 2zm0 5.8L18.6 19H5.4L12 7.8zM11 11h2v4h-2v-4zm0 5h2v2h-2v-2z"></path></svg></span><strong data-admin-priority="">0</strong><span>Prioridade alta</span><small>Prazo de até 7 dias</small></button>
 </div>
-<div class="prototype-warning"><strong>Protótipo:</strong> somente solicitações criadas na sua conta aparecem aqui.</div>
 <section class="request-section" id="solicitacoes">
 <div class="dashboard-section-title admin-list-heading"><div><span class="eyebrow">Atendimentos</span><h2 data-admin-list-title="">Todas as solicitações</h2><p data-admin-results-count="">0 solicitações encontradas</p></div></div>
 <div class="admin-list-toolbar">
@@ -50,7 +49,7 @@
 <button aria-pressed="false" class="admin-filter-chip" data-status-filter="cancelled" type="button">Cancelados</button>
 </div>
 </div>
-<div aria-live="polite" aria-busy="false" class="requests-list" id="admin-requests-list"></div>
+<div aria-busy="false" aria-live="polite" class="requests-list" id="admin-requests-list"></div>
 </section>
 </div>
 </section>
@@ -65,10 +64,10 @@
 <p>Tecnologia • Inovação • Soluções</p>
 </div>
 </footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="css/jss/supabase-config.js"></script>
+<script src="css/jss/supabase-config.js"></script><script src="css/jss/requests-supabase.js"></script>
 <script src="css/jss/admin-auth-supabase.js"></script>
-<script src="css/jss/admin-demo.js"></script>
-<script src="css/jss/dashboard-v41.js"></script>
-<script src="css/jss/admin-dashboard-v471.js"></script>
+
+
+
 <script src="css/jss/refinement-v46.js"></script></body>
 </html>
