@@ -11,6 +11,7 @@
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const safeExternalUrl=v=>{try{const u=new URL(normalize(v));return ['http:','https:'].includes(u.protocol)?u.href:''}catch(_){return ''}};
   const fmt=iso=>iso?new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date(iso)):'—';
+  const fmtDate=iso=>iso?new Intl.DateTimeFormat('pt-BR',{dateStyle:'medium'}).format(new Date(iso)):'—';
   const msg=(el,text,type='')=>{if(!el)return;el.textContent=text;el.className=`form-message ${type}`};
   const busy=(form,on)=>{form?.querySelectorAll('button,input,select,textarea').forEach(x=>x.disabled=on);form?.setAttribute('aria-busy',String(on))};
   const params=new URLSearchParams(location.search);
@@ -65,6 +66,37 @@
     $('.account-logout',slot)?.addEventListener('click',async()=>{await db.auth.signOut();location.href='index.html'});
     $$('a[href^="login.html?destino="]').forEach(a=>{const q=new URLSearchParams(a.href.split('?')[1]||'');const d=safeDestination(q.get('destino'));if(d)a.href=d});
   }
+  function syncAuthAwareSections(user){
+    $$('[data-guest-only]').forEach(el=>{
+      if(user){
+        el.setAttribute('hidden','hidden');
+        el.style.display='none';
+      }else{
+        el.removeAttribute('hidden');
+        el.style.display='';
+      }
+    });
+    $$('[data-user-only]').forEach(el=>{
+      if(user){
+        el.removeAttribute('hidden');
+        el.style.display='';
+      }else{
+        el.setAttribute('hidden','hidden');
+        el.style.display='none';
+      }
+    });
+  }
+  function syncFooterClientLinks(user){
+    const wrappers=[...$$('.footer-compact-grid > div:nth-child(2) .footer-links')];
+    wrappers.forEach(w=>{
+      if(!w)return;
+      if(user){
+        w.innerHTML='<a href="painel-cliente.html">Meu painel</a><a href="perfil.html">Meu perfil</a><a href="nova-solicitacao.html">Nova solicitação</a>';
+      }else{
+        w.innerHTML='<a href="login.html">Entrar</a><a href="cadastro.html">Criar conta</a><a href="nova-solicitacao.html">Solicitar</a>';
+      }
+    });
+  }
   async function initAuthState(){
     const {data:{session}}=await db.auth.getSession();
     const user=session?.user||null;
@@ -73,6 +105,8 @@
       if(p?.is_blocked){await db.auth.signOut();currentUser=null}else currentUser=user;
     }
     await renderAccount(currentUser);
+    syncAuthAwareSections(currentUser);
+    syncFooterClientLinks(currentUser);
     if(protectedPage&&!currentUser){const currentTarget=safeDestination(`${page}${location.search}`)||safeDestination(page)||'painel-cliente.html';location.replace(`login.html?destino=${encodeURIComponent(currentTarget)}`)}
     window.dispatchEvent(new CustomEvent('infotech:auth-ready',{detail:{user:currentUser}}));
   }
@@ -211,15 +245,39 @@
     });
   }
   async function initProfile(){
-    const profile=$('#profile-form'), password=$('#password-form');if(!profile&&!password)return;
+    const profile=$('#profile-form'), password=$('#password-form');if(!profile&&!password&&!$('[data-profile-created]'))return;
     const user=(await db.auth.getUser()).data.user;if(!user)return;
-    if(profile){profile.elements.name.value=displayName(user);profile.elements.email.value=user.email||'';profile.addEventListener('submit',async e=>{e.preventDefault();const out=$('#profile-message');busy(profile,true);const {error}=await db.auth.updateUser({email:email(profile.elements.email.value),data:{full_name:normalize(profile.elements.name.value)}});busy(profile,false);if(error){msg(out,error.message,'error');return}msg(out,'Perfil atualizado. Se o e-mail mudou, confirme o novo endereço.','success')})}
+    const set=(selector,value)=>{$$(selector).forEach(el=>el.textContent=value)};
+    set('[data-profile-user-name]',displayName(user));
+    set('[data-profile-user-email]',user.email||'—');
+    set('[data-profile-created]',fmtDate(user.created_at));
+    set('[data-profile-last-signin]',fmt(user.last_sign_in_at||user.created_at));
+    const confirmed=Boolean(user.email_confirmed_at);
+    set('[data-profile-email-status]',confirmed?'Confirmado':'Pendente');
+    set('[data-profile-email-caption]',confirmed?'Seu e-mail já está validado para acesso.':'Confirme seu e-mail para manter o acesso liberado.');
+    if(profile){
+      profile.elements.name.value=displayName(user);
+      profile.elements.email.value=user.email||'';
+      profile.addEventListener('submit',async e=>{
+        e.preventDefault();
+        const out=$('#profile-message');
+        busy(profile,true);
+        const nextName=normalize(profile.elements.name.value), nextEmail=email(profile.elements.email.value);
+        const {error}=await db.auth.updateUser({email:nextEmail,data:{full_name:nextName}});
+        busy(profile,false);
+        if(error){msg(out,error.message,'error');return}
+        set('[data-profile-user-name]',nextName||'Cliente');
+        set('[data-profile-user-email]',nextEmail||'—');
+        msg(out,'Perfil atualizado. Se o e-mail mudou, confirme o novo endereço.','success');
+      })
+    }
     if(password){password.addEventListener('submit',async e=>{e.preventDefault();const out=$('#password-message'),p=String(password.elements.newPassword.value||''),c=String(password.elements.confirmPassword.value||'');if(!validateStrongPassword(p)){msg(out,'Use ao menos 8 caracteres, incluindo letras e números.','error');return}if(p!==c){msg(out,'As senhas não coincidem.','error');return}busy(password,true);const {error}=await db.auth.updateUser({password:p});busy(password,false);if(error){msg(out,error.message,'error');return}password.reset();msg(out,'Senha alterada com sucesso.','success')})}
   }
   async function current(){return (await db.auth.getUser()).data.user}
   function row(r){return {id:r.protocol,uuid:r.id,userId:r.user_id,title:r.title,service:r.service,description:r.description,deadline:r.deadline,budget:r.budget,contact:r.contact,reference:r.reference_url,status:r.status,adminResponse:r.admin_response,messages:Array.isArray(r.messages)?r.messages:[],project:r.project||{},createdAt:r.created_at,updatedAt:r.updated_at}}
   async function loadRequest(protocol){
-    const {data,error}=await db.from('requests').select('*').eq('protocol',protocol).maybeSingle();if(error)throw error;return data?row(data):null;
+    const user=await current(); if(!user)return null;
+    const {data,error}=await db.from('requests').select('*').eq('protocol',protocol).eq('user_id',user.id).maybeSingle();if(error)throw error;return data?row(data):null;
   }
   function initRequestCreate(){
     const form=$('#request-form');if(!form)return;
@@ -237,7 +295,8 @@
   async function initRequestList(){
     const list=$('#requests-list');if(!list)return;
     list.innerHTML='<div class="empty-state">Carregando suas solicitações...</div>';
-    const {data,error}=await db.from('requests').select('*').order('created_at',{ascending:false});
+    const user=await current(); if(!user){list.innerHTML='<div class="empty-state">Faça login para visualizar suas solicitações.</div>';return}
+    const {data,error}=await db.from('requests').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
     if(error){list.innerHTML='<div class="empty-state">Não foi possível carregar suas solicitações.</div>';return}
     const items=(data||[]).map(row);
     list.innerHTML=items.length?items.map(i=>`<article class="request-card"><div class="request-main"><span class="request-id">#${esc(i.id)}</span><h3>${esc(i.title)}</h3><p>${esc(i.service)} · ${esc(i.description.slice(0,125))}${i.description.length>125?'…':''}</p><div class="request-meta"><span>${fmt(i.createdAt)}</span><span class="status ${statusClass(i.status)}">${esc(i.status)}</span></div></div><a class="btn btn-outline" href="detalhes-solicitacao.html?id=${encodeURIComponent(i.id)}">Acompanhar</a></article>`).join(''):'<div class="empty-state"><h3>Nenhuma solicitação ainda</h3><p>Quando você enviar a primeira, ela aparecerá aqui.</p></div>';

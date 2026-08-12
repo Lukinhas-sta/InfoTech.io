@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Arte InfoTech.io Solicitações</title>
+  <desc id="desc">Emblema neon azul com documento, check e balões representando solicitações online.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="58%">
+      <stop offset="0%" stop-color="#07192d"/>
+      <stop offset="62%" stop-color="#030c18"/>
+      <stop offset="100%" stop-color="#01050d"/>
+    </radialGradient>
+    <linearGradient id="cyan" x1="0" x2="1">
+      <stop offset="0%" stop-color="#4ef5ff"/>
+      <stop offset="55%" stop-color="#19c7ff"/>
+      <stop offset="100%" stop-color="#1673ff"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0.85  0 0 1 0 1  0 0 0 1 0"/>
+    </filter>
+  </defs>
+
+  <circle cx="540" cy="540" r="430" fill="url(#bg)"/>
+  <circle cx="540" cy="540" r="445" fill="none" stroke="url(#cyan)" stroke-width="14" filter="url(#glow)"/>
+  <circle cx="540" cy="540" r="404" fill="none" stroke="rgba(78,245,255,.25)" stroke-width="2" opacity="0.35"/>
+
+  <g filter="url(#softGlow)" opacity="0.6">
+    <circle cx="540" cy="370" r="150" fill="#0f4a7b"/>
+  </g>
+
+  <g stroke="url(#cyan)" stroke-width="8" stroke-linecap="round" fill="none" filter="url(#glow)" opacity="0.85">
+    <path d="M148 420h128"/><path d="M128 470h170"/><path d="M144 520h120"/><path d="M138 570h178"/><path d="M162 620h110"/>
+    <path d="M932 420H804"/><path d="M952 470H782"/><path d="M936 520H816"/><path d="M942 570H764"/><path d="M918 620H808"/>
+    <circle cx="298" cy="420" r="6" fill="#77f9ff"/><circle cx="322" cy="470" r="6" fill="#77f9ff"/><circle cx="284" cy="570" r="6" fill="#77f9ff"/>
+    <circle cx="782" cy="420" r="6" fill="#77f9ff"/><circle cx="758" cy="470" r="6" fill="#77f9ff"/><circle cx="796" cy="570" r="6" fill="#77f9ff"/>
+  </g>
+
+  <g filter="url(#glow)">
+    <circle cx="540" cy="236" r="86" fill="none" stroke="url(#cyan)" stroke-width="10"/>
+    <text x="540" y="257" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="98" font-weight="700" fill="#ffffff">IT</text>
+    <path d="M592 158l32-32" stroke="url(#cyan)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M632 164l34-34" stroke="url(#cyan)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M656 196l40-20" stroke="url(#cyan)" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="628" cy="122" r="10" fill="#59f5ff"/>
+    <circle cx="671" cy="129" r="10" fill="#59f5ff"/>
+    <circle cx="702" cy="173" r="10" fill="#59f5ff"/>
+  </g>
+
+  <g filter="url(#glow)">
+    <rect x="388" y="308" width="304" height="400" rx="30" fill="rgba(3,10,20,0.55)" stroke="url(#cyan)" stroke-width="10"/>
+    <rect x="438" y="372" width="204" height="18" rx="9" fill="#55f4ff" opacity="0.95"/>
+    <rect x="438" y="420" width="160" height="18" rx="9" fill="#3ce9ff" opacity="0.85"/>
+    <rect x="438" y="468" width="178" height="18" rx="9" fill="#3ce9ff" opacity="0.72"/>
+    <rect x="438" y="516" width="128" height="18" rx="9" fill="#3ce9ff" opacity="0.60"/>
+
+    <circle cx="540" cy="620" r="70" fill="rgba(12,40,63,0.82)" stroke="#5af5ff" stroke-width="10"/>
+    <path d="M508 620l20 20 46-50" stroke="#7dfbff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g filter="url(#glow)">
+    <path d="M318 480h136c18 0 32 14 32 32v56c0 18-14 32-32 32h-88l-44 34 8-34h-12c-18 0-32-14-32-32v-56c0-18 14-32 32-32z" fill="rgba(7,21,38,.85)" stroke="url(#cyan)" stroke-width="10"/>
+    <circle cx="362" cy="540" r="10" fill="#7bf9ff"/>
+    <circle cx="402" cy="540" r="10" fill="#7bf9ff"/>
+    <circle cx="442" cy="540" r="10" fill="#7bf9ff"/>
+  </g>
+
+  <g filter="url(#glow)">
+    <path d="M626 474h142c18 0 32 14 32 32v56c0 18-14 32-32 32h-76l-36 30 6-30h-36c-18 0-32-14-32-32v-56c0-18 14-32 32-32z" fill="rgba(7,21,38,.85)" stroke="url(#cyan)" stroke-width="10"/>
+    <circle cx="674" cy="534" r="10" fill="#7bf9ff"/>
+    <circle cx="714" cy="534" r="10" fill="#7bf9ff"/>
+    <circle cx="754" cy="534" r="10" fill="#7bf9ff"/>
+  </g>
+
+  <g fill="#ffffff" font-family="Arial, Helvetica, sans-serif" text-anchor="middle" filter="url(#glow)">
+    <text x="540" y="838" font-size="104" font-weight="700" letter-spacing="5">SOLICITAÇÕES</text>
+    <text x="540" y="900" font-size="40" letter-spacing="8" fill="#6ddfff">INFOTECH.IO</text>
+  </g>
+
+  <g filter="url(#glow)">
+    <rect x="470" y="858" width="140" height="4" rx="2" fill="#79fbff"/>
+    <circle cx="540" cy="860" r="10" fill="#79fbff"/>
+  </g>
+</svg>

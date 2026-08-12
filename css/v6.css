@@ -1589,3 +1589,245 @@ main,.site-footer,.site-header{max-width:100%;overflow-x:clip}
 @media(prefers-reduced-motion:reduce){
   .header-person,.header-person::before,.header-person::after,.header-person .hp-head,.header-person .hp-arm,.lock-shackle{animation:none!important}
 }
+
+/* ===== V6.9 — ajustes de layout, solicitações e perfil ===== */
+.hero h1{
+  max-width:16.5ch!important;
+  line-height:.98!important;
+  letter-spacing:-.048em!important;
+}
+.hero h1 span{display:inline!important}
+.hero h1 br{display:block}
+.page-hero.request-hero h1{max-width:11ch}
+.auth-actions{display:flex;gap:10px;flex-wrap:wrap}
+.auth-actions[hidden]{display:none!important}
+
+/* Widget da conta: mesmo visual para visitante e usuário logado. */
+.account-login-link,
+.account-trigger{
+  min-height:56px!important;
+  border-radius:18px!important;
+  border:1px solid rgba(84,220,255,.18)!important;
+  background:linear-gradient(180deg,rgba(8,20,38,.92),rgba(6,18,34,.84))!important;
+  box-shadow:0 14px 30px rgba(0,0,0,.22), inset 0 0 0 1px rgba(255,255,255,.02)!important;
+  padding:8px 12px!important;
+}
+.account-login-link .header-person,
+.account-avatar .header-person,
+.profile-header-person{
+  display:block!important;
+  margin:0!important;
+  transform-origin:50% 80%!important;
+}
+.account-avatar{
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  border-radius:12px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  place-items:center!important;
+}
+.header-person{
+  width:34px!important;
+  height:35px!important;
+  overflow:visible!important;
+  isolation:isolate;
+  animation:hpTechFloatV69 3.4s ease-in-out infinite!important;
+  filter:drop-shadow(0 0 7px rgba(64,235,255,.58))!important;
+}
+.header-person::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-2px;
+  width:22px;
+  height:7px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(77,244,255,.42),rgba(77,244,255,0) 72%);
+  opacity:.66;
+  animation:hpTechBaseV69 3.4s ease-in-out infinite;
+}
+.header-person::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:52%;
+  width:44px;
+  height:44px;
+  transform:translate(-50%,-50%);
+  border-radius:16px;
+  border:1px solid rgba(90,244,255,.14);
+  box-shadow:0 0 16px rgba(36,231,255,.08);
+  opacity:.7;
+}
+.header-person .hp-head{
+  width:12px!important;
+  height:12px!important;
+  left:11px!important;
+  top:1px!important;
+  background:linear-gradient(180deg,#89fbff,#28d5ff)!important;
+  box-shadow:0 0 9px rgba(36,231,255,.72)!important;
+  animation:hpHeadTechV69 3.4s ease-in-out infinite!important;
+}
+.header-person .hp-head::before{
+  opacity:.88!important;
+  top:-3px!important;
+}
+.header-person .hp-body{
+  left:8px!important;
+  bottom:3px!important;
+  width:18px!important;
+  height:15px!important;
+  border-radius:10px 10px 8px 8px!important;
+  background:linear-gradient(180deg,#66f6ff 0%,#2bcff4 50%,#1877ff 100%)!important;
+}
+.header-person .hp-body::after{
+  content:"";
+  position:absolute;
+  left:50%;top:6px;
+  width:9px;height:2px;
+  transform:translateX(-50%);
+  border-radius:999px;
+  background:rgba(3,34,60,.55);
+  box-shadow:0 5px 0 rgba(3,34,60,.36);
+}
+.header-person .hp-arm{
+  top:17px!important;
+  width:11px!important;
+  height:4px!important;
+  background:linear-gradient(90deg,#5ef4ff,#27bfff)!important;
+  box-shadow:0 0 5px rgba(36,231,255,.45)!important;
+}
+.header-person .hp-arm::before,
+.header-person .hp-arm::after{animation:none!important}
+.header-person .hp-left{
+  left:1px!important;
+  transform-origin:100% 50%!important;
+  animation:hpTechArmLeftV69 3.4s ease-in-out infinite!important;
+}
+.header-person .hp-left::before{
+  left:-7px!important;
+  top:0!important;
+  transform:rotate(-10deg)!important;
+  transform-origin:100% 50%!important;
+}
+.header-person .hp-left::after{
+  left:-14px!important;
+  top:-1px!important;
+  transform:scale(.95)!important;
+}
+.header-person .hp-right{
+  right:1px!important;
+  transform-origin:0 50%!important;
+  animation:hpTechArmRightV69 3.4s ease-in-out infinite!important;
+}
+.header-person .hp-right::before{
+  right:-7px!important;
+  top:0!important;
+  transform:rotate(10deg)!important;
+  transform-origin:0 50%!important;
+}
+.header-person .hp-right::after{
+  right:-14px!important;
+  top:-1px!important;
+  transform:scale(.95)!important;
+}
+.account-login-link .header-person,
+.account-avatar .header-person{scale:.84!important}
+.profile-header-person{scale:1.9!important}
+.profile-mascot{
+  width:88px;height:88px;border-radius:24px;display:grid;place-items:center;flex:0 0 88px;
+  background:linear-gradient(180deg,rgba(9,24,43,.92),rgba(6,19,35,.82));
+  border:1px solid rgba(84,220,255,.2);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 14px 28px rgba(0,0,0,.18);
+}
+@keyframes hpTechFloatV69{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  20%{transform:translateY(-1px) rotate(-1.5deg)}
+  50%{transform:translateY(-2px) rotate(1.5deg)}
+  75%{transform:translateY(-1px) rotate(0deg)}
+}
+@keyframes hpHeadTechV69{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  30%{transform:translateY(-1px) rotate(-6deg)}
+  56%{transform:translateY(0) rotate(5deg)}
+}
+@keyframes hpTechArmLeftV69{
+  0%,100%{transform:rotate(18deg)}
+  24%{transform:rotate(10deg)}
+  48%{transform:rotate(-8deg)}
+  70%{transform:rotate(12deg)}
+}
+@keyframes hpTechArmRightV69{
+  0%,100%{transform:rotate(-18deg)}
+  24%{transform:rotate(-10deg)}
+  48%{transform:rotate(8deg)}
+  70%{transform:rotate(-12deg)}
+}
+@keyframes hpTechBaseV69{
+  0%,100%{opacity:.5;transform:translateX(-50%) scaleX(.92)}
+  50%{opacity:.78;transform:translateX(-50%) scaleX(1.15)}
+}
+
+/* Perfil mais bonito e com mais utilidade */
+.profile-shell{padding-block:38px 90px;display:grid;gap:18px}
+.profile-hero-card,
+.profile-card{
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:linear-gradient(180deg,rgba(5,18,34,.82),rgba(5,16,31,.72));
+  box-shadow:var(--shadow);
+}
+.profile-hero-card{padding:28px}
+.profile-hero-top{display:flex;gap:18px;align-items:center;margin-bottom:24px}
+.profile-hero-top h1{margin:10px 0 12px;font-size:clamp(2rem,4.2vw,3.35rem);line-height:.98;letter-spacing:-.045em}
+.profile-hero-top p{margin:0;color:var(--muted);max-width:60ch}
+.profile-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.profile-summary-grid article,
+.profile-meta-card,
+.profile-feature-list article{
+  border:1px solid rgba(85,221,255,.12);
+  background:rgba(8,23,42,.58);
+  border-radius:18px;
+}
+.profile-summary-grid article{padding:16px}
+.profile-summary-grid small,
+.profile-meta-card small{display:block;color:var(--muted-2);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em}
+.profile-summary-grid strong,
+.profile-meta-card strong{display:block;margin-top:6px;font-size:1rem;color:#fff}
+.profile-summary-grid span,
+.profile-meta-card div span{display:block;margin-top:6px;color:var(--muted);font-size:.83rem;line-height:1.45}
+.profile-quick-actions{display:flex;gap:10px;flex-wrap:wrap}
+.profile-grid-enhanced{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.9fr);gap:18px}
+.profile-card{padding:28px}
+.profile-card h2{margin-top:8px}
+.profile-card-main .auth-form{display:grid;gap:16px}
+.profile-card-side{display:grid;gap:16px;align-content:start}
+.profile-feature-list{display:grid;gap:12px}
+.profile-feature-list article{padding:16px}
+.profile-feature-list strong{display:block;font-size:.96rem}
+.profile-feature-list span{display:block;margin-top:6px;color:var(--muted);font-size:.88rem;line-height:1.5}
+.profile-meta-card{display:grid;gap:0;overflow:hidden}
+.profile-meta-card>div{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.05)}
+.profile-meta-card>div:last-child{border-bottom:0}
+
+@media(max-width:900px){
+  .profile-summary-grid,
+  .profile-grid-enhanced{grid-template-columns:1fr}
+}
+@media(max-width:680px){
+  .hero h1{max-width:12.9ch!important;font-size:clamp(2.45rem,10.7vw,4.05rem)!important}
+  .page-hero.request-hero h1{max-width:10.5ch!important}
+  .profile-hero-card,.profile-card{padding:22px}
+  .profile-hero-top{align-items:flex-start}
+  .profile-mascot{width:76px;height:76px;flex-basis:76px}
+  .profile-header-person{scale:1.6!important}
+  .profile-quick-actions{display:grid;grid-template-columns:1fr}
+  .profile-quick-actions .btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){
+  .header-person,.header-person::before,.header-person::after,.header-person .hp-head,.header-person .hp-arm{animation:none!important}
+}
