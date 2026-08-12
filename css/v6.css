@@ -1831,3 +1831,101 @@ main,.site-footer,.site-header{max-width:100%;overflow-x:clip}
 @media(prefers-reduced-motion:reduce){
   .header-person,.header-person::before,.header-person::after,.header-person .hp-head,.header-person .hp-arm{animation:none!important}
 }
+
+/* =========================================================
+   InfoTech V7.0 — painel limpo + hero de solicitações
+   ========================================================= */
+.dashboard-shell-flat{
+  display:block!important;
+  padding-block:42px 80px!important;
+}
+.dashboard-shell-flat .dashboard-content{
+  display:grid;
+  gap:18px;
+}
+.dashboard-overview{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:22px;
+}
+.dashboard-overview h1{
+  margin:10px 0 8px;
+  font-size:clamp(2.2rem,4.8vw,3.2rem);
+  line-height:1.02;
+  letter-spacing:-.04em;
+}
+.dashboard-overview p{
+  margin:0;
+  color:var(--muted);
+  max-width:58ch;
+  line-height:1.7;
+}
+.dashboard-quick-actions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:10px;
+}
+.dashboard-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px 16px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(5,16,31,.55);
+  color:#c2d5e5;
+  font-size:.88rem;
+  font-weight:800;
+  line-height:1;
+  text-align:center;
+  transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease;
+}
+.dashboard-chip:hover,
+.dashboard-chip.active{
+  color:#fff;
+  border-color:rgba(77,212,255,.34);
+  background:rgba(36,231,255,.09);
+  transform:translateY(-1px);
+}
+.dashboard-chip-logout{
+  color:#ffb7c2;
+}
+.dashboard-chip-logout:hover{
+  color:#fff3f6;
+  border-color:rgba(255,143,163,.35);
+  background:rgba(255,76,120,.12);
+}
+.request-hero h1{
+  max-width:11ch;
+}
+@media (max-width:980px){
+  .dashboard-overview{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .dashboard-quick-actions{
+    justify-content:flex-start;
+  }
+}
+@media (max-width:680px){
+  .dashboard-overview h1{
+    font-size:clamp(2rem,10vw,2.6rem);
+  }
+  .dashboard-quick-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+  .dashboard-chip{
+    width:100%;
+    min-height:46px;
+  }
+  .dashboard-chip-logout{
+    grid-column:1/-1;
+  }
+  .request-hero h1{
+    max-width:9.5ch;
+  }
+}
