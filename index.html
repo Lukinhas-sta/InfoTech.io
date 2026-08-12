@@ -1,134 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" /><meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; frame-src 'none'; form-action 'self'; script-src 'self' https://cdn.jsdelivr.net; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https://yncspxfsvlqdnodlsosb.supabase.co; connect-src 'self' https://yncspxfsvlqdnodlsosb.supabase.co wss://yncspxfsvlqdnodlsosb.supabase.co; media-src 'none'; worker-src 'none'; manifest-src 'self'; upgrade-insecure-requests"><meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="theme-color" content="#050505" />
-  <meta name="description" content="Rass Studio — Body Piercing, Nail Design, joias e agendamentos em Cerquilho." />
-  <meta name="robots" content="index,follow" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Rass Studio | Piercing • Nail Design • Joias" />
-  <meta property="og:description" content="Seu estilo em cada detalhe. Piercing, Nail Design, joias e agendamentos." />
-  <meta property="og:image" content="assets/images/helix.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <title>Rass Studio | Piercing • Nail Design • Joias</title>
-  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <link rel="stylesheet" href="assets/css/v4.css" />
-  <link rel="stylesheet" href="assets/css/production.css?v=4.8" />
-<script src="assets/js/security.js?v=4.8" defer></script></head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#050816" name="theme-color"/>
+<meta content="Soluções digitais sob medida: criação de sites, sistemas, programas, aplicativos e suporte técnico." name="description"/>
+<meta content="index, follow" name="robots"/>
+<title>Infotech.io | Tecnologia e soluções digitais</title>
+<link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22&gt;&lt;rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23050816%22/&gt;&lt;path d=%22M18 18h28v8H36v20h10v8H18v-8h10V26H18z%22 fill=%22%2300e5ff%22/&gt;&lt;/svg&gt;" rel="icon"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/home.css" rel="stylesheet"/>
+<link href="css/responsivo.css" rel="stylesheet"/>
+<link href="css/refinement-v46.css" rel="stylesheet"/><link href="css/refinement-v472.css" rel="stylesheet"/></head>
 <body>
-  <div class="page-loader" id="pageLoader" aria-hidden="true"><div class="loader-mark">R</div><div class="loader-name">RASS STUDIO</div><div class="loader-line"><span></span></div></div>
-  <div class="scroll-progress" id="scrollProgress"></div><div class="cursor-glow" id="cursorGlow"></div><div class="noise"></div>
-  <div class="site-status-banner hidden" id="siteStatusBanner"></div>
-
-  <header class="header" id="inicio">
-    <a href="#inicio" class="logo"><span class="logo-mark">R</span><span class="logo-copy"><strong>RASS STUDIO</strong><small>BEAUTY · ART · ATTITUDE</small></span></a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span></button>
-    <nav class="nav" id="nav">
-      <a href="#inicio" data-section="inicio">Início</a><a href="#escolha" data-section="escolha">Studio</a><a href="#servicos" data-section="servicos">Serviços</a><a href="#joias" data-section="joias">Joias</a><a href="#galeria" data-section="galeria">Galeria</a><a href="#agenda" data-section="agenda">Agendar</a>
-    </nav>
-    <a href="#agenda" class="btn btn-white header-cta magnetic">Agendar <span>↗</span></a>
-  </header>
-
-  <main>
-    <section class="hero section-black v4-hero">
-      <div class="hero-orbit hero-orbit-a"></div><div class="hero-orbit hero-orbit-b"></div>
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <div class="kicker hero-animate"><span></span><b id="heroEyebrow">PIERCING · NAIL DESIGN · JOIAS</b></div>
-          <h1 class="hero-title v4-title"><span class="hero-line" id="heroLine1">Rass Studio.</span><span class="hero-line hero-line-muted" id="heroLine2">Seu estilo.</span><span class="hero-line"><em id="heroLine3">Sua expressão.</em></span></h1>
-          <p class="hero-lead hero-animate" id="heroSubtitle">Body piercing e nail design em um studio feito para cuidar dos detalhes que fazem você se sentir você.</p>
-          <div class="hero-actions hero-animate"><a href="#agenda" class="btn btn-white btn-large magnetic">Agendar horário <span>→</span></a><a href="#escolha" class="btn btn-outline btn-large magnetic">Conhecer o Studio <span>↘</span></a></div>
-          <div class="hero-trust hero-animate"><div class="trust-item"><span class="trust-icon">◇</span><div><strong>Piercing</strong><small>Estilo e cuidado</small></div></div><div class="trust-item"><span class="trust-icon">✦</span><div><strong>Nail Design</strong><small>Detalhes personalizados</small></div></div><div class="trust-item"><span class="trust-icon">○</span><div><strong>Agenda</strong><small>Horário online</small></div></div></div>
-        </div>
-        <div class="hero-media hero-duo" id="heroMedia">
-          <div class="hero-frame hero-main-photo" data-parallax="0.035"><img id="heroPrimary" src="assets/images/helix.jpg" alt="Trabalho de piercing"><div class="photo-shade"></div><div class="photo-caption"><span>BODY PIERCING</span><strong>Detalhes que expressam você</strong></div></div>
-          <div class="hero-frame hero-side-photo hero-nails-photo" data-parallax="-0.025"><img id="heroSecondary" src="assets/images/nails-fibra.jpg" alt="Nail design"><div class="mini-tag">NAIL DESIGN</div></div>
-          <div class="hero-mini-card glass-card" data-parallax="0.055"><span class="mini-eyebrow">AGENDE ONLINE</span><strong>Escolha a área,<br>serviço, dia e horário.</strong><a href="#agenda">Começar <span>↗</span></a></div>
-          <div class="hero-stamp spin-slow"><span>RASS · STUDIO · BEAUTY ·</span><strong>R</strong></div>
-          <a class="instagram-pill magnetic" href="https://www.instagram.com/rassstudio_" target="_blank" rel="noopener">@rassstudio_ <span>↗</span></a>
-        </div>
-      </div>
-      <a href="#escolha" class="scroll-cue"><span>EXPLORE</span><i></i></a>
-      <div class="hero-marquee"><div>PIERCING ✦ NAIL DESIGN ✦ JOIAS ✦ AGENDAMENTOS ✦ RASS STUDIO ✦ PIERCING ✦ NAIL DESIGN ✦ JOIAS ✦ AGENDAMENTOS ✦</div></div>
-    </section>
-
-    <section class="choice-section section-white" id="escolha">
-      <div class="section-head reveal"><div><div class="section-label">RASS STUDIO</div><h2>O que você procura<br><em>hoje?</em></h2></div><p>Dois universos, a mesma identidade. Escolha sua experiência e veja apenas o que combina com o que você quer fazer.</p></div>
-      <div class="choice-grid">
-        <button class="choice-card piercing-choice reveal tilt-card" data-service-type="Piercing"><img src="assets/images/tragus.jpg" alt="Piercing"><div class="choice-overlay"></div><div class="choice-copy"><small>01 · BODY PIERCING</small><h3>Piercing</h3><p>Perfurações, joias e composições.</p><span>Explorar serviços ↗</span></div></button>
-        <button class="choice-card nails-choice reveal delay-1 tilt-card" data-service-type="Unhas"><img src="assets/images/nails-fibra.jpg" alt="Nail design"><div class="choice-overlay"></div><div class="choice-copy"><small>02 · NAIL DESIGN</small><h3>Nails</h3><p>Alongamento, molde F1 e banho em gel.</p><span>Explorar serviços ↗</span></div></button>
-      </div>
-    </section>
-
-    <section id="servicos" class="services section-white">
-      <div class="section-head reveal"><div><div class="section-label">SERVIÇOS</div><h2>Escolha o detalhe<br>que vai ser <em>seu.</em></h2></div><p>Serviços separados por categoria, com duração, descrição e valor quando configurado pela profissional.</p></div>
-      <div class="filter-row service-filter reveal" id="serviceFilters"></div>
-      <div class="service-sections" id="serviceSections"></div>
-      <div class="service-cta reveal"><div><small>QUER ALGO PERSONALIZADO?</small><h3>Conte sua ideia e peça um orçamento diretamente pelo site.</h3></div><button class="btn btn-black btn-large magnetic" data-open-quote="Orçamento personalizado">Pedir orçamento <span>↗</span></button></div>
-    </section>
-
-    <section class="experience section-black v4-experience">
-      <div class="experience-visual reveal"><img class="experience-main" src="assets/images/procedimento.jpg" alt="Procedimento de piercing"><img class="experience-float" src="assets/images/nails-gel.jpg" alt="Procedimento de unhas"></div>
-      <div class="experience-copy reveal delay-1"><div class="section-label light">A EXPERIÊNCIA RASS</div><h2>Um Studio para cuidar <em>dos seus detalhes.</em></h2><p>Piercing e nail design com atendimento individual, organização e uma experiência pensada do primeiro contato até a finalização.</p><div class="experience-points"><article><span>01</span><div><h3>Escolha sua experiência</h3><p>Piercing ou unhas: o site mostra somente os serviços da área escolhida.</p></div></article><article><span>02</span><div><h3>Veja valores e horários</h3><p>Consulte serviços, disponibilidade e opções antes de chamar.</p></div></article><article><span>03</span><div><h3>Agende em poucos passos</h3><p>Selecione serviço, data e horário; o pedido já entra no painel administrativo.</p></div></article></div><a href="#agenda" class="btn btn-outline btn-large magnetic">Agendar agora <span>→</span></a></div>
-    </section>
-
-    <section id="promocoes" class="promo-section section-white hidden"><div class="section-head reveal"><div><div class="section-label">DESTAQUES</div><h2>Novidades do<br><em>Studio.</em></h2></div></div><div class="promo-grid" id="promoGrid"></div></section>
-
-    <section id="joias" class="jewelry section-white">
-      <div class="section-head reveal"><div><div class="section-label">CATÁLOGO DE JOIAS</div><h2>Joias para completar<br>o seu <em>piercing.</em></h2></div><p>Veja modelos, preço e disponibilidade. O estoque exibido aqui acompanha o que foi registrado no painel do Studio.</p></div>
-      <div class="filter-row reveal" id="jewelryFilters"></div><div class="jewelry-grid" id="jewelryGrid"></div><div class="empty-card hidden" id="jewelryEmpty">Nenhuma joia nessa categoria no momento.</div>
-    </section>
-
-    <section class="lookbook section-black" id="galeria">
-      <div class="section-head light-head reveal"><div><div class="section-label light">GALERIA</div><h2>Do piercing às unhas.<br><em>Resultados que inspiram.</em></h2></div><a class="btn btn-outline btn-large magnetic" href="https://www.instagram.com/rassstudio_" target="_blank" rel="noopener">Ver Instagram <span>↗</span></a></div>
-      <div class="filter-row gallery-filter reveal" id="galleryFilters"></div><p class="gallery-hint reveal">Clique em uma foto para ampliar.</p><div class="gallery-grid v4-gallery" id="galleryGrid"></div>
-    </section>
-
-    <section class="booking section-white" id="agenda">
-      <div class="booking-intro reveal"><div class="section-label">AGENDAMENTO</div><h2>Escolha o seu<br><em>momento.</em></h2><p>Primeiro escolha Piercing ou Unhas. Depois o serviço, data e um horário que esteja livre.</p><div class="booking-benefits"><span>○ Pedido salvo na agenda</span><span>◇ Horários ocupados bloqueados</span><span>✦ Confirmação pelo Studio</span></div><div class="booking-open-status" id="bookingOpenStatus"></div></div>
-      <form class="booking-card reveal delay-1" id="bookingForm" novalidate><div class="hp-field" aria-hidden="true"><label>Não preencha<input id="bookingWebsite" name="website" tabindex="-1" autocomplete="off"></label></div>
-        <div class="booking-step"><div class="step-title"><span>1</span><div><small>ÁREA</small><h3>O que você quer fazer?</h3></div></div><div class="booking-type-grid" id="bookingTypes"></div></div>
-        <div class="booking-step"><div class="step-title"><span>2</span><div><small>SERVIÇO</small><h3>Escolha uma opção</h3></div></div><div class="service-choice-grid" id="bookingServices"></div></div>
-        <div class="booking-step"><div class="step-title"><span>3</span><div><small>PROFISSIONAL</small><h3>Quem vai atender?</h3></div></div><div class="staff-choice-grid" id="bookingStaff"></div></div>
-        <div class="booking-step"><div class="step-title"><span>4</span><div><small>DATA E HORA</small><h3>Quando fica melhor?</h3></div></div><label class="field">Data<input id="bookingDate" type="date" required></label><div class="time-grid" id="timeGrid"><p class="time-placeholder">Escolha uma data para ver os horários.</p></div></div>
-        <div class="booking-step"><div class="step-title"><span>5</span><div><small>SEUS DADOS</small><h3>Como entramos em contato?</h3></div></div><div class="two-fields"><label class="field">Nome completo<input id="clientName" required maxlength="100" autocomplete="name"></label><label class="field">WhatsApp<input id="clientPhone" required maxlength="20" inputmode="tel" autocomplete="tel" placeholder="(15) 99999-9999"></label></div><label class="field">E-mail <small>(opcional)</small><input id="clientEmail" type="email" maxlength="254" autocomplete="email"></label><label class="field">Observação <small>(opcional)</small><textarea id="bookingNotes" rows="3" maxlength="1000"></textarea></label></div>
-        <button class="btn btn-black btn-large full magnetic" id="bookingSubmit" type="submit">Solicitar agendamento <span>↗</span></button><p class="booking-disclaimer">O pedido entra como pendente até a confirmação do Studio.</p>
-      </form>
-    </section>
-
-    <section class="faq section-black" id="duvidas"><div class="section-head light-head reveal"><div><div class="section-label light">DÚVIDAS</div><h2>Antes de<br><em>agendar.</em></h2></div></div><div class="faq-list reveal" id="faqList"><details><summary>O horário fica confirmado imediatamente?<span>+</span></summary><p>Não. O pedido entra como pendente no painel do Studio e pode ser confirmado pela profissional.</p></details><details><summary>Os valores de unhas já estão definidos?<span>+</span></summary><p>Os serviços de unhas foram cadastrados como “sob consulta” até a profissional definir os valores reais no painel administrativo.</p></details><details><summary>Posso ver joias antes do atendimento?<span>+</span></summary><p>Sim. A seção de joias mostra modelos, preços e disponibilidade registrada no estoque.</p></details><details><summary>Onde fica o Studio?<span>+</span></summary><p id="faqLocation">Cerquilho — SP. O endereço completo pode ser informado na confirmação do horário.</p></details></div></section>
-
-    <section class="contact section-white" id="contato">
-      <div class="contact-shell">
-        <div class="contact-heading reveal"><div class="section-label">CONTATO</div><h2>Fale com a<br><em>Rass Studio.</em></h2><p>Agende, tire dúvidas ou peça um orçamento. O atendimento é feito diretamente pelo Studio.</p></div>
-        <div class="contact-cards reveal delay-1">
-          <button class="contact-card contact-whatsapp" id="whatsappBtn" type="button"><span class="contact-card-icon">W</span><div><small>WHATSAPP</small><strong id="contactWhatsapp">(15) 99179-9866</strong><em>Conversar agora →</em></div></button>
-          <a class="contact-card" href="https://www.instagram.com/rassstudio_" target="_blank" rel="noopener"><span class="contact-card-icon">◎</span><div><small>INSTAGRAM</small><strong>@rassstudio_</strong><em>Acompanhar o Studio ↗</em></div></a>
-          <div class="contact-card"><span class="contact-card-icon">⌖</span><div><small>LOCALIZAÇÃO</small><strong id="contactLocation">Cerquilho — SP</strong><em>Atendimento com hora marcada</em></div></div>
-          <div class="contact-card"><span class="contact-card-icon">◷</span><div><small>ATENDIMENTO</small><strong id="contactHours">Com hora marcada</strong><em>Consulte os horários disponíveis</em></div></div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer footer-v5">
-    <div class="footer-main">
-      <div class="footer-brand"><span class="logo-mark">R</span><div><strong>RASS STUDIO</strong><small>PIERCING · NAIL DESIGN · JOIAS</small><p>Beauty, art & attitude. Um Studio pensado para cuidar dos detalhes que expressam você.</p></div></div>
-      <div class="footer-column"><small>NAVEGAÇÃO</small><a href="#servicos">Serviços</a><a href="#joias">Joias</a><a href="#galeria">Galeria</a><a href="#agenda">Agendamentos</a></div>
-      <div class="footer-column"><small>CONTATO</small><a id="footerWhatsappLink" href="https://wa.me/5515991799866" target="_blank" rel="noopener">WhatsApp <span id="footerWhatsapp">(15) 99179-9866</span></a><a href="https://www.instagram.com/rassstudio_" target="_blank" rel="noopener">Instagram @rassstudio_</a><span>Cerquilho — SP</span></div>
-    </div>
-    <div class="footer-bottom"><span>© <b id="year"></b> Rass Studio. Todos os direitos reservados.</span></div>
-  </footer>
-  <a class="floating-booking magnetic" href="#agenda">Agendar <span>✦</span></a><button class="back-top" id="backTop" aria-label="Voltar ao topo">↑</button>
-  <div class="mobile-actionbar" aria-label="Ações rápidas"><a href="#agenda">Agendar horário</a><button type="button" id="mobileWhatsappBtn">WhatsApp</button></div>
-
-  <div class="modal" id="quoteModal" aria-hidden="true"><div class="modal-bg" data-close-quote></div><div class="modal-card"><button class="modal-close" data-close-quote>×</button><small>ORÇAMENTO</small><h3 id="quoteTitle">Solicitar orçamento</h3><form id="quoteForm" novalidate><div class="hp-field" aria-hidden="true"><label>Não preencha<input id="quoteWebsite" name="website" tabindex="-1" autocomplete="off"></label></div><input type="hidden" id="quoteService"><label class="field">Nome<input id="quoteName" required maxlength="100" autocomplete="name"></label><label class="field">WhatsApp<input id="quotePhone" required maxlength="20" inputmode="tel" autocomplete="tel"></label><label class="field">Conte o que você deseja<textarea id="quoteDescription" rows="4" maxlength="1500"></textarea></label><button class="btn btn-black full" type="submit">Enviar pedido <span>↗</span></button></form></div></div>
-  <div class="modal product-modal" id="jewelryModal" aria-hidden="true"><div class="modal-bg" data-close-jewelry></div><div class="modal-card wide" id="jewelryModalContent"></div></div>
-  <div class="gallery-lightbox" id="galleryLightbox" aria-hidden="true"><button class="lightbox-close" data-gallery-close>×</button><button class="lightbox-nav prev" data-gallery-prev>←</button><div class="lightbox-stage"><img id="lightboxImage" alt=""><div class="lightbox-meta"><span id="lightboxCount"></span><strong id="lightboxCaption"></strong></div></div><button class="lightbox-nav next" data-gallery-next>→</button></div>
-  <div class="toast" id="toast"></div>
-
-  <script src="assets/js/supabase-config.js"></script><script src="assets/js/data.js"></script><script src="assets/js/remote.js"></script><script src="assets/js/app.js?v=4.8"></script>
-</body>
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<header class="site-header">
+<nav aria-label="Navegação principal" class="navbar">
+<div class="logo"><a href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a></div>
+<button aria-controls="menu-principal" aria-expanded="false" aria-label="Abrir menu" class="menu-mobile" type="button"><span></span><span></span><span></span></button>
+<ul class="menu" id="menu-principal"><li><a aria-current="page" class="ativo" href="index.html">Início</a></li><li><a href="servicos.html">Serviços</a></li><li><a href="solicitacoes.html">Solicitações</a></li><li><a href="projetos.html">Projetos</a></li><li><a href="contato.html">Contato</a></li><li><a href="sobre.html">Sobre Nós</a></li></ul>
+</nav>
+</header>
+<main id="conteudo">
+<section class="hero container">
+<div class="hero-copy">
+<span class="eyebrow"><span class="status-dot"></span>Soluções digitais sob medida</span>
+<h1>Transformamos ideias em <span>soluções digitais</span> que funcionam.</h1>
+<p>Sites, sistemas, aplicativos e suporte técnico planejados com clareza para facilitar sua rotina e fortalecer seu negócio.</p>
+<div class="hero-actions">
+<a aria-label="Solicitar atendimento pela Área do Cliente" class="btn btn-whatsapp" href="login.html?destino=nova-solicitacao.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 4v2h10V7H7zm0 4v2h10v-2H7zm0 4v2h6v-2H7z"></path></svg>Solicitar atendimento</a>
+<a class="btn btn-outline" href="servicos.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 11h10.2l-3.6-3.6L13 6l6 6-6 6-1.4-1.4 3.6-3.6H5v-2z"></path></svg>Conhecer serviços</a>
+</div>
+<ul class="hero-benefits"><li>Atendimento personalizado</li><li>Projetos responsivos</li><li>Comunicação transparente</li></ul>
+</div>
+<div aria-label="Representação de soluções conectadas" class="hero-visual">
+<div class="dashboard-card">
+<div class="window-bar"><span></span><span></span><span></span><small>infotech.io</small></div>
+<div class="code-line wide"></div><div class="code-line medium"></div>
+<div class="dashboard-grid">
+<div class="mini-card"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M3 4h18v12H3V4zm2 2v8h14V6H5zm3 14h8v-2H8v2z"></path></svg><span>Sites</span></div>
+<div class="mini-card"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 3v13h10V5H7zm4 14h2v1h-2v-1z"></path></svg><span>Apps</span></div>
+<div class="mini-card"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v3h12V6H6zm0 5v7h5v-7H6zm7 0v7h5v-7h-5z"></path></svg><span>Sistemas</span></div>
+</div>
+<div class="signal"><i></i><i></i><i></i><i></i><i></i></div>
+</div>
+<span class="floating-chip chip-a">&lt;/&gt;</span><span class="floating-chip chip-b">01</span><span class="floating-chip chip-c">⚙</span>
+</div>
+</section>
+<section aria-label="Diferenciais" class="proof-strip"><div class="container proof-grid"><div><strong><span class="counter" data-counter="6">6</span></strong><span>Áreas de atendimento</span></div><div><strong><span class="counter" data-counter="4">4</span></strong><span>Etapas bem definidas</span></div><div><strong><span class="counter" data-counter="100">100</span>%</strong><span>Atendimento personalizado</span></div><div><strong>Online</strong><span>Acompanhamento pela Área do Cliente</span></div></div></section>
+<section class="section container">
+<div class="section-heading"><span class="eyebrow">O que fazemos</span><h2>Tecnologia para resolver necessidades reais</h2><p>Cada serviço é planejado para entregar uma solução clara, útil e adequada ao seu objetivo.</p></div>
+<div class="card-grid four services-preview">
+<article class="feature-card"><span class="card-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M3 4h18v16H3V4zm2 2v3h14V6H5zm0 5v7h14v-7H5z"></path></svg></span><h3>Sites profissionais</h3><p>Sites modernos, rápidos e preparados para celular, tablet e computador.</p><a href="servicos.html">Conhecer serviço <span>→</span></a></article>
+<article class="feature-card"><span class="card-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 3h16v18H4V3zm2 2v4h12V5H6zm0 6v8h5v-8H6zm7 0v8h5v-8h-5z"></path></svg></span><h3>Sistemas e programas</h3><p>Soluções personalizadas para organizar tarefas e melhorar processos.</p><a href="servicos.html">Conhecer serviço <span>→</span></a></article>
+<article class="feature-card"><span class="card-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 3v13h10V5H7zm4 14h2v1h-2v-1z"></path></svg></span><h3>Aplicativos</h3><p>Projetos pensados para facilitar rotinas e aproximar negócios de seus clientes.</p><a href="servicos.html">Conhecer serviço <span>→</span></a></article>
+<article class="feature-card"><span class="card-icon"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M22 19.6 13.5 11a6 6 0 0 0-7.9-7.9l3.3 3.3-2.5 2.5-3.3-3.3A6 6 0 0 0 11 13.5l8.6 8.5 2.4-2.4z"></path></svg></span><h3>Suporte técnico</h3><p>Ajuda com computadores, notebooks, celulares e configurações.</p><a href="servicos.html">Conhecer serviço <span>→</span></a></article>
+</div>
+</section>
+<section class="section section-dark"><div class="container"><div class="section-heading"><span class="eyebrow">Por que escolher a Infotech</span><h2>Clareza em cada etapa do projeto</h2><p>Do primeiro contato à entrega, você entende o que será feito e por quê.</p></div><div class="trust-grid"><article><strong>01</strong><h3>Escuta antes da solução</h3><p>Primeiro entendemos sua necessidade para depois indicar o melhor caminho.</p></article><article><strong>02</strong><h3>Comunicação transparente</h3><p>Explicações diretas e acompanhamento das etapas do desenvolvimento.</p></article><article><strong>03</strong><h3>Projeto sob medida</h3><p>Nada de solução genérica: o trabalho considera seu objetivo e realidade.</p></article><article><strong>04</strong><h3>Experiência responsiva</h3><p>Interfaces preparadas para funcionar bem em diferentes tamanhos de tela.</p></article></div></div></section>
+<section class="section container"><div class="section-heading"><span class="eyebrow">Como trabalhamos</span><h2>Um processo simples e organizado</h2></div><div class="steps-grid"><article><span>1</span><h3>Conversa inicial</h3><p>Entendemos sua ideia, problema ou necessidade.</p></article><article><span>2</span><h3>Planejamento</h3><p>Definimos a solução, as etapas e o que será necessário.</p></article><article><span>3</span><h3>Desenvolvimento</h3><p>Construímos e revisamos o projeto com atenção aos detalhes.</p></article><article><span>4</span><h3>Entrega e suporte</h3><p>Entregamos a solução e orientamos sobre os próximos passos.</p></article></div></section>
+<section class="cta container"><div><span class="eyebrow">Vamos conversar?</span><h2>Conte sua ideia. A tecnologia cuida do próximo passo.</h2><p>Envie sua solicitação e acompanhe análise, orçamento e atualizações pela Área do Cliente.</p></div><a aria-label="Criar uma nova solicitação na Área do Cliente" class="btn btn-whatsapp" href="login.html?destino=nova-solicitacao.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm6 4v4H7v2h4v4h2v-4h4v-2h-4V7h-2z"></path></svg>Criar solicitação</a></section>
+</main>
+<footer class="site-footer">
+<div class="footer-simple container">
+<a class="footer-logo" href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a>
+<p>Transformando ideias em soluções digitais úteis,<br class="footer-break"/> modernas e acessíveis.</p>
+</div>
+<div class="footer-bottom container">
+<p>© 2026 Infotech.io</p>
+<p>Tecnologia • Inovação • Soluções</p>
+</div>
+</footer>
+<script src="css/jss/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="css/jss/supabase-config.js"></script>
+<script src="css/jss/auth-demo.js"></script><script src="css/jss/refinement-v46.js"></script></body>
 </html>
