@@ -637,3 +637,103 @@ main,.site-header,.site-footer,.navbar,.container{max-width:100%}
 @media(prefers-reduced-motion:reduce){
   .account-login-link svg,.account-avatar svg,.about-next-star span,.user-character .user-head,.user-character .user-body,.user-character .user-arm,.lock-shackle{animation:none!important}
 }
+
+/* =========================================================
+   InfoTech V6.3 — synchronized neon + true-feel infinite loops
+   ========================================================= */
+
+/* The logo itself stays still; only light/rings breathe together. */
+.logo-heartbeat::before,
+.logo-heartbeat::after,
+.logo-heartbeat .neon-aura{
+  transform-origin:50% 50%;
+  animation:ringHeartbeatV63 1.72s cubic-bezier(.32,.72,.28,1) infinite!important;
+  will-change:transform,opacity,filter;
+}
+.logo-heartbeat::before{border-color:rgba(69,222,255,.30)!important;box-shadow:0 0 22px rgba(36,231,255,.08)}
+.logo-heartbeat::after{border-color:rgba(36,231,255,.22)!important}
+.logo-heartbeat img{
+  animation:logoGlowV63 1.72s cubic-bezier(.32,.72,.28,1) infinite!important;
+  transform:none!important;
+  will-change:filter;
+}
+@keyframes ringHeartbeatV63{
+  0%,100%{transform:scale(.985) rotate(0deg);opacity:.14;filter:brightness(.72)}
+  11%{transform:scale(1.018) rotate(1.2deg);opacity:.68;filter:brightness(1.35)}
+  20%{transform:scale(.998) rotate(.2deg);opacity:.28;filter:brightness(.9)}
+  31%{transform:scale(1.038) rotate(-1.1deg);opacity:.92;filter:brightness(1.62)}
+  43%{transform:scale(1.004) rotate(0deg);opacity:.34;filter:brightness(.95)}
+  64%{transform:scale(.985) rotate(0deg);opacity:.12;filter:brightness(.68)}
+}
+@keyframes logoGlowV63{
+  0%,100%{filter:drop-shadow(0 20px 58px rgba(0,0,0,.50)) drop-shadow(0 0 14px rgba(24,207,255,.10))}
+  11%{filter:drop-shadow(0 20px 58px rgba(0,0,0,.50)) drop-shadow(0 0 31px rgba(24,231,255,.38))}
+  20%{filter:drop-shadow(0 20px 58px rgba(0,0,0,.50)) drop-shadow(0 0 18px rgba(24,207,255,.18))}
+  31%{filter:drop-shadow(0 20px 58px rgba(0,0,0,.50)) drop-shadow(0 0 42px rgba(36,231,255,.52))}
+  43%,64%{filter:drop-shadow(0 20px 58px rgba(0,0,0,.50)) drop-shadow(0 0 15px rgba(24,207,255,.12))}
+}
+
+/* Less reading at the top, fewer forced line breaks. */
+.hero-v7{grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);gap:44px;min-height:auto;padding-block:54px 64px}
+.hero-v7 .hero-copy{min-width:0}
+.hero-v7 h1{font-size:clamp(2.8rem,5.25vw,5.2rem);line-height:.96;max-width:12.8ch;margin:17px 0 16px}
+.hero-v7 p{max-width:54ch;line-height:1.55;font-size:clamp(.98rem,1.35vw,1.12rem)}
+.hero-v7 .hero-actions{margin-top:23px}
+.hero-v7 .hero-points{margin-top:20px;gap:14px}
+.section-v7 .section-heading{max-width:680px;margin-bottom:30px}
+.section-v7 .section-heading h2{font-size:clamp(2rem,3.65vw,3.55rem);line-height:1.02;margin:15px 0 10px}
+.section-v7 .section-heading p{font-size:.96rem;line-height:1.55;max-width:55ch}
+
+/* Infinite tracks use native momentum. Clones are visual runway only. */
+.coverflow-stage,
+.process-shelf,
+.service-shelf,
+.portfolio-shelf,
+.about-values{
+  scroll-snap-type:x proximity!important;
+  scroll-behavior:auto;
+}
+[data-loop-clone]{user-select:none}
+.coverflow-stage{overscroll-behavior-inline:contain}
+.coverflow-stage.is-dragging,.process-shelf.is-dragging,.service-shelf.is-dragging,.portfolio-shelf.is-dragging,.about-values.is-dragging{scroll-snap-type:none!important}
+
+/* About page: compact pitch instead of a wall of text. */
+.about-hero-v63{min-height:auto;padding-block:56px 62px;gap:44px}
+.about-hero-v63 h1{font-size:clamp(2.5rem,5vw,4.8rem);line-height:.98;max-width:12ch;margin-bottom:16px}
+.about-hero-v63 p{font-size:1.02rem;line-height:1.55;max-width:48ch}
+
+/* Projects flow straight from cases to CTA after removing the generic standard section. */
+.portfolio-shelf + .shelf-dots{margin-bottom:10px}
+
+@media(max-width:680px){
+  .hero-v7{grid-template-columns:1fr!important;gap:18px;padding-top:28px!important;padding-bottom:28px!important}
+  .hero-v7 h1{font-size:clamp(2.45rem,11.4vw,3.45rem)!important;line-height:.96!important;letter-spacing:-.045em!important;max-width:10.8ch!important;margin:14px auto 14px!important;text-align:center}
+  .hero-v7 h1 span{display:inline!important}
+  .hero-v7 p{font-size:.96rem!important;line-height:1.48!important;max-width:34ch!important;margin-inline:auto;text-align:center}
+  .hero-v7 .eyebrow{margin-inline:auto;display:flex;width:max-content;max-width:100%;font-size:.68rem;letter-spacing:.10em}
+  .hero-v7 .hero-actions{margin-top:19px;gap:9px}.hero-v7 .hero-actions .btn{min-height:49px;width:100%}
+  .hero-v7 .hero-points{justify-content:center;margin-top:16px;gap:10px 15px;font-size:.75rem}
+  .hero-v7 .hero-visual{min-height:275px!important;margin-top:2px}
+  .logo-heartbeat{width:min(76vw,310px)!important}
+  .proof-grid article{padding:17px 20px}.proof-grid strong{font-size:1.12rem}.proof-grid span{font-size:.72rem}
+  .section-v7 .section-heading{margin-bottom:20px}.section-v7 .section-heading h2{font-size:clamp(1.92rem,8.6vw,2.65rem);line-height:1.02}.section-v7 .section-heading p{font-size:.88rem;line-height:1.48}
+  .about-hero-v63{padding-block:36px 42px!important;gap:24px}.about-hero-v63 h1{font-size:clamp(2.3rem,10.2vw,3.2rem)!important;line-height:.98!important;max-width:9.5ch;margin-inline:auto;text-align:center}.about-hero-v63 p{font-size:.94rem!important;line-height:1.48!important;max-width:31ch;margin-inline:auto;text-align:center}.about-hero-v63 .hero-actions,.about-hero-v63 .btn{width:100%}.about-hero-v63>div:first-child{text-align:center}.about-hero-v63 .eyebrow{margin-inline:auto}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .logo-heartbeat::before,.logo-heartbeat::after,.logo-heartbeat .neon-aura,.logo-heartbeat img{animation:none!important}
+}
+
+/* Fixed physical widths are required once the infinite runway duplicates cards. */
+.process-shelf .process-step{flex:0 0 calc((100% - 36px)/4);min-width:230px}
+.service-shelf .service-product{flex:0 0 calc((100% - 36px)/3);min-width:290px}
+.portfolio-shelf .portfolio-card{flex:0 0 calc((100% - 18px)/2);min-width:390px}
+.about-values{display:flex;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;gap:1px}
+.about-values::-webkit-scrollbar{display:none}
+.about-values article{flex:0 0 calc((100% - 2px)/3);min-width:220px;scroll-snap-align:center}
+
+@media(max-width:680px){
+  .process-shelf .process-step{flex:0 0 78vw;min-width:0;max-width:320px}
+  .service-shelf .service-product,.portfolio-shelf .portfolio-card{flex:0 0 84vw;min-width:0;max-width:360px}
+  .about-values article{flex:0 0 78vw;min-width:0;max-width:320px}
+}
