@@ -9,13 +9,27 @@
   const normalize=v=>String(v||'').trim();
   const email=v=>normalize(v).toLowerCase();
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const safeExternalUrl=v=>{try{const u=new URL(normalize(v));return ['http:','https:'].includes(u.protocol)?u.href:''}catch(_){return ''}};
   const fmt=iso=>iso?new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date(iso)):'—';
   const msg=(el,text,type='')=>{if(!el)return;el.textContent=text;el.className=`form-message ${type}`};
   const busy=(form,on)=>{form?.querySelectorAll('button,input,select,textarea').forEach(x=>x.disabled=on);form?.setAttribute('aria-busy',String(on))};
   const params=new URLSearchParams(location.search);
   const allowedDestinations=new Set(['painel-cliente.html','nova-solicitacao.html','perfil.html']);
+  function safeDestination(raw){
+    if(!raw)return '';
+    try{
+      const u=new URL(String(raw),location.href);
+      const file=u.pathname.split('/').pop();
+      if(!allowedDestinations.has(file))return '';
+      if(file==='nova-solicitacao.html'){
+        const service=normalize(u.searchParams.get('servico')).slice(0,80);
+        return service?`${file}?servico=${encodeURIComponent(service)}`:file;
+      }
+      return file;
+    }catch(_){return ''}
+  }
   const savedDestination=localStorage.getItem('infotech:after-confirm');
-  const destination=allowedDestinations.has(params.get('destino'))?params.get('destino'):(allowedDestinations.has(savedDestination)?savedDestination:'painel-cliente.html');
+  const destination=safeDestination(params.get('destino'))||safeDestination(savedDestination)||'painel-cliente.html';
   const protectedPage=document.body.hasAttribute('data-client-protected');
   const page=location.pathname.split('/').pop()||'index.html';
   const displayName=u=>normalize(u?.user_metadata?.full_name||u?.user_metadata?.name||u?.email?.split('@')[0]||'Cliente');
@@ -49,7 +63,7 @@
     trigger?.addEventListener('click',e=>{e.stopPropagation();const open=dd.hidden;dd.hidden=!open;trigger.setAttribute('aria-expanded',String(open))});
     document.addEventListener('click',e=>{if(wrap&&!wrap.contains(e.target)){dd.hidden=true;trigger?.setAttribute('aria-expanded','false')}});
     $('.account-logout',slot)?.addEventListener('click',async()=>{await db.auth.signOut();location.href='index.html'});
-    $$('a[href^="login.html?destino="]').forEach(a=>{const q=new URLSearchParams(a.href.split('?')[1]||'');const d=q.get('destino');if(allowedDestinations.has(d))a.href=d});
+    $$('a[href^="login.html?destino="]').forEach(a=>{const q=new URLSearchParams(a.href.split('?')[1]||'');const d=safeDestination(q.get('destino'));if(d)a.href=d});
   }
   async function initAuthState(){
     const {data:{session}}=await db.auth.getSession();
@@ -59,11 +73,25 @@
       if(p?.is_blocked){await db.auth.signOut();currentUser=null}else currentUser=user;
     }
     await renderAccount(currentUser);
-    if(protectedPage&&!currentUser) location.replace(`login.html?destino=${encodeURIComponent(page)}`);
+    if(protectedPage&&!currentUser){const currentTarget=safeDestination(`${page}${location.search}`)||safeDestination(page)||'painel-cliente.html';location.replace(`login.html?destino=${encodeURIComponent(currentTarget)}`)}
     window.dispatchEvent(new CustomEvent('infotech:auth-ready',{detail:{user:currentUser}}));
   }
   function validateStrongPassword(v){
     return v.length>=8 && /[A-Za-z]/.test(v) && /\d/.test(v);
+  }
+  const signupDraftKey='infotech:signup-draft';
+  function saveSignupDraft(emailValue,passwordValue){
+    try{sessionStorage.setItem(signupDraftKey,JSON.stringify({email:email(emailValue),password:String(passwordValue||''),destination,createdAt:Date.now()}))}catch(_){}
+  }
+  function takeSignupDraft(){
+    try{
+      const raw=sessionStorage.getItem(signupDraftKey);
+      sessionStorage.removeItem(signupDraftKey);
+      if(!raw)return null;
+      const draft=JSON.parse(raw);
+      if(!draft?.email||!draft?.password||Date.now()-Number(draft.createdAt||0)>5*60*1000)return null;
+      return draft;
+    }catch(_){return null}
   }
   function initLogin(){
     const form=$('#login-form');if(!form)return;
@@ -71,15 +99,43 @@
       e.preventDefault();const out=$('#login-message');
       if(!form.checkValidity()){form.reportValidity();return}
       busy(form,true);msg(out,'Validando sua conta...','success');
-      const {data,error}=await db.auth.signInWithPassword({email:email(form.elements.email.value),password:String(form.elements.password.value||'')});
-      if(error||!data.user){busy(form,false);msg(out,error?.message==='Email not confirmed'?'Confirme seu e-mail antes de entrar.':'E-mail ou senha incorretos.','error');return}
+      const loginEmail=email(form.elements.email.value), loginPassword=String(form.elements.password.value||'');
+      const {data,error}=await db.auth.signInWithPassword({email:loginEmail,password:loginPassword});
+      if(error||!data.user){
+        busy(form,false);
+        const message=String(error?.message||'');
+        const code=String(error?.code||'');
+        if(code==='email_not_confirmed'||/email not confirmed/i.test(message)){msg(out,'Confirme seu e-mail antes de entrar.','error');return}
+        const invalid=code==='invalid_credentials'||/invalid login credentials|invalid credentials|email or password/i.test(message);
+        if(invalid){
+          saveSignupDraft(loginEmail,loginPassword);
+          msg(out,'Conta não reconhecida com esses dados. Abrindo o cadastro com e-mail e senha preenchidos...','success');
+          const dest=safeDestination(params.get('destino'))||'painel-cliente.html';
+          setTimeout(()=>location.replace(`cadastro.html?origem=login&destino=${encodeURIComponent(dest)}`),420);
+          return;
+        }
+        msg(out,'Não foi possível validar o acesso agora. Tente novamente.','error');return;
+      }
       const p=await profileRole(data.user.id);
       if(p?.is_blocked){await db.auth.signOut();busy(form,false);msg(out,'Esta conta está bloqueada. Entre em contato com a Infotech.','error');return}
-      msg(out,'Acesso liberado. Abrindo sua área...','success');setTimeout(()=>location.replace(destination),300);
+      localStorage.removeItem('infotech:after-confirm');msg(out,'Acesso liberado. Abrindo sua área...','success');setTimeout(()=>location.replace(destination),300);
     });
   }
   function initRegister(){
     const form=$('#register-form');if(!form)return;
+    const draft=takeSignupDraft();
+    if(draft){
+      form.elements.email.value=draft.email;
+      form.elements.password.value=draft.password;
+      form.elements.confirmPassword.value=draft.password;
+      const draftDestination=safeDestination(draft.destination);if(draftDestination)localStorage.setItem('infotech:after-confirm',draftDestination);
+      const note=document.createElement('div');
+      note.className='signup-prefill-note';
+      note.innerHTML='E-mail e senha vieram da tentativa de acesso e foram preenchidos só nesta tela. Complete seu nome para criar a conta. Se você já tinha cadastro, use <a href="recuperar-senha.html">recuperar senha</a>.';
+      form.parentElement?.insertBefore(note,form);
+      form.elements.name?.focus();
+      form.elements.password?.dispatchEvent(new Event('input',{bubbles:true}));
+    }
     form.addEventListener('submit',async e=>{
       e.preventDefault();const out=$('#register-message');
       if(!form.checkValidity()){form.reportValidity();return}
@@ -87,11 +143,19 @@
       if(!validateStrongPassword(password)){msg(out,'Use ao menos 8 caracteres, incluindo letras e números.','error');return}
       if(password!==confirm){msg(out,'As senhas não coincidem.','error');return}
       busy(form,true);msg(out,'Criando sua conta segura...','success');
-      const dest=allowedDestinations.has(params.get('destino'))?params.get('destino'):'painel-cliente.html';
+      const dest=safeDestination(params.get('destino'))||safeDestination(draft?.destination)||'painel-cliente.html';
       localStorage.setItem('infotech:after-confirm',dest);
       const redirect=new URL(`email-confirmado.html?destino=${encodeURIComponent(dest)}`,location.href).href;
       const {data,error}=await db.auth.signUp({email:email(form.elements.email.value),password,options:{data:{full_name:normalize(form.elements.name.value)},emailRedirectTo:redirect}});
-      if(error){busy(form,false);msg(out,error.message||'Não foi possível criar a conta.','error');return}
+      if(error){
+        busy(form,false);
+        const m=String(error.message||'');
+        if(/already registered|already been registered|user already exists/i.test(m)){msg(out,'Esse e-mail já possui conta. Entre com a senha correta ou use “Esqueci minha senha”.','error');return}
+        msg(out,m||'Não foi possível criar a conta.','error');return
+      }
+      if(data?.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0){
+        busy(form,false);msg(out,'Esse e-mail já possui conta. Use “Esqueci minha senha” se não lembrar a senha.','error');return;
+      }
       if(data.session){msg(out,'Conta criada e autenticada. Abrindo sua área...','success');setTimeout(()=>location.replace(dest),350);return}
       form.reset();busy(form,false);msg(out,'Conta criada! Abra o e-mail de confirmação. Ao confirmar, você volta para a Infotech automaticamente.','success');
     });
@@ -99,7 +163,7 @@
   async function initConfirmation(){
     const root=$('#confirmation-root');if(!root)return;
     const saved=localStorage.getItem('infotech:after-confirm');
-    const dest=allowedDestinations.has(params.get('destino'))?params.get('destino'):(allowedDestinations.has(saved)?saved:'painel-cliente.html');
+    const dest=safeDestination(params.get('destino'))||safeDestination(saved)||'painel-cliente.html';
     const status=$('#confirmation-status'), action=$('#confirmation-action');
     msg(status,'Validando sua confirmação...','success');
     let session=(await db.auth.getSession()).data.session;
@@ -164,7 +228,7 @@
       e.preventDefault();const out=$('#request-message');if(!form.checkValidity()){form.reportValidity();return}
       const user=await current();if(!user){location.href='login.html?destino=nova-solicitacao.html';return}
       busy(form,true);msg(out,'Registrando sua solicitação...','success');const fd=new FormData(form);
-      const {data,error}=await db.from('requests').insert({protocol:'',user_id:user.id,owner_email:user.email,owner_name:displayName(user),title:normalize(fd.get('title')),service:fd.get('service'),description:normalize(fd.get('description')),deadline:fd.get('deadline'),budget:fd.get('budget'),contact:fd.get('contact'),reference_url:normalize(fd.get('reference'))||null}).select('protocol').single();
+      const {data,error}=await db.from('requests').insert({protocol:'',user_id:user.id,owner_email:user.email,owner_name:displayName(user),title:normalize(fd.get('title')),service:fd.get('service'),description:normalize(fd.get('description')),deadline:fd.get('deadline'),budget:fd.get('budget'),contact:fd.get('contact'),reference_url:safeExternalUrl(fd.get('reference'))||null}).select('protocol').single();
       busy(form,false);if(error){console.error(error);msg(out,'Não foi possível enviar agora. Tente novamente.','error');return}
       sessionStorage.setItem('infotechLastProtocol',data.protocol);location.href='solicitacao-enviada.html';
     });
@@ -184,7 +248,7 @@
   function renderDetail(item){
     const set=(s,v)=>{const el=$(s);if(el)el.textContent=v||'—'};
     set('[data-request-id]','#'+item.id);set('[data-request-title]',item.title);set('[data-request-service]',item.service);set('[data-request-description]',item.description);set('[data-request-deadline]',item.deadline);set('[data-request-budget]',item.budget);set('[data-request-contact]',item.contact);set('[data-request-date]',fmt(item.createdAt));
-    const ref=$('[data-request-reference]');if(ref)ref.innerHTML=item.reference?`<a href="${esc(item.reference)}" rel="noopener noreferrer" target="_blank">Abrir referência</a>`:'Não informada';
+    const ref=$('[data-request-reference]');if(ref){const safeRef=safeExternalUrl(item.reference);ref.innerHTML=safeRef?`<a href="${esc(safeRef)}" rel="noopener noreferrer" target="_blank">Abrir referência</a>`:'Não informada'};
     const st=$('[data-request-status]');if(st){st.textContent=item.status;st.className=`status ${statusClass(item.status)}`}
     const res=$('#response-content');if(res)res.innerHTML=item.adminResponse?`<div class="response-grid"><div><span>Viabilidade</span><strong>${esc(item.adminResponse.viability||'Em avaliação')}</strong></div><div><span>Valor</span><strong>${esc(item.adminResponse.value||'A combinar')}</strong></div><div><span>Prazo</span><strong>${esc(item.adminResponse.estimatedDeadline||'A combinar')}</strong></div></div><p>${esc(item.adminResponse.response||'')}</p>${item.adminResponse.notes?`<p>${esc(item.adminResponse.notes)}</p>`:''}`:'<div class="empty-state">A equipe ainda está analisando sua solicitação.</div>';
   }

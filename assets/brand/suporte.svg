@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" role="img" aria-label="Suporte InfoTech.io">
+  <defs>
+    <radialGradient id="bg"><stop offset="0" stop-color="#06182a"/><stop offset=".72" stop-color="#020812"/><stop offset="1" stop-color="#000"/></radialGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#20f0ff"/><stop offset=".55" stop-color="#20bfff"/><stop offset="1" stop-color="#1768ff"/></linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="960" height="960" fill="#000"/>
+  <circle cx="480" cy="480" r="438" fill="url(#bg)" stroke="#25dfff" stroke-width="12"/>
+  <circle cx="480" cy="480" r="423" fill="none" stroke="#1883ff" stroke-width="3" opacity=".8"/>
+  
+    <g fill="none" stroke="url(#blue)" stroke-width="9" stroke-linecap="round" opacity=".78">
+      <path d="M70 335h95l45 45h70"/><circle cx="280" cy="380" r="11" fill="#12dfff" stroke="none"/>
+      <path d="M70 385h70l55 55h70"/><circle cx="265" cy="440" r="11" fill="#12dfff" stroke="none"/>
+      <path d="M70 445h105l35 35h75"/><circle cx="285" cy="480" r="11" fill="#12dfff" stroke="none"/>
+      <path d="M70 505h75l55 55h85"/><circle cx="285" cy="560" r="11" fill="#12dfff" stroke="none"/>
+      <path d="M890 335h-95l-45 45h-70"/><circle cx="680" cy="380" r="11" fill="#12dfff" stroke="none"/>
+      <path d="M890 385h-70l-55 55h-70"/><circle cx="695" cy="440" r="11" fill="#12dfff" stroke="none"/>
+      <path d="M890 445H785l-35 35h-75"/><circle cx="675" cy="480" r="11" fill="#12dfff" stroke="none"/>
+      <path d="M890 505h-75l-55 55h-85"/><circle cx="675" cy="560" r="11" fill="#12dfff" stroke="none"/>
+    </g>
+  <g transform="translate(0,-10)">
+    <circle cx="480" cy="150" r="86" fill="#03101c" stroke="url(#blue)" stroke-width="10"/>
+    <path d="M420 184V112h26v72z" fill="url(#blue)"/><path d="M462 112h86v22h-30v70h-26v-70h-30z" fill="#fff"/>
+    <path d="M522 98l38-42m-16 42 56-56m-41 82 51-18" fill="none" stroke="#20eaff" stroke-width="9" stroke-linecap="round"/><circle cx="563" cy="56" r="9" fill="#071421" stroke="#20eaff" stroke-width="7"/><circle cx="602" cy="40" r="9" fill="#071421" stroke="#20eaff" stroke-width="7"/><circle cx="614" cy="104" r="9" fill="#071421" stroke="#20eaff" stroke-width="7"/>
+  </g>
+  <g filter="url(#glow)"><g class="icon" fill="none" stroke="url(#blue)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M365 445v-47c0-78 51-132 115-132s115 54 115 132v47"/><rect x="337" y="420" width="62" height="112" rx="28"/><rect x="561" y="420" width="62" height="112" rx="28"/><path d="M592 530c-15 50-48 70-91 70h-45"/><circle cx="445" cy="600" r="13" fill="#5bf5ff" stroke="none"/>
+        <circle cx="480" cy="388" r="60"/><path d="M438 477c21-23 49-35 82-35s61 12 82 35" opacity=".65"/>
+      </g></g>
+  <text x="480" y="724" text-anchor="middle" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="84" font-weight="700" letter-spacing="3">SUPORTE</text>
+  <path d="M300 776h150m60 0h150" stroke="url(#blue)" stroke-width="6" stroke-linecap="round"/><circle cx="480" cy="776" r="13" fill="#24eaff"/>
+  <text x="480" y="840" text-anchor="middle" fill="#25cfff" font-family="Arial,Helvetica,sans-serif" font-size="34" font-weight="600" letter-spacing="8">INFOTECH.IO</text>
+</svg>

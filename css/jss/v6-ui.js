@@ -49,10 +49,9 @@
   'use strict';
   const $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const prefersHover=matchMedia('(hover:hover) and (pointer:fine)').matches;
 
   const logicalOf=item=>Number(item?.dataset?.loopIndex||0);
-  const itemCenter=(item)=>item.offsetLeft+item.offsetWidth/2;
+  const itemCenter=item=>item.offsetLeft+item.offsetWidth/2;
   const nearestIndex=(track,items)=>{
     const center=track.scrollLeft+track.clientWidth/2;
     let best=0,dist=Infinity;
@@ -62,11 +61,7 @@
     }
     return best;
   };
-  const centerTo=(track,item,behavior='smooth')=>{
-    if(!item)return;
-    const left=itemCenter(item)-track.clientWidth/2;
-    track.scrollTo({left,behavior:reduced?'auto':behavior});
-  };
+  const centerLeft=(track,item)=>itemCenter(item)-track.clientWidth/2;
 
   function cloneCard(node,index){
     const c=node.cloneNode(true);
@@ -76,7 +71,7 @@
     c.setAttribute('aria-hidden','true');
     c.querySelectorAll('[id]').forEach(x=>x.removeAttribute('id'));
     c.querySelectorAll('a,button,input,select,textarea,[tabindex]').forEach(x=>x.setAttribute('tabindex','-1'));
-    c.querySelectorAll('img').forEach(img=>{img.loading='lazy';img.decoding='async'});
+    c.querySelectorAll('img').forEach(img=>{img.loading='eager';img.decoding='async';img.fetchPriority='low'});
     return c;
   }
 
@@ -90,25 +85,81 @@
     return [...track.children];
   }
 
-  function addDots(host,count,go){
-    const dots=host.querySelector('[data-carousel-dots],[data-snap-dots]') || host.nextElementSibling?.matches?.('[data-snap-dots]') && host.nextElementSibling;
+  function dotsFor(host,count,go){
+    const dots=host.querySelector('[data-carousel-dots],[data-snap-dots]') ||
+      (host.nextElementSibling?.matches?.('[data-snap-dots]') ? host.nextElementSibling : null);
     if(!dots)return {update:()=>{}};
     dots.innerHTML='';
     const buttons=[];
     for(let i=0;i<count;i++){
       const b=document.createElement('button');
-      b.type='button'; b.setAttribute('aria-label',`Ir para item ${i+1}`);
-      b.addEventListener('click',()=>go(i)); dots.appendChild(b); buttons.push(b);
+      b.type='button';
+      b.setAttribute('aria-label',`Ir para item ${i+1}`);
+      b.addEventListener('click',()=>go(i));
+      dots.appendChild(b);buttons.push(b);
     }
-    return {update:(active)=>buttons.forEach((b,i)=>{const on=i===active;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'true':'false')})};
+    return {update(active){
+      buttons.forEach((b,i)=>{
+        const on=i===active;
+        b.classList.toggle('active',on);
+        b.setAttribute('aria-current',on?'true':'false');
+      });
+    }};
   }
 
-  function setupLoop(track,originals,host,{autoplay=5000,coverflow=false}={}){
+  function setupLoop(track,originals,host,{autoplay=5000}={}){
     if(!track||originals.length<2)return;
     const count=originals.length;
     const items=buildThreeRuns(track,originals);
     const middleStart=count;
-    let active=0, autoTimer=0, settleTimer=0, visualRaf=0, paused=false, dragging=false;
+    let autoTimer=0, settleTimer=0, raf=0, motionRaf=0, suppressScrollUntil=0;
+    let dragging=false, paused=false, active=0, programmatic=false;
+    let pointerId=null, axis=null, startX=0, startY=0, startScroll=0, lastX=0, lastT=0, velocity=0, startIndex=middleStart, moved=false;
+
+    const updateDots=()=>{
+      const p=nearestIndex(track,items);
+      active=logicalOf(items[p]);
+      dots.update(active);
+    };
+    const requestDots=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;updateDots()})};
+
+    const normalizeSeamless=()=>{
+      const p=nearestIndex(track,items);
+      const group=Math.floor(p/count);
+      if(group===1)return p;
+      const logical=logicalOf(items[p]);
+      const source=items[p],target=items[middleStart+logical];
+      if(source&&target){
+        const relative=(track.scrollLeft+track.clientWidth/2)-itemCenter(source);
+        suppressScrollUntil=performance.now()+120;
+        track.scrollLeft=itemCenter(target)+relative-track.clientWidth/2;
+        return middleStart+logical;
+      }
+      return p;
+    };
+
+    const stopMotion=()=>{if(motionRaf){cancelAnimationFrame(motionRaf);motionRaf=0}programmatic=false};
+
+    const animateTo=(item,duration=250,done)=>{
+      if(!item)return;
+      stopMotion();programmatic=true;
+      const from=track.scrollLeft,to=centerLeft(track,item);
+      if(reduced||Math.abs(to-from)<1){track.scrollLeft=to;normalizeSeamless();requestDots();programmatic=false;done?.();return}
+      const start=performance.now();
+      const ease=t=>1-Math.pow(1-t,3);
+      const tick=now=>{
+        const t=Math.min(1,(now-start)/duration);
+        track.scrollLeft=from+(to-from)*ease(t);
+        if(t<1)motionRaf=requestAnimationFrame(tick);
+        else{motionRaf=0;normalizeSeamless();requestDots();programmatic=false;done?.()}
+      };
+      motionRaf=requestAnimationFrame(tick);
+    };
+
+    // Pré-decodifica as imagens do carrossel para evitar flash ao cruzar as cópias do loop.
+    items.forEach(item=>item.querySelectorAll?.('img').forEach(img=>{
+      if(typeof img.decode==='function')img.decode().catch(()=>{});
+    }));
 
     const schedule=()=>{
       clearTimeout(autoTimer);
@@ -116,111 +167,110 @@
       autoTimer=setTimeout(()=>step(1),autoplay);
     };
 
-    const goLogical=(logical,behavior='smooth')=>{
-      const current=nearestIndex(track,items);
-      let target=middleStart+logical;
-      // Pick the nearest duplicate so dot navigation never jumps far.
-      const candidates=[logical,middleStart+logical,middleStart*2+logical];
-      target=candidates.reduce((a,b)=>Math.abs(b-current)<Math.abs(a-current)?b:a,candidates[0]);
-      centerTo(track,items[target],behavior);
-      active=logical; dots.update(active); schedule();
-    };
-    const dots=addDots(host,count,(i)=>goLogical(i));
-
-    const paint=()=>{
-      visualRaf=0;
-      const p=nearestIndex(track,items);
-      active=logicalOf(items[p]);
-      dots.update(active);
-      if(coverflow){
-        // Only three visual states; much cheaper than recalculating filters/transforms continuously.
-        items.forEach((item,i)=>{
-          const delta=Math.max(-2,Math.min(2,i-p));
-          item.classList.toggle('is-active',delta===0);
-          item.classList.toggle('is-near',Math.abs(delta)===1);
-          item.classList.toggle('is-far',Math.abs(delta)>=2);
-        });
-      }
-    };
-    const requestPaint=()=>{if(!visualRaf)visualRaf=requestAnimationFrame(paint)};
-
-    const normalize=()=>{
+    const settle=(forcedDir=0)=>{
       clearTimeout(settleTimer);
-      const p=nearestIndex(track,items);
-      const logical=logicalOf(items[p]);
-      const group=Math.floor(p/count);
-      if(group!==1){
-        const source=items[p], target=items[middleStart+logical];
-        if(source&&target){
-          const relative=(track.scrollLeft + track.clientWidth/2)-itemCenter(source);
-          track.scrollLeft=itemCenter(target)+relative-track.clientWidth/2;
-        }
+      let p=normalizeSeamless();
+      if(forcedDir){
+        const logicalStart=logicalOf(items[startIndex]||items[p]);
+        const logicalNow=logicalOf(items[p]);
+        if(logicalNow===logicalStart){p=Math.max(0,Math.min(items.length-1,p+forcedDir))}
       }
-      requestPaint(); schedule();
+      animateTo(items[p],210,()=>{normalizeSeamless();requestDots();schedule()});
     };
-    const settleSoon=()=>{clearTimeout(settleTimer);settleTimer=setTimeout(normalize,120)};
 
-    const step=(dir)=>{
+    const settleSoon=()=>{
+      clearTimeout(settleTimer);
+      settleTimer=setTimeout(()=>settle(0),190);
+    };
+
+    const step=dir=>{
+      normalizeSeamless();
       const p=nearestIndex(track,items);
       const target=items[Math.max(0,Math.min(items.length-1,p+dir))];
-      centerTo(track,target,'smooth'); schedule();
+      animateTo(target,300,()=>{normalizeSeamless();requestDots();schedule()});
     };
 
-    // Native touch scrolling supplies momentum on mobile. We only observe it.
-    track.addEventListener('scroll',()=>{requestPaint();settleSoon()},{passive:true});
-    if('onscrollend' in window) track.addEventListener('scrollend',normalize,{passive:true});
-    track.addEventListener('touchstart',()=>{dragging=true;clearTimeout(autoTimer)},{passive:true});
-    track.addEventListener('touchend',()=>{dragging=false;settleSoon()},{passive:true});
-    track.addEventListener('touchcancel',()=>{dragging=false;settleSoon()},{passive:true});
+    const goLogical=logical=>{
+      normalizeSeamless();
+      const p=nearestIndex(track,items);
+      const candidates=[logical,middleStart+logical,middleStart*2+logical];
+      const target=candidates.reduce((a,b)=>Math.abs(b-p)<Math.abs(a-p)?b:a,candidates[0]);
+      animateTo(items[target],280,()=>{normalizeSeamless();requestDots();schedule()});
+    };
+    const dots=dotsFor(host,count,goLogical);
 
-    // Lightweight mouse drag + momentum for desktop. Touch remains entirely native.
-    if(prefersHover){
-      let down=false,startX=0,startScroll=0,lastX=0,lastT=0,velocity=0,momentum=0,moved=false;
-      const stopMomentum=()=>{if(momentum){cancelAnimationFrame(momentum);momentum=0}};
-      const finish=()=>{
-        if(!down)return; down=false; dragging=false; paused=false; track.classList.remove('is-dragging');
-        let v=velocity*18;
-        const glide=()=>{
-          v*=.90;
-          if(Math.abs(v)<.22){momentum=0;settleSoon();return}
-          track.scrollLeft+=v; momentum=requestAnimationFrame(glide);
-        };
-        if(Math.abs(v)>.55) momentum=requestAnimationFrame(glide); else settleSoon();
-        if(moved){
-          const block=e=>{e.preventDefault();e.stopPropagation();track.removeEventListener('click',block,true)};
-          track.addEventListener('click',block,true);
+    const startPointer=e=>{
+      if(e.pointerType==='mouse'&&e.button!==0)return;
+      stopMotion();clearTimeout(autoTimer);clearTimeout(settleTimer);
+      pointerId=e.pointerId;axis=null;dragging=true;paused=true;moved=false;
+      startX=lastX=e.clientX;startY=e.clientY;startScroll=track.scrollLeft;lastT=performance.now();velocity=0;
+      startIndex=nearestIndex(track,items);
+      track.classList.add('is-dragging');
+      try{track.setPointerCapture?.(e.pointerId)}catch(_){}
+    };
+
+    const movePointer=e=>{
+      if(pointerId!==e.pointerId)return;
+      const dx=e.clientX-startX,dy=e.clientY-startY;
+      if(!axis&&Math.max(Math.abs(dx),Math.abs(dy))>6){
+        axis=Math.abs(dx)>Math.abs(dy)*1.08?'x':'y';
+        if(axis==='y'){
+          dragging=false;paused=false;pointerId=null;track.classList.remove('is-dragging');schedule();return;
         }
-      };
-      track.addEventListener('pointerdown',e=>{
-        if(e.pointerType!=='mouse'||e.button!==0)return;
-        stopMomentum(); down=true; dragging=true; moved=false; paused=true; clearTimeout(autoTimer);
-        startX=lastX=e.clientX; startScroll=track.scrollLeft; lastT=performance.now(); velocity=0;
-        track.classList.add('is-dragging'); track.setPointerCapture?.(e.pointerId);
-      });
-      track.addEventListener('pointermove',e=>{
-        if(!down||e.pointerType!=='mouse')return;
-        const now=performance.now(),dx=e.clientX-startX,dt=Math.max(8,now-lastT);
-        if(Math.abs(dx)>4)moved=true;
-        track.scrollLeft=startScroll-dx;
-        velocity=(lastX-e.clientX)/dt; lastX=e.clientX; lastT=now;
-        e.preventDefault();
-      });
-      track.addEventListener('pointerup',finish); track.addEventListener('pointercancel',finish);
-      track.addEventListener('pointerleave',()=>{if(!down){paused=false;schedule()}});
-      track.addEventListener('pointerenter',()=>{if(!down){paused=true;clearTimeout(autoTimer)}});
-    }
+      }
+      if(axis!=='x')return;
+      moved=moved||Math.abs(dx)>7;
+      const now=performance.now(),dt=Math.max(8,now-lastT);
+      track.scrollLeft=startScroll-dx;
+      velocity=(lastX-e.clientX)/dt;
+      lastX=e.clientX;lastT=now;
+      requestDots();
+      e.preventDefault();
+    };
 
+    const endPointer=e=>{
+      if(pointerId!==e.pointerId&&pointerId!==null)return;
+      const dx=(e?.clientX??lastX)-startX;
+      pointerId=null;track.classList.remove('is-dragging');dragging=false;paused=false;
+      suppressScrollUntil=performance.now()+140;
+      if(axis!=='x'){axis=null;schedule();return}
+      axis=null;
+      const traveled=track.scrollLeft-startScroll;
+      const forcedDir=Math.abs(traveled)>=6?(traveled>0?1:-1):(Math.abs(dx)>=8?(dx<0?1:-1):0);
+      let v=Math.max(-46,Math.min(46,velocity*26));
+      if(Math.abs(v)<.65){settle(forcedDir);return}
+      const glide=()=>{
+        track.scrollLeft+=v;
+        normalizeSeamless();requestDots();
+        v*=.925;
+        if(Math.abs(v)<.28){motionRaf=0;settle(forcedDir);return}
+        motionRaf=requestAnimationFrame(glide);
+      };
+      motionRaf=requestAnimationFrame(glide);
+      if(moved){
+        const block=ev=>{ev.preventDefault();ev.stopPropagation();track.removeEventListener('click',block,true)};
+        track.addEventListener('click',block,true);
+      }
+    };
+
+    track.addEventListener('pointerdown',startPointer);
+    track.addEventListener('pointermove',movePointer,{passive:false});
+    track.addEventListener('pointerup',endPointer);
+    track.addEventListener('pointercancel',endPointer);
+    track.addEventListener('scroll',()=>{if(performance.now()<suppressScrollUntil)return;if(pointerId===null&&!programmatic&&!motionRaf&&!dragging){normalizeSeamless();requestDots();settleSoon()}},{passive:true});
+    track.addEventListener('wheel',()=>{paused=true;clearTimeout(autoTimer);clearTimeout(settleTimer);settleTimer=setTimeout(()=>{paused=false;settle(0)},220)},{passive:true});
     track.addEventListener('keydown',e=>{
       if(e.key==='ArrowLeft'){e.preventDefault();step(-1)}
       if(e.key==='ArrowRight'){e.preventDefault();step(1)}
     });
     track.tabIndex=0;
-    track._loopNext=()=>step(1); track._loopPrev=()=>step(-1); track._loopGo=goLogical;
+    track._loopNext=()=>step(1);track._loopPrev=()=>step(-1);track._loopGo=goLogical;
     document.addEventListener('visibilitychange',schedule);
-    addEventListener('resize',()=>requestAnimationFrame(normalize),{passive:true});
+    addEventListener('resize',()=>requestAnimationFrame(()=>{normalizeSeamless();settle(0)}),{passive:true});
 
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      centerTo(track,items[middleStart],'auto'); paint(); schedule();
+      track.scrollLeft=centerLeft(track,items[middleStart]);
+      updateDots();schedule();
     }));
   }
 
@@ -229,12 +279,12 @@
     if(!track)return;
     const originals=$$(':scope > [data-carousel-slide]',track);
     root.querySelectorAll('[data-carousel-prev],[data-carousel-next],.carousel-arrow').forEach(x=>x.remove());
-    setupLoop(track,originals,root,{autoplay:Number(root.dataset.autoplay||5000),coverflow:true});
+    setupLoop(track,originals,root,{autoplay:Number(root.dataset.autoplay||5000)});
   });
 
   $$('[data-snap-carousel]').forEach(track=>{
     const originals=[...track.children].filter(x=>x.matches('article,a,.card,.process-step'));
-    setupLoop(track,originals,track.parentElement||track,{autoplay:Number(track.dataset.autoplay||5000),coverflow:false});
+    setupLoop(track,originals,track.parentElement||track,{autoplay:Number(track.dataset.autoplay||5000)});
   });
 
   $$('[data-scroll-next]').forEach(btn=>btn.addEventListener('click',()=>{
