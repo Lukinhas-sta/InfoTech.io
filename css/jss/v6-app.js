@@ -14,7 +14,8 @@
   const busy=(form,on)=>{form?.querySelectorAll('button,input,select,textarea').forEach(x=>x.disabled=on);form?.setAttribute('aria-busy',String(on))};
   const params=new URLSearchParams(location.search);
   const allowedDestinations=new Set(['painel-cliente.html','nova-solicitacao.html','perfil.html']);
-  const destination=allowedDestinations.has(params.get('destino'))?params.get('destino'):'painel-cliente.html';
+  const savedDestination=localStorage.getItem('infotech:after-confirm');
+  const destination=allowedDestinations.has(params.get('destino'))?params.get('destino'):(allowedDestinations.has(savedDestination)?savedDestination:'painel-cliente.html');
   const protectedPage=document.body.hasAttribute('data-client-protected');
   const page=location.pathname.split('/').pop()||'index.html';
   const displayName=u=>normalize(u?.user_metadata?.full_name||u?.user_metadata?.name||u?.email?.split('@')[0]||'Cliente');
@@ -87,6 +88,7 @@
       if(password!==confirm){msg(out,'As senhas não coincidem.','error');return}
       busy(form,true);msg(out,'Criando sua conta segura...','success');
       const dest=allowedDestinations.has(params.get('destino'))?params.get('destino'):'painel-cliente.html';
+      localStorage.setItem('infotech:after-confirm',dest);
       const redirect=new URL(`email-confirmado.html?destino=${encodeURIComponent(dest)}`,location.href).href;
       const {data,error}=await db.auth.signUp({email:email(form.elements.email.value),password,options:{data:{full_name:normalize(form.elements.name.value)},emailRedirectTo:redirect}});
       if(error){busy(form,false);msg(out,error.message||'Não foi possível criar a conta.','error');return}
@@ -96,7 +98,8 @@
   }
   async function initConfirmation(){
     const root=$('#confirmation-root');if(!root)return;
-    const dest=allowedDestinations.has(params.get('destino'))?params.get('destino'):'painel-cliente.html';
+    const saved=localStorage.getItem('infotech:after-confirm');
+    const dest=allowedDestinations.has(params.get('destino'))?params.get('destino'):(allowedDestinations.has(saved)?saved:'painel-cliente.html');
     const status=$('#confirmation-status'), action=$('#confirmation-action');
     msg(status,'Validando sua confirmação...','success');
     let session=(await db.auth.getSession()).data.session;
@@ -109,6 +112,7 @@
       session=(await db.auth.getSession()).data.session;
     }
     if(session?.user){
+      localStorage.removeItem('infotech:after-confirm');
       msg(status,'E-mail confirmado. Sua conta está pronta!','success');
       action.textContent='Entrar na Área do Cliente';action.href=dest;
       let sec=2;const c=$('#confirmation-countdown');if(c)c.textContent=sec;
