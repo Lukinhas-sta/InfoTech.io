@@ -10,7 +10,7 @@
 <title>InfoTech.io | Entrar</title>
 <link rel="icon" href="assets/brand/logo.webp">
 <link rel="preload" as="image" href="assets/brand/logo.webp">
-<link rel="stylesheet" href="css/v6.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://rgngqumqzylthdiazvfu.supabase.co" crossorigin><link rel="stylesheet" href="css/v6.css">
 </head>
 <body class="auth-page auth-login-page"><a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
 <header class="site-header">
@@ -18,16 +18,16 @@
 <a class="brand" href="index.html"><img src="assets/brand/logo.webp" alt="InfoTech.io"><span class="brand-copy"><strong>InfoTech<span>.io</span></strong><small>SITES • SISTEMAS • TECNOLOGIA</small></span></a>
 <button class="menu-mobile" type="button" aria-controls="menu-principal" aria-expanded="false" aria-label="Abrir menu"><span></span><span></span><span></span></button>
 <ul class="menu" id="menu-principal"><li><a class="" href="index.html">Início</a></li><li><a class="" href="servicos.html">Serviços</a></li><li><a class="" href="solicitacoes.html">Solicitar</a></li><li><a class="" href="projetos.html">Projetos</a></li><li><a class="" href="contato.html">Contato</a></li><li><a class="" href="sobre.html">Sobre</a></li></ul>
-<div class="account-slot"></div>
+<div class="account-slot"><a class="account-login-link account-login-fallback" href="login.html" aria-label="Área do Cliente"><span class="header-person" aria-hidden="true"><i class="hp-head"></i><i class="hp-body"></i><i class="hp-arm hp-left"></i><i class="hp-arm hp-right"></i></span><span>Área do Cliente</span></a></div>
 </nav>
-</header><main id="conteudo"><section class="auth-shell auth-shell-v7 container">
+</header><main id="conteudo"><section class="auth-shell auth-shell-v7 auth-shell-v7-single container">
 <div class="auth-card auth-card-v7 reveal">
 <div class="auth-card-top"><div class="tech-lock" aria-hidden="true"><span class="lock-shackle"></span><span class="lock-body"><i></i></span></div><div><span class="eyebrow">Área do Cliente</span><h1>Acesso seguro</h1></div></div>
 <p class="auth-lead">Digite seus dados abaixo para abrir sua Área do Cliente.</p>
 <form class="auth-form" id="login-form"><label for="login-email">E-mail</label><input id="login-email" name="email" type="email" autocomplete="email" required placeholder="seuemail@exemplo.com"><label for="login-password">Senha</label><div class="password-field"><input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="Sua senha"><button class="password-toggle" type="button" data-toggle-password="login-password">Mostrar</button></div><p class="form-message" id="login-message" aria-live="polite"></p><button class="btn auth-primary" type="submit">Entrar na minha área</button></form>
 <div class="auth-links-row"><a href="recuperar-senha.html">Esqueci minha senha</a><a href="cadastro.html">Criar conta</a></div><p class="auth-admin-link"><a href="admin-login.html">Acesso administrativo</a></p>
 </div>
-<aside class="auth-side-v7 reveal" aria-label="Benefícios da área do cliente"><div class="user-signal user-character" aria-hidden="true"><span class="user-head"></span><span class="user-body"></span><span class="user-arm arm-left"></span><span class="user-arm arm-right"></span></div><span class="eyebrow">Sua central InfoTech</span><h2>Seu projeto sem conversa perdida.</h2><p>Depois do login, tudo fica concentrado em um único lugar.</p><div class="auth-benefits"><span>Solicitações</span><span>Mensagens</span><span>Arquivos</span><span>Progresso</span></div></aside>
+
 </section></main><footer class="site-footer site-footer-v7"><div class="container">
 <div class="footer-brandline"><a class="brand footer-brand-mini" href="index.html"><img src="assets/brand/logo.webp" alt="InfoTech.io"><span class="brand-copy"><strong>InfoTech<span>.io</span></strong><small>SITES • SISTEMAS • TECNOLOGIA</small></span></a><p>Tecnologia feita para apresentar melhor sua empresa, organizar o atendimento e transformar ideias em projetos digitais.</p></div>
 <div class="footer-compact-grid">
@@ -37,7 +37,7 @@
 </div>
 <div class="footer-bottom"><span>© <span data-year></span> InfoTech.io. Todos os direitos reservados.</span><span>Desempenho • clareza • segurança</span></div>
 </div></footer>
-<script src="css/jss/v6-ui.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="css/jss/supabase-config.js"></script>
-<script src="css/jss/v6-app.js"></script></body></html>
+<script defer src="css/jss/v6-ui.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="css/jss/supabase-config.js"></script>
+<script defer src="css/jss/v6-app.js"></script></body></html>

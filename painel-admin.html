@@ -10,7 +10,7 @@
 <title>InfoTech.io | Painel administrativo</title>
 <link rel="icon" href="assets/brand/logo.webp">
 <link rel="preload" as="image" href="assets/brand/logo.webp">
-<link rel="stylesheet" href="css/v6.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://rgngqumqzylthdiazvfu.supabase.co" crossorigin><link rel="stylesheet" href="css/v6.css">
 </head>
 <body><a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
 <header class="site-header">
@@ -18,9 +18,9 @@
 <a class="brand" href="index.html"><img src="assets/brand/logo.webp" alt="InfoTech.io"><span class="brand-copy"><strong>InfoTech<span>.io</span></strong><small>SITES • SISTEMAS • TECNOLOGIA</small></span></a>
 <button class="menu-mobile" type="button" aria-controls="menu-principal" aria-expanded="false" aria-label="Abrir menu"><span></span><span></span><span></span></button>
 <ul class="menu" id="menu-principal"><li><a class="" href="index.html">Início</a></li><li><a class="" href="servicos.html">Serviços</a></li><li><a class="" href="solicitacoes.html">Solicitar</a></li><li><a class="" href="projetos.html">Projetos</a></li><li><a class="" href="contato.html">Contato</a></li><li><a class="" href="sobre.html">Sobre</a></li></ul>
-<div class="account-slot"></div>
+<div class="account-slot"><a class="account-login-link account-login-fallback" href="login.html" aria-label="Área do Cliente"><span class="header-person" aria-hidden="true"><i class="hp-head"></i><i class="hp-body"></i><i class="hp-arm hp-left"></i><i class="hp-arm hp-right"></i></span><span>Área do Cliente</span></a></div>
 </nav>
-</header><main id="conteudo"><section class="admin-shell container"><div class="admin-top"><div><span class="eyebrow">Administração</span><h1>Painel InfoTech</h1><p>Solicitações e clientes em um só lugar.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-outline" href="clientes-admin.html">Clientes</a><a class="btn btn-ghost" data-admin-logout href="admin-login.html">Sair</a></div></div><div class="admin-stats"><article><strong data-admin-total>0</strong><span>Total</span></article><article><strong data-admin-new>0</strong><span>Novas / análise</span></article><article><strong data-admin-progress>0</strong><span>Em andamento</span></article><article><strong data-admin-done>0</strong><span>Concluídas</span></article></div><div class="admin-tools"><input id="admin-search" placeholder="Buscar por protocolo, cliente ou serviço"><select id="admin-filter"><option value="all">Todos os status</option><option>Enviada</option><option>Em análise</option><option>Orçamento enviado</option><option>Aguardando aprovação</option><option>Aprovada</option><option>Em andamento</option><option>Concluída</option><option>Cancelada</option></select></div><div class="admin-list" id="admin-requests-list"></div></section></main><footer class="site-footer site-footer-v7"><div class="container">
+</header><main id="conteudo"><section class="admin-shell container"><div class="admin-top"><div><span class="eyebrow">Administração</span><h1>Painel InfoTech</h1><p>Solicitações e clientes em um só lugar.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-outline" href="clientes-admin.html">Clientes</a><a class="btn btn-ghost" data-admin-logout href="admin-login.html">Sair</a></div></div><div class="admin-stats"><article><strong data-admin-total>0</strong><span>Total</span></article><article><strong data-admin-new>0</strong><span>Novas / análise</span></article><article><strong data-admin-progress>0</strong><span>Em andamento</span></article><article><strong data-admin-done>0</strong><span>Concluídas</span></article></div><div class="admin-tools"><input id="admin-search" aria-label="Buscar solicitações" placeholder="Buscar por protocolo, cliente ou serviço"><select id="admin-filter" aria-label="Filtrar solicitações por status"><option value="all">Todos os status</option><option>Enviada</option><option>Em análise</option><option>Orçamento enviado</option><option>Aguardando aprovação</option><option>Aprovada</option><option>Em andamento</option><option>Concluída</option><option>Cancelada</option></select></div><div class="admin-list" id="admin-requests-list"></div></section></main><footer class="site-footer site-footer-v7"><div class="container">
 <div class="footer-brandline"><a class="brand footer-brand-mini" href="index.html"><img src="assets/brand/logo.webp" alt="InfoTech.io"><span class="brand-copy"><strong>InfoTech<span>.io</span></strong><small>SITES • SISTEMAS • TECNOLOGIA</small></span></a><p>Tecnologia feita para apresentar melhor sua empresa, organizar o atendimento e transformar ideias em projetos digitais.</p></div>
 <div class="footer-compact-grid">
 <div><div class="footer-title">InfoTech</div><div class="footer-links"><a href="projetos.html">Projetos</a><a href="sobre.html">Sobre</a><a href="contato.html">Contato</a></div></div>
@@ -29,7 +29,7 @@
 </div>
 <div class="footer-bottom"><span>© <span data-year></span> InfoTech.io. Todos os direitos reservados.</span><span>Desempenho • clareza • segurança</span></div>
 </div></footer>
-<script src="css/jss/v6-ui.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="css/jss/supabase-config.js"></script>
-<script src="css/jss/v6-admin.js"></script></body></html>
+<script defer src="css/jss/v6-ui.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="css/jss/supabase-config.js"></script>
+<script defer src="css/jss/v6-admin.js"></script></body></html>

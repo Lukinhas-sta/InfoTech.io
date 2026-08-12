@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-labelledby="t d">
+  <title id="t">Sites InfoTech</title>
+  <desc id="d">Ícone neon da InfoTech para sites.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#03111d"/>
+      <stop offset="100%" stop-color="#020914"/>
+    </linearGradient>
+    <linearGradient id="stroke" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#55f4ff"/>
+      <stop offset="100%" stop-color="#2e7fff"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="3.2" flood-color="#35eaff" flood-opacity="0.8"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#2384ff" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="220" height="220" rx="110" fill="url(#bg)"/>
+  <circle cx="110" cy="110" r="101" fill="none" stroke="url(#stroke)" stroke-width="5" filter="url(#glow)"/>
+  <circle cx="110" cy="110" r="78" fill="rgba(0,0,0,0.15)" stroke="rgba(80,220,255,0.18)" stroke-width="1.5"/>
+  <g stroke="#2de7ff" stroke-opacity="0.35" stroke-width="2" fill="none">
+    <path d="M27 92h25m-12-12 12 12-12 12"/>
+    <path d="M193 92h-25m12-12-12 12 12 12"/>
+    <path d="M27 128h25m-12-12 12 12-12 12"/>
+    <path d="M193 128h-25m12-12-12 12 12 12"/>
+  </g>
+  <g fill="#ffffff" font-family="Inter,Segoe UI,Arial,sans-serif">
+    <text x="110" y="34" text-anchor="middle" font-size="18" font-weight="800" fill="#6befff">IT</text>
+    <text x="110" y="180" text-anchor="middle" font-size="23" font-weight="800" letter-spacing="2.4" fill="#ffffff">SITES</text>
+    <text x="110" y="201" text-anchor="middle" font-size="11" letter-spacing="2.8" fill="#56dfff">INFOTECH.IO</text>
+  </g>
+  <g stroke="url(#stroke)" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)">
+    <rect x="63" y="66" width="94" height="62" rx="10"/><path d="M63 83h94"/><circle cx="76" cy="74.5" r="2.4" fill="#55f4ff" stroke="none"/><circle cx="86" cy="74.5" r="2.4" fill="#55f4ff" stroke="none"/><circle cx="96" cy="74.5" r="2.4" fill="#55f4ff" stroke="none"/><path d="M84 104c10-16 42-16 52 0-10 16-42 16-52 0z"/><path d="M110 88c-7 9-7 27 0 35M110 88c7 9 7 27 0 35"/><path d="M84 104h52"/>
+  </g>
+</svg>
