@@ -737,3 +737,162 @@ main,.site-header,.site-footer,.navbar,.container{max-width:100%}
   .service-shelf .service-product,.portfolio-shelf .portfolio-card{flex:0 0 84vw;min-width:0;max-width:360px}
   .about-values article{flex:0 0 78vw;min-width:0;max-width:320px}
 }
+
+/* =========================================================
+   InfoTech V6.4 — stable sliders, compact service/project grids
+   and synchronized neon emblems
+   ========================================================= */
+
+/* Performance: avoid expensive permanent compositing on every carousel card. */
+.coverflow [data-carousel-slide]{
+  will-change:auto!important;
+  transition:transform .28s cubic-bezier(.2,.75,.25,1),opacity .28s ease,box-shadow .28s ease!important;
+  transform:none!important;
+  filter:none!important;
+  opacity:.52!important;
+  contain:layout paint;
+}
+.coverflow [data-carousel-slide].is-near{transform:scale(.92)!important;opacity:.72!important}
+.coverflow [data-carousel-slide].is-active{transform:scale(1)!important;opacity:1!important;box-shadow:0 20px 56px rgba(0,0,0,.34),0 0 28px rgba(36,231,255,.08)!important}
+.coverflow [data-carousel-slide].is-far{transform:scale(.88)!important;opacity:.34!important}
+.coverflow-stage,.process-shelf,.about-values{
+  scroll-snap-type:x proximity!important;
+  overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-x pan-y;
+  scroll-behavior:auto!important;
+}
+.coverflow-stage.is-dragging,.process-shelf.is-dragging,.about-values.is-dragging{scroll-snap-type:none!important}
+[data-loop-clone]{pointer-events:none!important}
+
+/* Same synchronized neon aura around brand marks without moving the image. */
+.brand{position:relative;isolation:isolate}
+.brand::before{
+  content:"";position:absolute;left:-5px;top:50%;width:58px;height:58px;transform:translateY(-50%);
+  border-radius:50%;border:1px solid rgba(55,230,255,.22);z-index:-1;pointer-events:none;
+  box-shadow:0 0 14px rgba(36,231,255,.15),0 0 30px rgba(36,118,255,.07);
+  animation:brandAuraV64 1.72s cubic-bezier(.32,.72,.28,1) infinite;
+}
+.brand img{animation:none!important;transform:none!important}
+.footer-brand-mini::before{width:52px;height:52px;left:-5px}
+@keyframes brandAuraV64{
+  0%,100%{opacity:.20;scale:.94;filter:brightness(.78)}
+  12%{opacity:.72;scale:1.04;filter:brightness(1.45)}
+  24%{opacity:.30;scale:.98;filter:brightness(.92)}
+  36%{opacity:.88;scale:1.08;filter:brightness(1.72)}
+  50%,70%{opacity:.18;scale:.95;filter:brightness(.72)}
+}
+.page-hero-media{position:relative;isolation:isolate}
+.page-hero-media::before,.page-hero-media::after{
+  content:"";position:absolute;inset:13%;border-radius:50%;pointer-events:none;z-index:0;
+  border:1px solid rgba(53,225,255,.18);animation:emblemAuraV64 1.72s cubic-bezier(.32,.72,.28,1) infinite;
+}
+.page-hero-media::after{inset:20%;animation-delay:.06s;border-color:rgba(36,118,255,.18)}
+.page-hero-media>img,.page-hero-media>.portfolio-orb{position:relative;z-index:1}
+
+/* Reusable pulse for service/project marks. */
+.pulse-emblem{
+  width:86px;height:86px;margin-inline:auto;position:relative;display:grid;place-items:center;
+  border-radius:50%;isolation:isolate;background:radial-gradient(circle,rgba(10,58,86,.32),rgba(3,12,25,.78) 68%);
+}
+.pulse-emblem::before,.pulse-emblem::after{
+  content:"";position:absolute;inset:2px;border-radius:50%;border:1px solid rgba(55,230,255,.28);z-index:-1;
+  box-shadow:0 0 16px rgba(36,231,255,.12),0 0 28px rgba(36,118,255,.06);
+  animation:emblemAuraV64 1.72s cubic-bezier(.32,.72,.28,1) infinite;
+}
+.pulse-emblem::after{inset:10px;border-color:rgba(36,118,255,.20);animation-delay:.06s}
+.pulse-emblem img{width:74%;height:74%;object-fit:contain;border-radius:50%;position:relative;z-index:2;filter:drop-shadow(0 0 10px rgba(36,231,255,.12));transform:none!important}
+.rass-emblem img{border-radius:12px;width:78%;height:78%}
+.placeholder-emblem b{font-size:2rem;color:#79efff;text-shadow:0 0 18px rgba(36,231,255,.48);font-weight:400}
+@keyframes emblemAuraV64{
+  0%,100%{transform:scale(.92);opacity:.16;filter:brightness(.75)}
+  12%{transform:scale(1.03);opacity:.68;filter:brightness(1.42)}
+  24%{transform:scale(.97);opacity:.26;filter:brightness(.9)}
+  36%{transform:scale(1.10);opacity:.92;filter:brightness(1.7)}
+  50%,70%{transform:scale(.94);opacity:.14;filter:brightness(.72)}
+}
+
+/* Services: fixed 3 x 2 compact tile layout on phone and desktop. */
+.service-grid-heading{text-align:center;max-width:640px!important;margin-inline:auto}
+.service-grid-heading .eyebrow{margin-inline:auto}
+.service-mini-grid,.project-mini-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:920px;margin:0 auto;
+}
+.service-mini-card,.project-mini-card{
+  min-width:0;min-height:210px;padding:18px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:9px;overflow:hidden;position:relative;background:linear-gradient(160deg,rgba(7,29,50,.88),rgba(4,13,27,.94));
+  border-color:rgba(67,214,255,.18);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+  content-visibility:auto;contain-intrinsic-size:210px;
+}
+.service-mini-card:hover,.project-mini-live:hover{transform:translateY(-4px);border-color:rgba(77,231,255,.38);box-shadow:0 18px 44px rgba(0,0,0,.26),0 0 24px rgba(36,231,255,.07)}
+.service-mini-card strong,.project-mini-card strong{font-size:1.02rem;line-height:1.15}
+.service-mini-card small,.project-mini-card small{font-size:.74rem;line-height:1.3;color:var(--muted);max-width:17ch}
+
+/* Projects: same compact 3 x 2 visual language as services. */
+.project-mini-grid{max-width:920px}
+.project-mini-card{min-height:230px}
+.project-coming{opacity:.72;background:linear-gradient(160deg,rgba(7,23,40,.66),rgba(3,10,21,.82))}
+.mini-status{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:999px;font-size:.61rem;letter-spacing:.03em;border:1px solid rgba(62,230,168,.20);color:#a7f2d5;background:rgba(62,230,168,.05)}
+.mini-status::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(62,230,168,.7)}
+
+/* Header account character with real arms; the figure itself calls attention. */
+.account-login-link::after{display:none!important}
+.account-login-link{min-width:48px;justify-content:center;overflow:visible}
+.header-person{width:27px;height:28px;position:relative;display:block;filter:drop-shadow(0 0 8px rgba(36,231,255,.55));animation:hpBounceV64 2.25s ease-in-out infinite}
+.header-person .hp-head{position:absolute;left:9px;top:1px;width:10px;height:10px;border-radius:50%;background:#50efff;box-shadow:0 0 8px rgba(36,231,255,.7)}
+.header-person .hp-body{position:absolute;left:5px;bottom:1px;width:18px;height:13px;border-radius:10px 10px 5px 5px;background:linear-gradient(180deg,#55f2ff,#16bfea)}
+.header-person .hp-arm{position:absolute;top:14px;width:10px;height:4px;border-radius:8px;background:#46eaff;transform-origin:100% 50%;box-shadow:0 0 6px rgba(36,231,255,.55)}
+.header-person .hp-left{left:0;animation:hpArmLeftV64 2.25s ease-in-out infinite}
+.header-person .hp-right{right:0;transform-origin:0 50%;animation:hpArmRightV64 2.25s ease-in-out infinite}
+.header-person-small{width:23px;height:24px;transform:scale(.78)}
+@keyframes hpBounceV64{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-2px) rotate(-3deg)}55%{transform:translateY(1px) rotate(3deg)}75%{transform:translateY(-1px)}}
+@keyframes hpArmLeftV64{0%,100%{transform:rotate(18deg)}30%{transform:rotate(-48deg)}55%{transform:rotate(28deg)}70%{transform:rotate(-20deg)}}
+@keyframes hpArmRightV64{0%,100%{transform:rotate(-18deg)}30%{transform:rotate(48deg)}55%{transform:rotate(-28deg)}70%{transform:rotate(20deg)}}
+
+/* Login character arms are a little more expressive, still lightweight. */
+.user-character .user-arm{height:8px;width:23px}
+.user-character .arm-left{animation:waveLeftV64 1.95s ease-in-out infinite!important}
+.user-character .arm-right{animation:waveRightV64 1.95s ease-in-out infinite!important}
+@keyframes waveLeftV64{0%,100%{transform:rotate(18deg)}22%{transform:rotate(-55deg) translateY(-1px)}40%{transform:rotate(-25deg)}62%{transform:rotate(-62deg)}78%{transform:rotate(15deg)}}
+@keyframes waveRightV64{0%,100%{transform:rotate(-18deg)}22%{transform:rotate(55deg) translateY(-1px)}40%{transform:rotate(25deg)}62%{transform:rotate(62deg)}78%{transform:rotate(-15deg)}}
+
+/* Keep the page width stable in embedded mobile browsers. */
+html,body{max-width:100%;overflow-x:clip!important}
+main,.site-footer,.site-header{max-width:100%;overflow-x:clip}
+
+@media(max-width:680px){
+  .service-hero,.portfolio-hero{padding-bottom:28px}
+  .service-hero h1,.portfolio-hero h1{font-size:clamp(2.15rem,9.4vw,3rem);line-height:1.02}
+  .service-hero p,.portfolio-hero p{font-size:.9rem;line-height:1.48}
+  .service-mini-grid,.project-mini-grid{gap:8px;width:100%;max-width:none}
+  .service-mini-card,.project-mini-card{min-height:150px;padding:11px 6px;border-radius:16px;gap:6px}
+  .project-mini-card{min-height:160px}
+  .pulse-emblem{width:58px;height:58px}
+  .service-mini-card strong,.project-mini-card strong{font-size:.78rem;letter-spacing:-.01em}
+  .service-mini-card small,.project-mini-card small{font-size:.59rem;line-height:1.22;max-width:13ch}
+  .mini-status{font-size:.52rem;padding:4px 6px}
+  .portfolio-section .section-heading h2,.service-grid-heading h2{font-size:2.15rem!important}
+  .portfolio-section .section-heading p,.service-grid-heading p{font-size:.82rem!important}
+  .account-login-link>span:last-child{display:none}
+  .account-login-link{width:52px;height:52px;padding:0;border-radius:15px}
+  .brand::before{width:54px;height:54px;left:-4px}
+  .footer-brand-mini::before{width:49px;height:49px}
+  .page-hero-media::before{inset:16%}.page-hero-media::after{inset:22%}
+  /* Faster paint on the remaining sliders. */
+  .coverflow [data-carousel-slide]{box-shadow:none!important}
+  .coverflow [data-carousel-slide].is-active{box-shadow:0 12px 34px rgba(0,0,0,.25),0 0 18px rgba(36,231,255,.06)!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .brand::before,.page-hero-media::before,.page-hero-media::after,.pulse-emblem::before,.pulse-emblem::after,.header-person,.header-person .hp-arm,.user-character .user-arm{animation:none!important}
+}
+
+/* Keep showcase illustrations visually tied to the same heartbeat system. */
+.media-card-v7 .media-image{position:relative;isolation:isolate}
+.media-card-v7 .media-image::before,.media-card-v7 .media-image::after{
+  content:"";position:absolute;inset:14%;border-radius:50%;border:1px solid rgba(54,229,255,.18);z-index:0;pointer-events:none;
+  animation:emblemAuraV64 1.72s cubic-bezier(.32,.72,.28,1) infinite;
+}
+.media-card-v7 .media-image::after{inset:21%;animation-delay:.06s;border-color:rgba(36,118,255,.16)}
+.media-card-v7 .media-image img{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.media-card-v7 .media-image::before,.media-card-v7 .media-image::after{animation:none!important}}
