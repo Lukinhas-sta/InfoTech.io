@@ -1,99 +1,35 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="#050816" name="theme-color"/>
-<meta content="noindex, nofollow" name="robots"/>
-<title>Infotech.io | Painel administrativo</title>
-<link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22&gt;&lt;rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23050816%22/&gt;&lt;path d=%22M18 18h28v8H36v20h10v8H18v-8h10V26H18z%22 fill=%22%2300e5ff%22/&gt;&lt;/svg&gt;" rel="icon"/>
-<link href="css/style.css" rel="stylesheet"/>
-<link href="css/responsivo.css" rel="stylesheet"/>
-<link href="css/auth.css" rel="stylesheet"/>
-<link href="css/dashboard-v41.css" rel="stylesheet"/>
-<link href="css/refinement-v46.css" rel="stylesheet"/>
-<link href="css/admin-dashboard-v471.css" rel="stylesheet"/>
-<link href="css/refinement-v472.css" rel="stylesheet"/>
-<link href="css/dashboard-v510.css" rel="stylesheet"/></head>
-<body>
-<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
-<header class="site-header"><nav aria-label="Navegação principal" class="navbar"><div class="logo"><a href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a></div><a class="btn btn-outline admin-header-link" href="painel-cliente.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"></path></svg>Ver área do cliente</a></nav></header>
-<main id="conteudo">
-<section class="dashboard-shell container admin-dashboard">
-<aside class="dashboard-sidebar admin-sidebar">
-<div><span class="eyebrow">Administrador</span><h1>Infotech.io</h1><p>Gerencie todas as solicitações recebidas.</p></div>
-<nav aria-label="Menu administrativo"><a class="active" href="#resumo">Visão geral</a><a href="#solicitacoes">Solicitações</a><a href="clientes-admin.html">Clientes</a><a href="index.html">Ver site</a></nav>
-<a class="dashboard-exit" data-admin-logout="" href="admin-login.html">Sair do painel</a>
-</aside>
-<div class="dashboard-content">
-<section class="dashboard-welcome admin-welcome" id="resumo">
-<div><span class="eyebrow">Central de atendimento</span><h2>Olá, <span data-admin-name="">Lucas</span>! <span aria-hidden="true">👋</span></h2><p>Acompanhe os pedidos, encontre clientes e priorize os próximos atendimentos.</p></div>
-<a class="btn btn-outline" href="painel-cliente.html"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5z"></path></svg>Testar como cliente</a>
-</section>
-<section aria-label="Indicadores profissionais" class="dashboard-kpis">
-<article class="dashboard-kpi"><span>Clientes cadastrados</span><strong data-v510-clients>0</strong><small>Contas no Supabase</small></article>
-<article class="dashboard-kpi"><span>Projetos ativos</span><strong data-v510-active>0</strong><small>Em execução agora</small></article>
-<article class="dashboard-kpi"><span>Mensagens registradas</span><strong data-v510-messages>0</strong><small>Conversas das solicitações</small></article>
-<article class="dashboard-kpi"><span>Arquivos enviados</span><strong data-v510-files>0</strong><small>Anexos no atendimento</small></article>
-</section>
-<section class="dashboard-v510-grid">
-<article class="dashboard-v510-panel">
-<span class="eyebrow">Pesquisa global</span><h3>Encontre clientes e solicitações</h3><p>Pesquise por nome, e-mail, protocolo, serviço ou título.</p>
-<label class="dashboard-global-search" for="dashboard-global-search"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9.5 3a6.5 6.5 0 1 0 4.1 11.55L19.05 20 20.5 18.55l-5.45-5.45A6.5 6.5 0 0 0 9.5 3zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"></path></svg><input id="dashboard-global-search" autocomplete="off" placeholder="Digite para pesquisar..." type="search"/></label>
-<div class="dashboard-search-results" data-v510-search-results><div class="dashboard-recent-item"><span>Comece a digitar para pesquisar no sistema.</span></div></div>
-</article>
-<article class="dashboard-v510-panel">
-<span class="eyebrow">Distribuição</span><h3>Solicitações por status</h3><p>Visão rápida da carga de trabalho atual.</p>
-<div class="dashboard-status-chart" data-v510-status-chart></div>
-</article>
-<article class="dashboard-v510-panel">
-<span class="eyebrow">Atividade recente</span><h3>Últimas movimentações</h3><p>Alterações mais recentes nas solicitações.</p>
-<div class="dashboard-recent-list" data-v510-recent></div>
-</article>
-<article class="dashboard-v510-panel">
-<span class="eyebrow">Saúde do sistema</span><h3>Conexão e dados</h3><p>Resumo da disponibilidade dos recursos principais.</p>
-<div class="dashboard-health" data-v510-health><span class="dashboard-health-dot"></span><div><strong>Verificando Supabase...</strong><span data-v510-health-text></span></div></div>
-</article>
-</section>
-<div aria-label="Resumo das solicitações. Selecione um card para filtrar a lista." class="dashboard-stats admin-stats admin-smart-stats">
-<button aria-pressed="true" class="admin-stat-card is-active" data-dashboard-filter="all" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 4v2h10V7H7zm0 4v2h10v-2H7zm0 4v2h6v-2H7z"></path></svg></span><strong data-admin-total="">0</strong><span>Solicitações</span><small>Todos os pedidos</small></button>
-<button aria-pressed="false" class="admin-stat-card admin-stat-analysis" data-dashboard-filter="analysis" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M11 7h2v6h-2V7zm0 8h2v2h-2v-2zm1-13a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path></svg></span><strong data-admin-new="">0</strong><span>Em análise</span><small>Aguardando avaliação</small></button>
-<button aria-pressed="false" class="admin-stat-card admin-stat-progress" data-dashboard-filter="progress" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M13 2v8h8A9 9 0 1 1 13 2zm2 2.35V8h3.65A7 7 0 0 0 15 4.35z"></path></svg></span><strong data-admin-progress="">0</strong><span>Em andamento</span><small>Projetos ativos</small></button>
-<button aria-pressed="false" class="admin-stat-card admin-stat-done" data-dashboard-filter="done" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M9 16.2 4.8 12 3.4 13.4 9 19 21 7l-1.4-1.4L9 16.2z"></path></svg></span><strong data-admin-done="">0</strong><span>Concluídas</span><small>Entregas finalizadas</small></button>
-<button aria-pressed="false" class="admin-stat-card admin-stat-priority" data-dashboard-filter="priority" type="button"><span aria-hidden="true" class="admin-stat-icon"><svg viewbox="0 0 24 24"><path d="M12 2 1 21h22L12 2zm0 5.8L18.6 19H5.4L12 7.8zM11 11h2v4h-2v-4zm0 5h2v2h-2v-2z"></path></svg></span><strong data-admin-priority="">0</strong><span>Prioridade alta</span><small>Prazo de até 7 dias</small></button>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#020611">
+<meta name="description" content="Painel administrativo InfoTech.io.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<title>InfoTech.io | Painel administrativo</title>
+<link rel="icon" href="assets/brand/logo.webp">
+<link rel="preload" as="image" href="assets/brand/logo.webp">
+<link rel="stylesheet" href="css/v6.css">
+</head>
+<body><a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<header class="site-header">
+<nav class="navbar" aria-label="Navegação principal">
+<a class="brand" href="index.html"><img src="assets/brand/logo.webp" alt="InfoTech.io"><span class="brand-copy"><strong>InfoTech<span>.io</span></strong><small>SITES • SISTEMAS • TECNOLOGIA</small></span></a>
+<button class="menu-mobile" type="button" aria-controls="menu-principal" aria-expanded="false" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+<ul class="menu" id="menu-principal"><li><a class="" href="index.html">Início</a></li><li><a class="" href="servicos.html">Serviços</a></li><li><a class="" href="solicitacoes.html">Solicitar</a></li><li><a class="" href="projetos.html">Projetos</a></li><li><a class="" href="contato.html">Contato</a></li><li><a class="" href="sobre.html">Sobre</a></li></ul>
+<div class="account-slot"></div>
+</nav>
+</header><main id="conteudo"><section class="admin-shell container"><div class="admin-top"><div><span class="eyebrow">Administração</span><h1>Painel InfoTech</h1><p>Solicitações e clientes em um só lugar.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-outline" href="clientes-admin.html">Clientes</a><a class="btn btn-ghost" data-admin-logout href="admin-login.html">Sair</a></div></div><div class="admin-stats"><article><strong data-admin-total>0</strong><span>Total</span></article><article><strong data-admin-new>0</strong><span>Novas / análise</span></article><article><strong data-admin-progress>0</strong><span>Em andamento</span></article><article><strong data-admin-done>0</strong><span>Concluídas</span></article></div><div class="admin-tools"><input id="admin-search" placeholder="Buscar por protocolo, cliente ou serviço"><select id="admin-filter"><option value="all">Todos os status</option><option>Enviada</option><option>Em análise</option><option>Orçamento enviado</option><option>Aguardando aprovação</option><option>Aprovada</option><option>Em andamento</option><option>Concluída</option><option>Cancelada</option></select></div><div class="admin-list" id="admin-requests-list"></div></section></main><footer class="site-footer"><div class="container">
+<div class="footer-grid">
+<div class="footer-brand"><a class="brand" href="index.html"><img src="assets/brand/logo.webp" alt=""><span class="brand-copy"><strong>InfoTech<span>.io</span></strong><small>SITES • SISTEMAS • TECNOLOGIA</small></span></a><p>Soluções digitais sob medida para negócios que querem presença, organização e crescimento no digital.</p></div>
+<div><div class="footer-title">Soluções</div><div class="footer-links"><a href="servicos.html#sites">Sites</a><a href="servicos.html#sistemas">Sistemas</a><a href="servicos.html#suporte">Suporte</a></div></div>
+<div><div class="footer-title">InfoTech</div><div class="footer-links"><a href="projetos.html">Projetos</a><a href="sobre.html">Sobre</a><a href="contato.html">Contato</a></div></div>
+<div><div class="footer-title">Cliente</div><div class="footer-links"><a href="login.html">Entrar</a><a href="cadastro.html">Criar conta</a><a href="nova-solicitacao.html">Nova solicitação</a></div></div>
 </div>
-<section class="request-section" id="solicitacoes">
-<div class="dashboard-section-title admin-list-heading"><div><span class="eyebrow">Atendimentos</span><h2 data-admin-list-title="">Todas as solicitações</h2><p data-admin-results-count="">0 solicitações encontradas</p></div></div>
-<div class="admin-list-toolbar">
-<label class="admin-search" for="admin-request-search"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M9.5 3a6.5 6.5 0 1 0 4.1 11.55L19.05 20 20.5 18.55l-5.45-5.45A6.5 6.5 0 0 0 9.5 3zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"></path></svg><span class="sr-only">Pesquisar solicitações</span><input autocomplete="off" id="admin-request-search" placeholder="Pesquisar cliente, protocolo, serviço ou empresa..." type="search"/></label>
-<div aria-label="Filtrar solicitações por status" class="admin-filter-chips" role="group">
-<button aria-pressed="true" class="admin-filter-chip is-active" data-status-filter="all" type="button">Todos</button>
-<button aria-pressed="false" class="admin-filter-chip" data-status-filter="analysis" type="button">Em análise</button>
-<button aria-pressed="false" class="admin-filter-chip" data-status-filter="progress" type="button">Em andamento</button>
-<button aria-pressed="false" class="admin-filter-chip" data-status-filter="done" type="button">Concluídos</button>
-<button aria-pressed="false" class="admin-filter-chip" data-status-filter="cancelled" type="button">Cancelados</button>
-</div>
-</div>
-<div aria-busy="false" aria-live="polite" class="requests-list" id="admin-requests-list"></div>
-</section>
-</div>
-</section>
-</main>
-<footer class="site-footer">
-<div class="footer-simple container">
-<a class="footer-logo" href="index.html"><span class="logo-mark">I</span>Infotech<span>.io</span></a>
-<p>Transformando ideias em soluções digitais úteis,<br class="footer-break"/> modernas e acessíveis.</p>
-</div>
-<div class="footer-bottom container">
-<p>© 2026 Infotech.io</p>
-<p>Tecnologia • Inovação • Soluções</p>
-</div>
-</footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="css/jss/supabase-config.js"></script><script src="css/jss/requests-supabase.js"></script>
-<script src="css/jss/admin-auth-supabase.js"></script>
-
-
-
-<script src="css/jss/notifications-supabase.js"></script><script src="css/jss/dashboard-v510.js"></script><script src="css/jss/refinement-v46.js"></script></body>
-</html>
+<div class="footer-bottom"><span>© <span data-year></span> InfoTech.io. Todos os direitos reservados.</span><span>Desenvolvido com foco em desempenho, clareza e segurança.</span></div>
+</div></footer>
+<script src="css/jss/v6-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="css/jss/supabase-config.js"></script>
+<script src="css/jss/v6-admin.js"></script></body></html>
