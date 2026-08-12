@@ -1432,3 +1432,160 @@ main,.site-footer,.site-header{max-width:100%;overflow-x:clip}
   .service-mini-card .pulse-emblem img,.project-mini-card .pulse-emblem img{inline-size:76px!important;block-size:76px!important}
   .project-mini-card .rass-emblem img{inline-size:84%!important;block-size:auto!important;max-block-size:60%!important}
 }
+
+/* ===== V6.8 — mascote 3D + mãos sincronizadas + cadeado lateral ===== */
+/* Remove a esfera azul atrás do mascote quando o usuário está logado. */
+.account-avatar{
+  width:38px!important;
+  height:38px!important;
+  min-width:38px!important;
+  border-radius:12px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  perspective:180px;
+  place-items:center!important;
+}
+.account-trigger{overflow:visible!important}
+.account-avatar .header-person{
+  margin:0!important;
+  scale:.82;
+  transform-origin:50% 82%!important;
+}
+
+/* Efeito 3D de "sair da tela": o personagem avança, inclina e volta. */
+.header-person{
+  transform-style:preserve-3d!important;
+  perspective:180px!important;
+  will-change:transform,filter;
+  animation:hpBreakScreenV68 3.1s cubic-bezier(.42,0,.18,1) infinite!important;
+}
+.header-person::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-4px;
+  width:24px;
+  height:6px;
+  transform:translateX(-50%) translateZ(-10px);
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(40,232,255,.34),rgba(40,232,255,0) 72%);
+  filter:blur(1px);
+  opacity:.52;
+  pointer-events:none;
+  z-index:-1;
+  animation:hpDepthShadowV68 3.1s ease-in-out infinite;
+}
+.header-person::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:48px;
+  height:48px;
+  border:1px solid rgba(100,245,255,.0);
+  border-radius:14px 50% 18px 50%;
+  transform:translate(-50%,-50%) scale(.46) rotate(8deg) translateZ(-8px);
+  opacity:0;
+  pointer-events:none;
+  z-index:-2;
+  box-shadow:0 0 0 1px rgba(36,231,255,0),0 0 18px rgba(36,231,255,0);
+  animation:hpScreenRippleV68 3.1s ease-out infinite;
+}
+@keyframes hpBreakScreenV68{
+  0%,18%,100%{transform:perspective(180px) translate3d(0,0,0) rotateX(0) rotateY(0) rotateZ(0);filter:drop-shadow(0 0 7px rgba(40,232,255,.58))}
+  30%{transform:perspective(180px) translate3d(-1px,-2px,7px) rotateX(-5deg) rotateY(9deg) rotateZ(-2deg);filter:drop-shadow(0 2px 9px rgba(40,232,255,.72))}
+  43%{transform:perspective(180px) translate3d(1px,-3px,17px) rotateX(-8deg) rotateY(-10deg) rotateZ(2deg) scale(1.07);filter:drop-shadow(0 5px 12px rgba(40,232,255,.9))}
+  53%{transform:perspective(180px) translate3d(0,-2px,11px) rotateX(4deg) rotateY(8deg) rotateZ(-1deg) scale(1.035)}
+  68%{transform:perspective(180px) translate3d(0,1px,3px) rotateX(1deg) rotateY(-3deg) rotateZ(1deg)}
+  82%{transform:perspective(180px) translate3d(0,-1px,6px) rotateX(-2deg) rotateY(3deg) rotateZ(0)}
+}
+@keyframes hpDepthShadowV68{
+  0%,18%,100%{transform:translateX(-50%) scaleX(.88);opacity:.42}
+  43%{transform:translateX(-50%) scaleX(1.22);opacity:.72}
+  68%{transform:translateX(-50%) scaleX(.96);opacity:.5}
+}
+@keyframes hpScreenRippleV68{
+  0%,30%,100%{opacity:0;transform:translate(-50%,-50%) scale(.46) rotate(8deg)}
+  42%{opacity:.68;border-color:rgba(106,245,255,.52);box-shadow:0 0 0 1px rgba(36,231,255,.12),0 0 18px rgba(36,231,255,.20);transform:translate(-50%,-50%) scale(.74) rotate(-3deg)}
+  55%{opacity:.18;border-color:rgba(106,245,255,.22);transform:translate(-50%,-50%) scale(1.08) rotate(10deg)}
+  64%{opacity:0;transform:translate(-50%,-50%) scale(1.22) rotate(14deg)}
+}
+
+/* Braço + antebraço + mão agora funcionam como uma peça articulada única.
+   Assim a mão acompanha exatamente o braço e não "descola" durante a dança. */
+.header-person .hp-arm::before,
+.header-person .hp-arm::after{animation:none!important}
+.header-person .hp-left::before{
+  left:-7px!important;
+  top:0!important;
+  transform:rotate(-16deg)!important;
+  transform-origin:100% 50%!important;
+}
+.header-person .hp-left::after{
+  left:-14px!important;
+  top:-1px!important;
+  transform:rotate(-8deg)!important;
+}
+.header-person .hp-right::before{
+  right:-7px!important;
+  top:0!important;
+  transform:rotate(16deg)!important;
+  transform-origin:0 50%!important;
+}
+.header-person .hp-right::after{
+  right:-14px!important;
+  top:-1px!important;
+  transform:rotate(8deg)!important;
+}
+.header-person .hp-left{animation:hpArmLeftV68 3.1s cubic-bezier(.42,0,.18,1) infinite!important}
+.header-person .hp-right{animation:hpArmRightV68 3.1s cubic-bezier(.42,0,.18,1) infinite!important}
+@keyframes hpArmLeftV68{
+  0%,18%,100%{transform:rotate(22deg) scale(1)}
+  30%{transform:rotate(-18deg) scale(1.02)}
+  43%{transform:rotate(-48deg) scale(1.17)}
+  53%{transform:rotate(-24deg) scale(1.08)}
+  68%{transform:rotate(18deg) scale(1)}
+  82%{transform:rotate(-8deg) scale(1.04)}
+}
+@keyframes hpArmRightV68{
+  0%,18%,100%{transform:rotate(-20deg) scale(1)}
+  30%{transform:rotate(20deg) scale(1.03)}
+  43%{transform:rotate(52deg) scale(1.19)}
+  53%{transform:rotate(27deg) scale(1.08)}
+  68%{transform:rotate(-18deg) scale(1)}
+  82%{transform:rotate(10deg) scale(1.04)}
+}
+
+/* O cabelo e a cabeça acompanham o avanço 3D sem perder o desenho. */
+.header-person .hp-head{animation:hpHeadV68 3.1s ease-in-out infinite!important}
+@keyframes hpHeadV68{
+  0%,18%,100%{transform:translateY(0) rotate(0) translateZ(3px)}
+  30%{transform:translateY(-1px) rotate(-7deg) translateZ(5px)}
+  43%{transform:translateY(-2px) rotate(8deg) translateZ(8px)}
+  53%{transform:translateY(-1px) rotate(-4deg) translateZ(6px)}
+  68%{transform:translateY(0) rotate(3deg) translateZ(4px)}
+}
+
+/* Cadeado: levanta um pouco o arco e abre para o lado, como um cadeado real. */
+.lock-shackle{
+  transform-origin:7px 31px!important;
+  animation:unlockSideV68 3s cubic-bezier(.44,0,.2,1) infinite!important;
+  will-change:transform;
+}
+@keyframes unlockSideV68{
+  0%,26%,100%{transform:translate3d(0,0,0) rotate(0deg)}
+  36%{transform:translate3d(0,-6px,0) rotate(0deg)}
+  48%,67%{transform:translate3d(4px,-7px,0) rotate(25deg)}
+  77%{transform:translate3d(1px,-3px,0) rotate(8deg)}
+  86%{transform:translate3d(0,0,0) rotate(0deg)}
+}
+
+@media(max-width:680px){
+  .account-avatar{width:36px!important;height:36px!important;min-width:36px!important}
+  .account-avatar .header-person{scale:.78}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .header-person,.header-person::before,.header-person::after,.header-person .hp-head,.header-person .hp-arm,.lock-shackle{animation:none!important}
+}
