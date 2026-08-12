@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 180" role="img" aria-labelledby="t d">
+  <title id="t">Rass Studio</title><desc id="d">Marca tipográfica Rass Studio usada no projeto de portfólio.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#c7c7c7"/></linearGradient>
+  </defs>
+  <rect width="520" height="180" rx="28" fill="#050505"/>
+  <circle cx="86" cy="90" r="54" fill="none" stroke="#fff" stroke-width="2" opacity=".8"/>
+  <text x="86" y="117" text-anchor="middle" font-family="Georgia,serif" font-size="82" font-weight="700" fill="url(#g)">R</text>
+  <text x="164" y="83" font-family="Arial,sans-serif" font-size="38" font-weight="700" letter-spacing="5" fill="#fff">RASS STUDIO</text>
+  <text x="166" y="117" font-family="Arial,sans-serif" font-size="15" font-weight="600" letter-spacing="4" fill="#aaa">BEAUTY · ART · ATTITUDE</text>
+</svg>

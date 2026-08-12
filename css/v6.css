@@ -479,3 +479,161 @@ body::after{
 @media(prefers-reduced-motion:reduce){
   body::after,.brand img,.account-login-link::after,.account-login-link svg,.neon-aura,.logo-heartbeat::after,.user-signal,.user-signal i,.user-signal b,.lock-shackle,.portfolio-status i{animation:none!important}
 }
+
+/* =========================================================
+   InfoTech V6.2 — overflow fix, kinetic carousels & compact UI
+   ========================================================= */
+html,body{width:100%;max-width:100%;overflow-x:clip;overscroll-behavior-x:none}
+body{position:relative}
+main,.site-header,.site-footer,.navbar,.container{max-width:100%}
+.container{min-width:0}
+*{min-width:0}
+
+/* Header user: animate the person itself, not a halo */
+.account-login-link::after{display:none!important}
+.account-login-link svg,.account-avatar svg{transform-origin:50% 80%;animation:userDance 2.35s cubic-bezier(.45,0,.2,1) infinite!important;filter:drop-shadow(0 0 7px rgba(36,231,255,.5))}
+@keyframes userDance{
+  0%,100%{transform:translateY(0) rotate(0) scale(1)}
+  18%{transform:translateY(-3px) rotate(-8deg) scale(1.04)}
+  34%{transform:translateY(1px) rotate(7deg) scale(.98)}
+  50%{transform:translateY(-4px) rotate(0) scale(1.10)}
+  68%{transform:translateY(0) rotate(-5deg) scale(1.02)}
+  82%{transform:translateY(-2px) rotate(5deg) scale(1.05)}
+}
+
+/* Hero: keep the heartbeat aura, remove clipping/visual overload on mobile */
+.hero-v7{overflow:visible}
+.logo-heartbeat{max-width:500px}
+.logo-heartbeat img{max-width:74%}
+.logo-heartbeat .orbit-chip{max-width:150px}
+
+/* Kinetic coverflow: native scroll = real momentum on touch */
+.coverflow{padding:8px 0 38px;overflow:hidden;isolation:isolate;width:100%;max-width:100%}
+.coverflow::before{inset:12px 0 28px}
+.coverflow-stage{
+  --cf-card:min(390px,72vw);
+  position:relative;height:360px;perspective:1200px;
+  display:flex;align-items:center;gap:18px;overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scroll-padding-inline:calc((100% - var(--cf-card))/2);
+  padding:22px calc((100% - var(--cf-card))/2) 28px;
+  scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;cursor:grab;touch-action:pan-x pan-y;
+}
+.coverflow-stage::-webkit-scrollbar{display:none;width:0;height:0}
+.coverflow-stage.is-dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
+.coverflow [data-carousel-slide]{
+  position:relative!important;inset:auto!important;flex:0 0 var(--cf-card);width:var(--cf-card)!important;height:300px;
+  scroll-snap-align:center;transition:transform .22s ease,opacity .22s ease,filter .22s ease,box-shadow .28s ease;
+  will-change:transform,opacity;pointer-events:auto!important;transform-style:preserve-3d
+}
+.coverflow [data-carousel-slide].is-active{box-shadow:0 24px 80px rgba(0,0,0,.44),0 0 42px rgba(36,231,255,.12)}
+.carousel-arrow{display:none!important}
+.carousel-dots,.shelf-dots{display:flex;justify-content:center;align-items:center;gap:7px;min-height:15px;margin-top:2px}
+.carousel-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%)}
+.carousel-dots button,.shelf-dots button{width:7px;height:7px;border:0;border-radius:99px;padding:0;background:rgba(126,192,222,.34);cursor:pointer;transition:.25s}
+.carousel-dots button.active,.shelf-dots button.active{width:27px;background:linear-gradient(90deg,var(--cyan),var(--blue));box-shadow:0 0 15px rgba(36,231,255,.35)}
+.compact-coverflow .coverflow-stage{--cf-card:min(420px,72vw);height:290px}
+.compact-coverflow [data-carousel-slide]{height:225px}
+
+/* New compact project process */
+.process-section .section-heading{margin-bottom:26px}
+.process-shelf{
+  display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:4px;
+  scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;
+  padding:2px 2px 10px;cursor:grab
+}
+.process-shelf::-webkit-scrollbar{display:none}
+.process-shelf.is-dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
+.process-step{flex:1 1 0;min-width:0;scroll-snap-align:center;display:flex;align-items:center;gap:14px;padding:19px;border:1px solid rgba(76,200,255,.15);border-radius:18px;background:linear-gradient(145deg,rgba(7,29,50,.84),rgba(4,13,27,.88));box-shadow:0 12px 30px rgba(0,0,0,.16)}
+.process-icon{width:42px;height:42px;flex:0 0 42px;border-radius:13px;display:grid;place-items:center;color:#7ff1ff;background:rgba(36,231,255,.08);border:1px solid rgba(36,231,255,.17)}
+.process-step strong{display:block;font-size:.94rem}.process-step small{display:block;margin-top:5px;color:var(--muted);line-height:1.42;font-size:.78rem}
+
+/* Services: side by side, mobile becomes a swipe shelf */
+.service-hero{padding-bottom:44px}
+.service-shelf,.portfolio-shelf{
+  display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+  scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;
+  padding:4px 2px 18px;cursor:grab
+}
+.service-shelf::-webkit-scrollbar,.portfolio-shelf::-webkit-scrollbar{display:none;width:0;height:0}
+.service-shelf.is-dragging,.portfolio-shelf.is-dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
+.service-product{flex:1 1 0;min-width:0;scroll-snap-align:center;display:flex;flex-direction:column;overflow:hidden}
+.service-product-banner{height:190px;overflow:hidden;background:#030a14;border-bottom:1px solid var(--line)}
+.service-product-banner img{width:100%;height:100%;object-fit:cover;transition:transform .55s ease}
+.service-product:hover .service-product-banner img{transform:scale(1.04)}
+.service-product-copy{display:flex;flex-direction:column;flex:1;padding:24px}
+.service-product-copy h3{font-size:1.42rem;margin:16px 0 9px}.service-product-copy p{color:var(--muted);line-height:1.58;margin:0 0 18px;font-size:.9rem}.service-product-copy .btn{margin-top:auto;width:100%}
+.service-note{display:block;margin:0 0 16px;color:#80dbea;font-size:.74rem}
+
+/* Portfolio: banner cards side by side; entire card is clickable */
+.portfolio-shelf{align-items:stretch}
+.portfolio-shelf .portfolio-card{flex:1 1 0;min-width:0;scroll-snap-align:center;color:inherit}
+.project-click-card{transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.project-click-card:hover{transform:translateY(-5px);border-color:rgba(67,222,255,.34);box-shadow:0 22px 58px rgba(0,0,0,.30),0 0 36px rgba(36,231,255,.06)}
+.project-banner{height:270px;display:grid;place-items:center}
+.infotech-project-banner img{width:62%;height:62%;object-fit:contain;border-radius:50%;filter:drop-shadow(0 0 25px rgba(36,231,255,.18))}
+.rass-project-banner{background:linear-gradient(145deg,#050505,#151515)}
+.rass-project-banner .rass-logo{width:76%;height:auto;object-fit:contain}
+.project-open-chip{position:absolute;left:18px;bottom:16px;z-index:4;padding:7px 10px;border-radius:999px;background:rgba(3,12,24,.82);border:1px solid rgba(94,225,255,.24);color:#baf6ff;font-size:.72rem;backdrop-filter:blur(10px)}
+
+/* Contact: remove first-time block, keep one useful compact card */
+.contact-grid{grid-template-columns:1fr}
+.contact-card-wide{max-width:940px;margin-inline:auto;padding:34px}
+.contact-methods-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.contact-methods-grid .contact-method{margin:0;height:100%}.contact-main-action{margin-top:20px}
+
+/* About: obvious glowing star that advances the horizontal value strip */
+.about-values-shell{position:relative;padding-right:68px}
+.about-next-star{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:56px;height:74px;border:1px solid rgba(83,230,255,.32);border-radius:18px;background:linear-gradient(180deg,rgba(9,35,58,.96),rgba(4,14,29,.96));color:#7af2ff;display:grid;place-items:center;align-content:center;gap:1px;cursor:pointer;box-shadow:0 0 24px rgba(36,231,255,.13);z-index:4}
+.about-next-star span{font-size:1.65rem;animation:starPulse 1.45s ease-in-out infinite}.about-next-star small{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:#a8d7e4}
+@keyframes starPulse{0%,100%{transform:scale(.86) rotate(0);filter:drop-shadow(0 0 3px rgba(36,231,255,.25));opacity:.55}45%{transform:scale(1.18) rotate(12deg);filter:drop-shadow(0 0 12px rgba(36,231,255,.95));opacity:1}60%{transform:scale(.98) rotate(-6deg);opacity:.8}}
+
+/* Login lock opens vertically; the character moves, not an aura */
+.lock-shackle{transform-origin:center bottom;animation:unlockTechV2 2.8s cubic-bezier(.45,0,.2,1) infinite!important}
+@keyframes unlockTechV2{0%,30%,100%{transform:translateY(0)}43%,66%{transform:translateY(-11px)}76%{transform:translateY(-2px)}}
+.user-character{animation:none!important;overflow:visible}
+.user-character i,.user-character b{display:none!important}
+.user-character .user-head{animation:userHeadMove 2.25s ease-in-out infinite;transform-origin:center bottom}
+.user-character .user-body{animation:userBodyMove 2.25s ease-in-out infinite;transform-origin:center bottom}
+.user-arm{position:absolute;width:22px;height:7px;border-radius:10px;background:#42eaff;top:50px;left:20px;transform-origin:100% 50%;box-shadow:0 0 10px rgba(36,231,255,.45)}
+.user-arm.arm-right{left:auto;right:20px;transform-origin:0 50%}
+.user-character .arm-left{animation:waveLeft 2.25s ease-in-out infinite}.user-character .arm-right{animation:waveRight 2.25s ease-in-out infinite}
+@keyframes userHeadMove{0%,100%{transform:translateY(0) rotate(0)}28%{transform:translateY(-3px) rotate(-7deg)}55%{transform:translateY(1px) rotate(7deg)}75%{transform:translateY(-2px)}}
+@keyframes userBodyMove{0%,100%{transform:translateY(0) scale(1)}45%{transform:translateY(-2px) scale(1.04)}72%{transform:translateY(1px) scale(.99)}}
+@keyframes waveLeft{0%,100%{transform:rotate(18deg)}35%{transform:rotate(-36deg)}62%{transform:rotate(24deg)}}
+@keyframes waveRight{0%,100%{transform:rotate(-18deg)}35%{transform:rotate(36deg)}62%{transform:rotate(-24deg)}}
+
+/* Mobile: no visible document scrollbar, no horizontal page slit */
+@media(max-width:680px){
+  html,body{overflow-x:clip!important;max-width:100%!important;scrollbar-width:none;-ms-overflow-style:none}
+  html::-webkit-scrollbar,body::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;background:transparent!important}
+  body{width:100%!important}
+  .container,.navbar{width:calc(100% - 28px)!important;margin-inline:auto!important}
+  .hero-v7{padding-top:30px;padding-bottom:34px;gap:20px}
+  .hero-v7 .hero-visual{min-height:300px;overflow:hidden}
+  .logo-heartbeat{width:min(82vw,335px)!important}
+  .logo-heartbeat .orbit-chip{display:none!important}
+  .proof-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .proof-grid article{border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .proof-grid article:nth-child(2n){border-right:0}.proof-grid article:nth-last-child(-n+2){border-bottom:0}
+  .section{padding-block:50px}.section.compact{padding-block:38px}.section-heading{margin-bottom:24px}.section-heading h2{font-size:clamp(2rem,9.4vw,3rem);line-height:1.03}
+  .coverflow{margin-inline:0!important;padding:0 0 32px!important;width:100%!important}
+  .coverflow::before{inset:0 0 22px;border-radius:22px}
+  .coverflow-stage{--cf-card:min(78vw,330px);height:330px;padding-inline:calc((100% - var(--cf-card))/2)!important;gap:12px}
+  .coverflow [data-carousel-slide]{height:275px}
+  .compact-coverflow .coverflow-stage{--cf-card:min(78vw,330px);height:258px}.compact-coverflow [data-carousel-slide]{height:210px}
+  .carousel-dots{bottom:4px}
+  .process-shelf{margin-inline:0;padding:2px 0 8px}.process-step{flex:0 0 78vw;max-width:320px;padding:17px}
+  .service-shelf,.portfolio-shelf{margin-inline:0;padding-inline:0;gap:12px}
+  .service-product,.portfolio-shelf .portfolio-card{flex:0 0 84vw;max-width:360px}
+  .service-product-banner{height:170px}.service-product-copy{padding:20px}.service-product-copy h3{font-size:1.25rem}
+  .project-banner{height:220px}.portfolio-copy{padding:20px}.portfolio-copy h3{font-size:1.42rem}
+  .contact-card-wide{padding:24px 20px}.contact-methods-grid{grid-template-columns:1fr;gap:8px}
+  .about-values-shell{padding-right:54px}.about-next-star{right:0;width:46px;height:68px}.about-next-star span{font-size:1.4rem}
+  .about-values{display:flex!important;overflow-x:auto!important;scroll-snap-type:x mandatory;gap:10px;background:transparent;border:0;border-radius:0}.about-values article{flex:0 0 78vw;max-width:320px;scroll-snap-align:center;border:1px solid var(--line)!important;border-radius:18px;background:rgba(5,17,33,.88)}
+  .auth-side-v7{padding:19px}.user-signal{margin-bottom:10px}
+  .user-arm{top:38px;left:14px;width:17px}.user-arm.arm-right{left:auto;right:14px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .account-login-link svg,.account-avatar svg,.about-next-star span,.user-character .user-head,.user-character .user-body,.user-character .user-arm,.lock-shackle{animation:none!important}
+}
