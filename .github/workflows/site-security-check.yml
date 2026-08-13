@@ -76,6 +76,11 @@ jobs:
             grep -qi 'noindex' "$page" || { echo "$page sem noindex"; exit 1; }
           done
 
+          if grep -RInE --include='*.html' '@supabase/supabase-js@(2|latest)([^0-9.]|$)' .; then
+            echo "Supabase JS usa versão flutuante; fixe uma versão exata."
+            exit 1
+          fi
+
       - name: Verify local site references and metadata
         run: python3 scripts/site_sanity.py
 
