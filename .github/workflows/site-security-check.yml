@@ -1,0 +1,78 @@
+name: Site security check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Reject private files and obvious server secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          bad_files="$(git ls-files | grep -E '(^|/)\.env($|\.)|\.(pem|p12|pfx|key)$' || true)"
+          if [ -n "$bad_files" ]; then
+            echo "Arquivos privados rastreados pelo Git:"
+            echo "$bad_files"
+            exit 1
+          fi
+
+          if grep -RInE \
+            --include='*.js' --include='*.html' --include='*.json' \
+            --exclude-dir='.git' \
+            'service[_-]?role|sb_secret_[A-Za-z0-9_-]{8,}|BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY' .; then
+            echo "Possível segredo administrativo encontrado em arquivo público."
+            exit 1
+          fi
+
+      - name: Verify required public security files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f robots.txt
+          test -f sitemap.xml
+          test -f SECURITY.md
+          test -f .well-known/security.txt
+          test -f .nojekyll
+
+      - name: Verify HTML security baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          while IFS= read -r page; do
+            grep -q 'Content-Security-Policy' "$page" || { echo "$page sem CSP"; exit 1; }
+            if grep -q "'unsafe-inline'" "$page"; then
+              echo "$page permite unsafe-inline"
+              exit 1
+            fi
+          done < <(find . -maxdepth 1 -name '*.html' -type f -print)
+
+          for page in admin-login.html admin-seguranca.html admin-solicitacao.html painel-admin.html cliente-admin.html clientes-admin.html; do
+            [ -f "$page" ] || continue
+            grep -qi 'noindex' "$page" || { echo "$page sem noindex"; exit 1; }
+          done
+
+      - name: Verify HTTPS-only production references
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInE \
+            --include='*.html' --include='*.js' --include='*.css' \
+            --exclude-dir='.git' \
+            '(^|["'"'"'(=[:space:]])http://infotech-io\.com\.br|http://rgngqumqzylthdiazvfu\.supabase\.co' .; then
+            echo "Referência HTTP insegura encontrada."
+            exit 1
+          fi
