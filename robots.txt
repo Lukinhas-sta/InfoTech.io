@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /admin-
+Disallow: /painel-
+Disallow: /cliente-admin.html
+Disallow: /clientes-admin.html
+Disallow: /detalhes-solicitacao.html
+Disallow: /nova-solicitacao.html
+Disallow: /perfil.html
+Disallow: /login.html
+Disallow: /cadastro.html
+Disallow: /recuperar-senha.html
+Disallow: /email-confirmado.html
+Disallow: /solicitacao-enviada.html
+
+Sitemap: https://infotech-io.com.br/sitemap.xml

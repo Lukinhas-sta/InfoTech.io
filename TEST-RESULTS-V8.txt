@@ -1,0 +1,26 @@
+InfoTech.io V8.0 — Testes finais
+Data: 2026-08-12
+
+STATIC AUDIT
+HTML analisados: 24
+OK: auditoria estática passou com 0 aviso(s).
+exit=0
+
+JAVASCRIPT SYNTAX
+supabase-config.js: OK
+v6-admin.js: OK
+v6-app.js: OK
+v6-ui.js: OK
+
+PUBLIC SECRET SCAN
+OK: nenhum segredo administrativo conhecido em HTML/JS público
+
+CSP / INLINE
+inline: none
+unsafe-inline: none
+
+PROJECT STATS
+HTML: 24
+JS: 4
+CSS bytes: 124456
+Files total: 65

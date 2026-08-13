@@ -3,7 +3,7 @@
   'use strict';
   const cfg=window.INFOTECH_SUPABASE_CONFIG||{};
   if(!window.supabase?.createClient||!cfg.url||!cfg.publishableKey){console.error('Supabase indisponível');return}
-  const db=window.infotechSupabase||window.supabase.createClient(cfg.url,cfg.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const db=window.infotechSupabase||window.supabase.createClient(cfg.url,cfg.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce',storageKey:'infotech-auth-v8'}});
   window.infotechSupabase=db;
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const normalize=v=>String(v||'').trim();
@@ -70,19 +70,15 @@
     $$('[data-guest-only]').forEach(el=>{
       if(user){
         el.setAttribute('hidden','hidden');
-        el.style.display='none';
       }else{
         el.removeAttribute('hidden');
-        el.style.display='';
       }
     });
     $$('[data-user-only]').forEach(el=>{
       if(user){
         el.removeAttribute('hidden');
-        el.style.display='';
       }else{
         el.setAttribute('hidden','hidden');
-        el.style.display='none';
       }
     });
   }
@@ -111,11 +107,13 @@
     window.dispatchEvent(new CustomEvent('infotech:auth-ready',{detail:{user:currentUser}}));
   }
   function validateStrongPassword(v){
-    return v.length>=8 && /[A-Za-z]/.test(v) && /\d/.test(v);
+    return v.length>=10 && /[a-z]/.test(v) && /[A-Z]/.test(v) && /\d/.test(v);
   }
-  const signupDraftKey='infotech:signup-draft';
-  function saveSignupDraft(emailValue,passwordValue){
-    try{sessionStorage.setItem(signupDraftKey,JSON.stringify({email:email(emailValue),password:String(passwordValue||''),destination,createdAt:Date.now()}))}catch(_){}
+  const passwordHelp='Use 10 ou mais caracteres, com letra maiúscula, minúscula e número.';
+  const signupDraftKey='infotech:signup-draft-v8';
+  function saveSignupDraft(emailValue){
+    // Nunca persiste senha no Web Storage. Apenas o e-mail é levado ao cadastro.
+    try{sessionStorage.setItem(signupDraftKey,JSON.stringify({email:email(emailValue),destination,createdAt:Date.now()}))}catch(_){}
   }
   function takeSignupDraft(){
     try{
@@ -123,9 +121,21 @@
       sessionStorage.removeItem(signupDraftKey);
       if(!raw)return null;
       const draft=JSON.parse(raw);
-      if(!draft?.email||!draft?.password||Date.now()-Number(draft.createdAt||0)>5*60*1000)return null;
+      if(!draft?.email||Date.now()-Number(draft.createdAt||0)>10*60*1000)return null;
       return draft;
     }catch(_){return null}
+  }
+  function showLoginNextActions(form,loginEmail){
+    let box=document.getElementById('login-next-actions');
+    if(!box){
+      box=document.createElement('div');box.id='login-next-actions';box.className='login-next-actions';
+      form.querySelector('#login-message')?.insertAdjacentElement('afterend',box);
+    }
+    box.replaceChildren();
+    const create=document.createElement('a');create.className='btn btn-outline';create.href=`cadastro.html?origem=login&destino=${encodeURIComponent(safeDestination(params.get('destino'))||'painel-cliente.html')}`;create.textContent='Criar uma conta';
+    const recover=document.createElement('a');recover.className='btn btn-ghost';recover.href='recuperar-senha.html';recover.textContent='Recuperar senha';
+    box.append(create,recover);
+    saveSignupDraft(loginEmail);
   }
   function initLogin(){
     const form=$('#login-form');if(!form)return;
@@ -142,10 +152,11 @@
         if(code==='email_not_confirmed'||/email not confirmed/i.test(message)){msg(out,'Confirme seu e-mail antes de entrar.','error');return}
         const invalid=code==='invalid_credentials'||/invalid login credentials|invalid credentials|email or password/i.test(message);
         if(invalid){
-          saveSignupDraft(loginEmail,loginPassword);
-          msg(out,'Conta não reconhecida com esses dados. Abrindo o cadastro com e-mail e senha preenchidos...','success');
-          const dest=safeDestination(params.get('destino'))||'painel-cliente.html';
-          setTimeout(()=>location.replace(`cadastro.html?origem=login&destino=${encodeURIComponent(dest)}`),420);
+          // Supabase retorna erro genérico para não revelar se um e-mail existe.
+          // Mantemos esse comportamento: não tentamos enumerar contas e nunca reutilizamos a senha no cadastro.
+          msg(out,'E-mail ou senha não conferem. Tente novamente, recupere a senha ou crie uma conta.','error');
+          showLoginNextActions(form,loginEmail);
+          form.elements.password.value='';form.elements.password.focus();
           return;
         }
         msg(out,'Não foi possível validar o acesso agora. Tente novamente.','error');return;
@@ -160,21 +171,18 @@
     const draft=takeSignupDraft();
     if(draft){
       form.elements.email.value=draft.email;
-      form.elements.password.value=draft.password;
-      form.elements.confirmPassword.value=draft.password;
       const draftDestination=safeDestination(draft.destination);if(draftDestination)localStorage.setItem('infotech:after-confirm',draftDestination);
       const note=document.createElement('div');
       note.className='signup-prefill-note';
-      note.innerHTML='E-mail e senha vieram da tentativa de acesso e foram preenchidos só nesta tela. Complete seu nome para criar a conta. Se você já tinha cadastro, use <a href="recuperar-senha.html">recuperar senha</a>.';
+      note.textContent='O e-mail foi preenchido a partir da tentativa de acesso. Por segurança, crie a senha somente aqui.';
       form.parentElement?.insertBefore(note,form);
       form.elements.name?.focus();
-      form.elements.password?.dispatchEvent(new Event('input',{bubbles:true}));
     }
     form.addEventListener('submit',async e=>{
       e.preventDefault();const out=$('#register-message');
       if(!form.checkValidity()){form.reportValidity();return}
       const password=String(form.elements.password.value||''), confirm=String(form.elements.confirmPassword.value||'');
-      if(!validateStrongPassword(password)){msg(out,'Use ao menos 8 caracteres, incluindo letras e números.','error');return}
+      if(!validateStrongPassword(password)){msg(out,passwordHelp,'error');return}
       if(password!==confirm){msg(out,'As senhas não coincidem.','error');return}
       busy(form,true);msg(out,'Criando sua conta segura...','success');
       const dest=safeDestination(params.get('destino'))||safeDestination(draft?.destination)||'painel-cliente.html';
@@ -231,7 +239,7 @@
       e.preventDefault();const out=$('#recovery-message');
       if(newPass){
         const p=String(form.elements.password.value||''),c=String(form.elements.confirmPassword.value||'');
-        if(!validateStrongPassword(p)){msg(out,'Use ao menos 8 caracteres, incluindo letras e números.','error');return}
+        if(!validateStrongPassword(p)){msg(out,passwordHelp,'error');return}
         if(p!==c){msg(out,'As senhas não coincidem.','error');return}
         busy(form,true);const {error}=await db.auth.updateUser({password:p});busy(form,false);
         if(error){msg(out,error.message||'Não foi possível salvar a senha.','error');return}
@@ -271,7 +279,7 @@
         msg(out,'Perfil atualizado. Se o e-mail mudou, confirme o novo endereço.','success');
       })
     }
-    if(password){password.addEventListener('submit',async e=>{e.preventDefault();const out=$('#password-message'),p=String(password.elements.newPassword.value||''),c=String(password.elements.confirmPassword.value||'');if(!validateStrongPassword(p)){msg(out,'Use ao menos 8 caracteres, incluindo letras e números.','error');return}if(p!==c){msg(out,'As senhas não coincidem.','error');return}busy(password,true);const {error}=await db.auth.updateUser({password:p});busy(password,false);if(error){msg(out,error.message,'error');return}password.reset();msg(out,'Senha alterada com sucesso.','success')})}
+    if(password){password.addEventListener('submit',async e=>{e.preventDefault();const out=$('#password-message'),p=String(password.elements.newPassword.value||''),c=String(password.elements.confirmPassword.value||'');if(!validateStrongPassword(p)){msg(out,passwordHelp,'error');return}if(p!==c){msg(out,'As senhas não coincidem.','error');return}busy(password,true);const {error}=await db.auth.updateUser({password:p});busy(password,false);if(error){msg(out,error.message,'error');return}password.reset();msg(out,'Senha alterada com sucesso.','success')})}
   }
   async function current(){return (await db.auth.getUser()).data.user}
   function row(r){return {id:r.protocol,uuid:r.id,userId:r.user_id,title:r.title,service:r.service,description:r.description,deadline:r.deadline,budget:r.budget,contact:r.contact,reference:r.reference_url,status:r.status,adminResponse:r.admin_response,messages:Array.isArray(r.messages)?r.messages:[],project:r.project||{},createdAt:r.created_at,updatedAt:r.updated_at}}
@@ -327,24 +335,47 @@
     if(q.data)p={...p,...q.data,updatedAt:q.data.updated_at};
     const stages=Array.isArray(p.stages)?p.stages:[], pct=Number.isFinite(Number(p.progress))?Number(p.progress):(stages.length?Math.round(stages.filter(s=>s.done).length/stages.length*100):0);
     const currentStage=stages.find(s=>!s.done);
-    el.innerHTML=`<div class="project-progress"><span style="width:${pct}%"></span></div><div class="project-meta"><div><span>Progresso</span><strong>${pct}%</strong></div><div><span>Status</span><strong>${esc(item.status)}</strong></div><div><span>Previsão</span><strong>${esc(p.deadline||'A definir')}</strong></div></div><div class="project-stages">${stages.length?stages.map(s=>`<div class="project-stage ${s.done?'done':currentStage?.id===s.id?'current':''}"><span class="project-stage-dot">${s.done?'✓':''}</span><div><strong>${esc(s.name)}</strong><span>${s.done?'Concluída':currentStage?.id===s.id?'Etapa atual':'Aguardando'}</span></div></div>`).join(''):'<div class="empty-state">O acompanhamento será liberado quando o projeto entrar em andamento.</div>'}</div>`;
+    el.innerHTML=`<div class="project-progress"><progress aria-label="Progresso do projeto" max="100" value="${pct}">${pct}%</progress></div><div class="project-meta"><div><span>Progresso</span><strong>${pct}%</strong></div><div><span>Status</span><strong>${esc(item.status)}</strong></div><div><span>Previsão</span><strong>${esc(p.deadline||'A definir')}</strong></div></div><div class="project-stages">${stages.length?stages.map(s=>`<div class="project-stage ${s.done?'done':currentStage?.id===s.id?'current':''}"><span class="project-stage-dot">${s.done?'✓':''}</span><div><strong>${esc(s.name)}</strong><span>${s.done?'Concluída':currentStage?.id===s.id?'Etapa atual':'Aguardando'}</span></div></div>`).join(''):'<div class="empty-state">O acompanhamento será liberado quando o projeto entrar em andamento.</div>'}</div>`;
   }
   async function loadFiles(item){
     const list=$('#attachments-list');if(!list)return;
     const {data,error}=await db.from('request_files').select('*').eq('request_id',item.uuid).order('created_at',{ascending:false});
     if(error){list.innerHTML='<div class="empty-state">Arquivos indisponíveis agora.</div>';return}
     list.innerHTML=(data||[]).length?(data||[]).map(f=>`<div class="attachment"><div><strong>${esc(f.file_name)}</strong><span>${fmt(f.created_at)}</span></div><button type="button" data-file="${esc(f.storage_path)}">Abrir</button></div>`).join(''):'<div class="empty-state">Nenhum arquivo compartilhado.</div>';
-    $$('[data-file]',list).forEach(btn=>btn.addEventListener('click',async()=>{const {data:s,error:e}=await db.storage.from('request-files').createSignedUrl(btn.dataset.file,300);if(!e&&s?.signedUrl)window.open(s.signedUrl,'_blank','noopener')}));
+    $$('[data-file]',list).forEach(btn=>btn.addEventListener('click',async()=>{const {data:s,error:e}=await db.storage.from('request-files').createSignedUrl(btn.dataset.file,120);if(!e&&s?.signedUrl)window.open(s.signedUrl,'_blank','noopener')}));
   }
-  function safeFileName(name){return String(name||'arquivo').replace(/[^a-zA-Z0-9._-]/g,'_').slice(0,120)}
+  function safeFileName(name){return String(name||'arquivo').replace(/[^a-zA-Z0-9._-]/g,'_').replace(/\.{2,}/g,'.').slice(0,100)}
+  const allowedUploads=Object.freeze({
+    jpg:['image/jpeg'],jpeg:['image/jpeg'],png:['image/png'],webp:['image/webp'],pdf:['application/pdf'],txt:['text/plain']
+  });
+  const extOf=name=>String(name||'').toLowerCase().split('.').pop();
+  async function inspectUpload(file){
+    const ext=extOf(file.name), expected=allowedUploads[ext];
+    if(!expected)throw new Error(`${file.name}: formato não permitido.`);
+    if(file.size<=0)throw new Error(`${file.name}: arquivo vazio.`);
+    if(file.size>10*1024*1024)throw new Error(`${file.name}: limite de 10 MB.`);
+    if(file.type&& !expected.includes(file.type))throw new Error(`${file.name}: tipo do arquivo não confere com a extensão.`);
+    const bytes=new Uint8Array(await file.slice(0,512).arrayBuffer());
+    const starts=(...sig)=>sig.every((v,i)=>bytes[i]===v);
+    let ok=false;
+    if(['jpg','jpeg'].includes(ext))ok=starts(0xff,0xd8,0xff);
+    else if(ext==='png')ok=starts(0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a);
+    else if(ext==='webp')ok=starts(0x52,0x49,0x46,0x46)&&bytes[8]===0x57&&bytes[9]===0x45&&bytes[10]===0x42&&bytes[11]===0x50;
+    else if(ext==='pdf')ok=starts(0x25,0x50,0x44,0x46,0x2d);
+    else if(ext==='txt')ok=!bytes.includes(0x00);
+    if(!ok)throw new Error(`${file.name}: conteúdo do arquivo não corresponde ao formato permitido.`);
+    return expected[0];
+  }
   async function uploadFiles(item,files,out){
     const user=await current();if(!user)return;
-    const selected=[...files].slice(0,3);if(!selected.length)return;
+    const all=[...files];
+    if(all.length>3)throw new Error('Envie no máximo 3 arquivos por vez.');
+    const selected=all.slice(0,3);if(!selected.length)return;
     for(const file of selected){
-      if(file.size>10*1024*1024)throw new Error(`${file.name}: limite de 10 MB.`);
+      const safeMime=await inspectUpload(file);
       const path=`${user.id}/${item.uuid}/${crypto.randomUUID?.()||globalThis.makeId()}-${safeFileName(file.name)}`;
-      const up=await db.storage.from('request-files').upload(path,file,{upsert:false,contentType:file.type||undefined});if(up.error)throw up.error;
-      const ins=await db.from('request_files').insert({request_id:item.uuid,uploader_id:user.id,sender:'client',sender_name:displayName(user),file_name:file.name,storage_path:path,mime_type:file.type||null,size_bytes:file.size,read_by_client:true});if(ins.error){await db.storage.from('request-files').remove([path]);throw ins.error}
+      const up=await db.storage.from('request-files').upload(path,file,{upsert:false,contentType:safeMime,cacheControl:'3600'});if(up.error)throw up.error;
+      const ins=await db.from('request_files').insert({request_id:item.uuid,uploader_id:user.id,sender:'client',sender_name:displayName(user),file_name:safeFileName(file.name),storage_path:path,mime_type:safeMime,size_bytes:file.size,read_by_client:true});if(ins.error){await db.storage.from('request-files').remove([path]);throw ins.error}
     }
   }
   async function initRequestDetail(){
@@ -359,6 +390,12 @@
   async function boot(){
     togglePassword();await initAuthState();initLogin();initRegister();initRecovery();await initConfirmation();await initProfile();initRequestCreate();await initSuccess();await initRequestList();await initRequestDetail();
     $$('[data-logout]').forEach(x=>x.addEventListener('click',async e=>{e.preventDefault();await db.auth.signOut();location.href='index.html'}));
+    db.auth.onAuthStateChange(async(event,session)=>{
+      if(!['SIGNED_IN','SIGNED_OUT','USER_UPDATED','TOKEN_REFRESHED'].includes(event))return;
+      const next=session?.user||null;
+      if(next?.id===currentUser?.id&&event==='TOKEN_REFRESHED')return;
+      await renderAccount(next);syncAuthAwareSections(next);syncFooterClientLinks(next);
+    });
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

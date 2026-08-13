@@ -3,7 +3,7 @@
   'use strict';
   const cfg=window.INFOTECH_SUPABASE_CONFIG||{};
   if(!window.supabase?.createClient||!cfg.url)return;
-  const db=window.infotechSupabase||window.supabase.createClient(cfg.url,cfg.publishableKey,{auth:{persistSession:true,autoRefreshToken:true}});
+  const db=window.infotechSupabase||window.supabase.createClient(cfg.url,cfg.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:'pkce',storageKey:'infotech-admin-auth-v8'}});
   window.infotechSupabase=db;
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -14,15 +14,39 @@
   let user=null;
   async function isAdmin(u){
     if(!u)return false;
-    const {data,error}=await db.from('profiles').select('role').eq('id',u.id).maybeSingle();
-    return !error&&data?.role==='admin';
+    const {data,error}=await db.from('profiles').select('role,is_blocked').eq('id',u.id).maybeSingle();
+    return !error&&data?.role==='admin'&&!data?.is_blocked;
   }
+  async function mfaInfo(){
+    try{
+      const [{data:factors,error:factorError},{data:aal,error:aalError}]=await Promise.all([
+        db.auth.mfa.listFactors(),db.auth.mfa.getAuthenticatorAssuranceLevel()
+      ]);
+      if(factorError||aalError)return {verified:[],currentLevel:null};
+      const pool=Array.isArray(factors?.all)?factors.all:[...(factors?.totp||[]),...(factors?.phone||[])];
+      return {verified:pool.filter(f=>f?.status==='verified'),currentLevel:aal?.currentLevel||null};
+    }catch(_){return {verified:[],currentLevel:null}}
+  }
+  const safeAdminDestination=raw=>{
+    const value=String(raw||'');
+    return /^(painel-admin|admin-solicitacao|clientes-admin|cliente-admin)\.html(?:\?.*)?$/.test(value)?value:'painel-admin.html';
+  };
   async function guard(){
     user=(await db.auth.getSession()).data.session?.user||null;
     const ok=await isAdmin(user);
     if(protectedAdmin&&!ok){location.replace(`admin-login.html?destino=${encodeURIComponent(page+location.search)}`);return false}
-    if(page==='admin-login.html'&&ok){location.replace('painel-admin.html');return false}
-    return ok;
+    if(!ok)return false;
+    const mfa=await mfaInfo();
+    if(mfa.verified.length&&mfa.currentLevel!=='aal2'&&page!=='admin-seguranca.html'){
+      const dest=safeAdminDestination(page+location.search);
+      location.replace(`admin-seguranca.html?mode=challenge&destino=${encodeURIComponent(dest)}`);return false;
+    }
+    if(page==='admin-login.html'){
+      if(mfa.verified.length&&mfa.currentLevel!=='aal2')location.replace('admin-seguranca.html?mode=challenge&destino=painel-admin.html');
+      else location.replace('painel-admin.html');
+      return false;
+    }
+    return true;
   }
   function initLogin(){
     const form=$('#admin-login-form');if(!form)return;
@@ -32,8 +56,13 @@
       const {data,error}=await db.auth.signInWithPassword({email:String(form.elements.email.value||'').trim().toLowerCase(),password:String(form.elements.password.value||'')});
       if(error||!data.user){msg(out,'E-mail ou senha incorretos.','error');form.querySelectorAll('input,button').forEach(x=>x.disabled=false);return}
       if(!(await isAdmin(data.user))){await db.auth.signOut();msg(out,'Esta conta não possui permissão administrativa.','error');form.querySelectorAll('input,button').forEach(x=>x.disabled=false);return}
-      const dest=new URLSearchParams(location.search).get('destino');const safe=dest&&/^(painel-admin|admin-solicitacao|clientes-admin|cliente-admin)\.html/.test(dest)?dest:'painel-admin.html';
-      msg(out,'Acesso autorizado.','success');setTimeout(()=>location.replace(safe),250);
+      const dest=safeAdminDestination(new URLSearchParams(location.search).get('destino'));
+      const mfa=await mfaInfo();
+      if(mfa.verified.length&&mfa.currentLevel!=='aal2'){
+        msg(out,'Senha validada. Confirme o segundo fator.','success');
+        setTimeout(()=>location.replace(`admin-seguranca.html?mode=challenge&destino=${encodeURIComponent(dest)}`),250);return;
+      }
+      msg(out,'Acesso autorizado.','success');setTimeout(()=>location.replace(dest),250);
     });
   }
   const row=r=>({id:r.protocol,uuid:r.id,userId:r.user_id,ownerName:r.owner_name,ownerEmail:r.owner_email,title:r.title,service:r.service,description:r.description,deadline:r.deadline,budget:r.budget,contact:r.contact,reference:r.reference_url,status:r.status,adminResponse:r.admin_response,messages:Array.isArray(r.messages)?r.messages:[],project:r.project||{},createdAt:r.created_at,updatedAt:r.updated_at});
@@ -86,7 +115,7 @@
     const list=$('#clients-list');if(!list)return;
     const {data,error}=await db.rpc('admin_list_clients');if(error){list.innerHTML='<div class="empty-state">Não foi possível carregar clientes.</div>';return}
     const clients=data||[];const search=$('#client-search');
-    const render=()=>{const q=(search?.value||'').toLowerCase();const view=clients.filter(c=>[c.full_name,c.email].join(' ').toLowerCase().includes(q));list.innerHTML=view.map(c=>`<article class="client-row"><div><strong>${esc(c.full_name||'Cliente')}</strong><span>${esc(c.email)} · ${c.email_confirmed_at?'E-mail confirmado':'E-mail pendente'}${c.is_blocked?' · BLOQUEADO':''}</span></div><div style="display:flex;gap:8px"><a class="btn btn-outline" href="cliente-admin.html?id=${encodeURIComponent(c.id)}">Ver cliente</a>${c.role!=='admin'?`<button class="btn btn-ghost" data-block="${esc(c.id)}" data-state="${c.is_blocked?'1':'0'}">${c.is_blocked?'Desbloquear':'Bloquear'}</button>`:''}</div></article>`).join('')||'<div class="empty-state">Nenhum cliente.</div>';$$('[data-block]',list).forEach(b=>b.addEventListener('click',async()=>{const blocked=b.dataset.state!=='1';const r=await db.rpc('admin_set_client_blocked',{p_client_id:b.dataset.block,p_blocked:blocked});if(!r.error){const c=clients.find(x=>x.id===b.dataset.block);if(c)c.is_blocked=blocked;render()}}))};search?.addEventListener('input',render);render();
+    const render=()=>{const q=(search?.value||'').toLowerCase();const view=clients.filter(c=>[c.full_name,c.email].join(' ').toLowerCase().includes(q));list.innerHTML=view.map(c=>`<article class="client-row"><div><strong>${esc(c.full_name||'Cliente')}</strong><span>${esc(c.email)} · ${c.email_confirmed_at?'E-mail confirmado':'E-mail pendente'}${c.is_blocked?' · BLOQUEADO':''}</span></div><div class="client-row-actions"><a class="btn btn-outline" href="cliente-admin.html?id=${encodeURIComponent(c.id)}">Ver cliente</a>${c.role!=='admin'?`<button class="btn btn-ghost" data-block="${esc(c.id)}" data-state="${c.is_blocked?'1':'0'}">${c.is_blocked?'Desbloquear':'Bloquear'}</button>`:''}</div></article>`).join('')||'<div class="empty-state">Nenhum cliente.</div>';$$('[data-block]',list).forEach(b=>b.addEventListener('click',async()=>{const blocked=b.dataset.state!=='1';const r=await db.rpc('admin_set_client_blocked',{p_client_id:b.dataset.block,p_blocked:blocked});if(!r.error){const c=clients.find(x=>x.id===b.dataset.block);if(c)c.is_blocked=blocked;render()}}))};search?.addEventListener('input',render);render();
   }
   async function initClientDetail(){
     const root=$('#client-admin-detail');if(!root)return;const id=new URLSearchParams(location.search).get('id');
@@ -94,6 +123,51 @@
     $('[data-client-name]').textContent=c.full_name||'Cliente';$('[data-client-email]').textContent=c.email||'—';$('[data-client-status]').textContent=c.is_blocked?'Bloqueado':'Ativo';
     const {data:reqs}=await db.from('requests').select('*').eq('user_id',id).order('created_at',{ascending:false});const list=$('#client-requests');list.innerHTML=(reqs||[]).map(r=>`<article class="admin-card"><div><span class="request-id">#${esc(r.protocol)}</span><h3>${esc(r.title)}</h3><p>${esc(r.service)} · ${esc(r.status)}</p></div><a class="btn btn-outline" href="admin-solicitacao.html?id=${encodeURIComponent(r.protocol)}">Abrir</a></article>`).join('')||'<div class="empty-state">Este cliente ainda não possui solicitações.</div>';
   }
-  async function boot(){const ok=await guard();initLogin();if(!protectedAdmin||ok){await initDashboard();await initDetail();await initClients();await initClientDetail()}$$('[data-admin-logout]').forEach(x=>x.addEventListener('click',async e=>{e.preventDefault();await db.auth.signOut();location.replace('admin-login.html')}))}
+  async function initMfaSecurity(){
+    const root=$('#admin-mfa-root');if(!root)return;
+    const out=$('#admin-mfa-message'), setup=$('#admin-mfa-setup'), verifyForm=$('#admin-mfa-verify-form');
+    const dest=safeAdminDestination(new URLSearchParams(location.search).get('destino'));
+    const setStatus=t=>{const el=$('#admin-mfa-status');if(el)el.textContent=t};
+    let factorId='';
+    const info=await mfaInfo();
+    if(info.verified.length){
+      factorId=info.verified[0].id;
+      if(info.currentLevel==='aal2'){
+        setStatus('MFA ativo · sessão verificada');
+        if(verifyForm)verifyForm.hidden=true;
+        const go=$('#admin-mfa-continue');if(go){go.hidden=false;go.href=dest}
+      }else{
+        setStatus('MFA ativo · confirme o código para continuar');
+        if(verifyForm)verifyForm.hidden=false;
+      }
+    }else{
+      setStatus('MFA ainda não configurado');
+      if(setup)setup.hidden=false;
+      if(verifyForm)verifyForm.hidden=true;
+    }
+    $('#admin-mfa-enroll')?.addEventListener('click',async()=>{
+      msg(out,'Gerando seu segundo fator...','success');
+      const {data,error}=await db.auth.mfa.enroll({factorType:'totp',friendlyName:'InfoTech Admin'});
+      if(error){msg(out,error.message||'Não foi possível iniciar o MFA.','error');return}
+      factorId=data.id;
+      const qr=$('#admin-mfa-qr');if(qr&&data?.totp?.qr_code){qr.src=data.totp.qr_code;qr.hidden=false}
+      const secret=$('#admin-mfa-secret');if(secret)secret.textContent=data?.totp?.secret||'';
+      if(verifyForm)verifyForm.hidden=false;
+      msg(out,'Escaneie o QR no autenticador e confirme o código de 6 dígitos.','success');
+    });
+    verifyForm?.addEventListener('submit',async e=>{
+      e.preventDefault();const code=String(verifyForm.elements.code.value||'').replace(/\D/g,'').slice(0,6);
+      if(code.length!==6){msg(out,'Digite os 6 números do autenticador.','error');return}
+      if(!factorId){const fresh=await mfaInfo();factorId=fresh.verified[0]?.id||''}
+      if(!factorId){msg(out,'Fator MFA não encontrado. Gere um novo QR.','error');return}
+      verifyForm.querySelectorAll('input,button').forEach(x=>x.disabled=true);
+      const {error}=await db.auth.mfa.challengeAndVerify({factorId,code});
+      verifyForm.querySelectorAll('input,button').forEach(x=>x.disabled=false);
+      if(error){msg(out,'Código inválido ou expirado. Tente novamente.','error');return}
+      msg(out,'Segundo fator confirmado. Abrindo o painel...','success');
+      setTimeout(()=>location.replace(dest),350);
+    });
+  }
+  async function boot(){const ok=await guard();initLogin();if(!protectedAdmin||ok){await initMfaSecurity();await initDashboard();await initDetail();await initClients();await initClientDetail()}$$('[data-admin-logout]').forEach(x=>x.addEventListener('click',async e=>{e.preventDefault();await db.auth.signOut();location.replace('admin-login.html')}))}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

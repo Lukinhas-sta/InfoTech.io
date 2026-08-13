@@ -1,0 +1,64 @@
+{
+  "name": "InfoTech.io",
+  "short_name": "InfoTech",
+  "description": "Sites, sistemas e soluções digitais profissionais.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#020611",
+  "theme_color": "#020611",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "assets/brand/logo-192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/brand/logo-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ],
+  "id": "/",
+  "shortcuts": [
+    {
+      "name": "Serviços",
+      "short_name": "Serviços",
+      "url": "/servicos.html",
+      "icons": [
+        {
+          "src": "assets/brand/logo-192.webp",
+          "sizes": "192x192",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "name": "Projetos",
+      "short_name": "Projetos",
+      "url": "/projetos.html",
+      "icons": [
+        {
+          "src": "assets/brand/logo-192.webp",
+          "sizes": "192x192",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "name": "Área do Cliente",
+      "short_name": "Cliente",
+      "url": "/login.html",
+      "icons": [
+        {
+          "src": "assets/brand/logo-192.webp",
+          "sizes": "192x192",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

@@ -17,7 +17,7 @@
   if(reduced || !('IntersectionObserver' in window)) items.forEach(x=>x.classList.add('visible'));
   else{
     const io=new IntersectionObserver((entries,o)=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');o.unobserve(e.target)}}),{threshold:.1,rootMargin:'0px 0px -40px'});
-    items.forEach((x,i)=>{x.style.setProperty('--delay',`${Math.min(i%4,3)*65}ms`);io.observe(x)});
+    items.forEach((x,i)=>{x.classList.add(`reveal-delay-${Math.min(i%4,3)}`);io.observe(x)});
   }
   $$('[data-year]').forEach(x=>x.textContent=new Date().getFullYear());
   // Compatibilidade com um bug histórico do script antigo de mensagens.
