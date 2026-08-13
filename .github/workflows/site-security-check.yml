@@ -76,6 +76,9 @@ jobs:
             grep -qi 'noindex' "$page" || { echo "$page sem noindex"; exit 1; }
           done
 
+      - name: Verify local site references and metadata
+        run: python3 scripts/site_sanity.py
+
       - name: Verify HTTPS-only production references
         shell: bash
         run: |
