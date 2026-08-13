@@ -1,0 +1,56 @@
+name: Pin Supabase CDN once
+
+on:
+  push:
+    branches: [pin-supabase-cdn-v10]
+
+permissions:
+  contents: write
+
+jobs:
+  pin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: pin-supabase-cdn-v10
+
+      - name: Pin browser dependency and align password copy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          old = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
+          new = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.3'
+          changed = 0
+
+          for page in sorted(Path('.').glob('*.html')):
+              text = page.read_text(encoding='utf-8')
+              next_text = text.replace(old, new)
+              if page.name == 'cadastro.html':
+                  next_text = next_text.replace('Senha com pelo menos 8 caracteres', 'Senha com pelo menos 10 caracteres')
+              if next_text != text:
+                  page.write_text(next_text, encoding='utf-8')
+                  changed += 1
+
+          if changed == 0:
+              raise SystemExit('Nenhuma página foi alterada; abortando para evitar commit vazio.')
+
+          print(f'Páginas atualizadas: {changed}')
+          PY
+
+          rm .github/workflows/pin-supabase-cdn-once.yml
+
+      - name: Commit branch changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- '*.html' .github/workflows/pin-supabase-cdn-once.yml
+          git commit -m 'Pin Supabase browser dependency to 2.112.3'
+          git push origin HEAD:pin-supabase-cdn-v10
