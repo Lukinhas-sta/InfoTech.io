@@ -44,6 +44,17 @@ jobs:
             exit 1
           fi
 
+      - name: Reject oversized tracked files
+        shell: bash
+        run: |
+          set -euo pipefail
+          oversized="$(git ls-files -z | xargs -0 -r du -b | awk '$1 > 10485760 {print $1 " bytes\t" $2}')"
+          if [ -n "$oversized" ]; then
+            echo "Arquivo rastreado acima de 10 MiB; mova mídia grande para armazenamento/CDN apropriado:"
+            echo "$oversized"
+            exit 1
+          fi
+
       - name: Verify required public security files
         shell: bash
         run: |
@@ -53,10 +64,25 @@ jobs:
           test -f SECURITY.md
           test -f .well-known/security.txt
           test -f .nojekyll
+          test -f _headers
 
           expires="$(awk -F': ' '/^Expires:/ {print $2}' .well-known/security.txt)"
           test -n "$expires"
           test "$(date -u -d "$expires" +%s)" -gt "$(date -u +%s)"
+
+      - name: Verify future edge security baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q '^  Content-Security-Policy:' _headers
+          grep -q "default-src 'self'" _headers
+          grep -q "object-src 'none'" _headers
+          grep -q "frame-ancestors 'none'" _headers
+          grep -q 'upgrade-insecure-requests' _headers
+          grep -q '^  Strict-Transport-Security: max-age=31536000; includeSubDomains$' _headers
+          grep -q '^  X-Content-Type-Options: nosniff$' _headers
+          grep -q '^  X-Frame-Options: DENY$' _headers
+          grep -q '^  Permissions-Policy:' _headers
 
       - name: Verify HTML security baseline
         shell: bash
