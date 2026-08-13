@@ -1,0 +1,5 @@
+Contact: https://infotech-io.com.br/contato.html
+Expires: 2027-08-13T23:59:59Z
+Canonical: https://infotech-io.com.br/.well-known/security.txt
+Policy: https://infotech-io.com.br/seguranca.html
+Preferred-Languages: pt-BR, en
