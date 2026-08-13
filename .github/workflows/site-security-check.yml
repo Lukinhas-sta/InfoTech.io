@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Reject private files and obvious server secrets
         shell: bash
@@ -26,6 +26,13 @@ jobs:
           if [ -n "$bad_files" ]; then
             echo "Arquivos privados rastreados pelo Git:"
             echo "$bad_files"
+            exit 1
+          fi
+
+          obsolete_ops="$(git ls-files | grep -E '^ALTERACOES-.*(ADMIN|SUPABASE).*|^CONFIGURAR-.*SUPABASE.*|^SUPABASE-SECURITY-.*\.sql$|^SUPABASE-HARDENING-.*\.sql$' || true)"
+          if [ -n "$obsolete_ops" ]; then
+            echo "Arquivos operacionais antigos não devem voltar à árvore pública:"
+            echo "$obsolete_ops"
             exit 1
           fi
 
@@ -46,6 +53,10 @@ jobs:
           test -f SECURITY.md
           test -f .well-known/security.txt
           test -f .nojekyll
+
+          expires="$(awk -F': ' '/^Expires:/ {print $2}' .well-known/security.txt)"
+          test -n "$expires"
+          test "$(date -u -d "$expires" +%s)" -gt "$(date -u +%s)"
 
       - name: Verify HTML security baseline
         shell: bash
