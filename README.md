@@ -4,6 +4,10 @@
 
 A **InfoTech.io** é um projeto em evolução voltado à criação de sites, sistemas e soluções de suporte em tecnologia. Este repositório reúne o site principal e a experiência da área do cliente.
 
+## 🌐 Projeto ao vivo
+
+**[Acessar a InfoTech.io](https://infotech-io.com.br/)**
+
 ## ✨ Principais recursos
 
 - Site institucional responsivo
@@ -30,4 +34,4 @@ A InfoTech.io também representa minha evolução de projetos escolares simples 
 
 ---
 
-**Projeto desenvolvido e mantido por Lucas / InfoTech.io.**
+**Projeto desenvolvido e mantido por Lucas Janoca / InfoTech.io.**
