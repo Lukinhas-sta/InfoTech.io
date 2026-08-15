@@ -1,6 +1,6 @@
 # Changelog — InfoTech.io
 
-Histórico consolidado das principais versões do projeto. Este arquivo substitui os antigos arquivos `ALTERACOES-*.txt` espalhados na raiz do repositório.
+Histórico consolidado das principais versões do projeto. Este arquivo substitui os antigos arquivos de alterações e READMEs de preview espalhados na raiz do repositório.
 
 ## V8.0
 
@@ -31,6 +31,42 @@ Histórico consolidado das principais versões do projeto. Este arquivo substitu
 - Criação/sincronização de perfil ligada ao Auth.
 - Bloqueio aplicado também nas policies.
 - Funções administrativas versionadas.
+
+## V6.7 — Preview
+- Artes originais do Instagram reutilizadas onde disponíveis.
+- Novos emblemas para Aplicativos, Automação, Programas e Suporte.
+- Logos e emblemas do conteúdo mantidos estáticos, concentrando animações em elementos de atenção.
+- Personagem do cabeçalho refinado com novas animações.
+- Carrosséis reescritos para arraste, impulso e loop contínuo mais estáveis.
+- Fluxo login → cadastro → confirmação → solicitação passou a preservar destino e serviço escolhido.
+- Credenciais inválidas podiam encaminhar ao cadastro sem colocar senha na URL.
+- Ajustes de centralização das imagens internas.
+
+## V6.6 — Preview
+- Revisão focada em estabilidade, desempenho e compactação visual.
+- Carrosséis otimizados com rolagem nativa no toque.
+- Serviços reorganizados em grade 3 × 2.
+- Projetos reorganizados em grade 3 × 2.
+- Ajustes para reduzir overflow lateral, custo de pintura e travamentos no celular.
+- Refinamentos de identidade visual e animação do personagem de acesso.
+
+## V6.4 — Preview
+- Revisão de estabilidade, desempenho e compactação visual.
+- Serviços e projetos migrados de carrosséis para grades.
+- Redução de elementos redundantes da interface.
+- Aura neon sincronizada aplicada a marcas e ícones principais.
+- Ajustes para reduzir overflow e melhorar desempenho móvel.
+
+## V6.3 — Preview
+- Carrosséis com loop visual, arraste no toque e autoplay.
+- Animações da marca sincronizadas.
+- Hero e textos da Home compactados.
+- Página de Projetos e Sobre simplificadas.
+
+## V6.2 — Preview
+- Revisão focada em responsividade mobile, carrosséis, compactação de conteúdo e portfólio.
+- Integrações existentes com Supabase preservadas.
+- Melhorias concentradas em interface, navegação e apresentação.
 
 ## V5.1.5
 - Corrigida referência ambígua de `request_id`.
