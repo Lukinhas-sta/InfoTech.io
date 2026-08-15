@@ -33,6 +33,15 @@ function parsePermanentMemory(text){
   return value.length>=2?value:null;
 }
 
+function classifyMemoryKind(text){
+  const t=String(text||'').toLowerCase();
+  if(/\b(prefiro|gosto|adoro|odeio|n[aã]o gosto|favorit[oa])\b/.test(t))return 'preference';
+  if(/\b(projeto|empresa|site|aplicativo|app|sistema)\b/.test(t))return 'project';
+  if(/\b(todo dia|todos os dias|sempre de manh[aã]|rotina|costumo)\b/.test(t))return 'routine';
+  if(/\b(sempre|nunca|quando eu|quero que voc[eê])\b/.test(t))return 'instruction';
+  return 'fact';
+}
+
 function bubble(role,text){
   const d=document.createElement('div');
   d.className='msg '+role;
@@ -73,6 +82,7 @@ if(form&&input){
       const user=session?.user;
       if(!user)throw new Error('Entre na sua conta da io antes de salvar uma memoria.');
 
+      const kind=classifyMemoryKind(memory);
       const {data:existing,error:findError}=await memoryDb
         .from('alex_memories')
         .select('id')
@@ -85,17 +95,17 @@ if(form&&input){
       if(existing?.length){
         const r=await memoryDb
           .from('alex_memories')
-          .update({importance:4,source:'user_explicit',updated_at:new Date().toISOString()})
+          .update({kind,importance:4,source:'user',updated_at:new Date().toISOString()})
           .eq('id',existing[0].id)
           .eq('user_id',user.id);
         saveError=r.error;
       }else{
         const r=await memoryDb.from('alex_memories').insert({
           user_id:user.id,
-          kind:'explicit',
+          kind,
           content:memory,
           importance:4,
-          source:'user_explicit'
+          source:'user'
         });
         saveError=r.error;
       }
