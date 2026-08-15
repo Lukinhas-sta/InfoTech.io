@@ -1,9 +1,0 @@
-VERSÃO 5.0.4.1 — CORREÇÃO DO ANDAMENTO DO PROJETO
-
-- Restauradas as cinco etapas padrão no painel administrativo.
-- O prazo e as etapas agora são salvos no Supabase.
-- Corrigido o redirecionamento indevido para “Solicitação não encontrada”.
-- Removido o bloco “Versão 5.0.1 — autenticação real” da tela de login.
-- O cliente passa a visualizar o mesmo progresso salvo pelo administrador.
-
-IMPORTANTE: execute novamente CONFIGURAR-SOLICITACOES-SUPABASE.sql no SQL Editor.
