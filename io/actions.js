@@ -2,132 +2,68 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const SB_URL='https://rgngqumqzylthdiazvfu.supabase.co';
 const SB_KEY='sb_publishable_Nw2oaGdMQHVIJNhUpjv5ag_JcxmRu2w';
+const OLLAMA='http://127.0.0.1:11434';
 const db=createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false}});
+
 const form=document.querySelector('#composer');
 const input=document.querySelector('#input');
 const chat=document.querySelector('#chat');
 const chatwrap=document.querySelector('#chatwrap');
 const notice=document.querySelector('#notice');
 
+const TOOL_REGISTRY=Object.freeze({
+  'memory.save':{label:'Salvar memória',risk:'safe'},
+  'list.add':{label:'Adicionar à lista',risk:'safe'},
+  'list.show':{label:'Ver lista',risk:'safe'},
+  'list.remove':{label:'Remover da lista',risk:'safe'},
+  'list.complete':{label:'Concluir item',risk:'safe'},
+  'list.list':{label:'Listar listas',risk:'safe'},
+  'backup.export':{label:'Exportar backup',risk:'safe'}
+});
+
 const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/[.!?]+$/,'').replace(/\s+/g,' ');
 const clean=s=>String(s||'').trim().replace(/[.!?]+$/,'').trim();
 const listName=s=>clean(s).replace(/^(?:de\s+|da\s+|do\s+)/i,'').toLowerCase().slice(0,80);
 const itemName=s=>clean(s).slice(0,300);
 
-function bubble(role,text){
-  const d=document.createElement('div'); d.className='msg '+role;
-  const mini=document.createElement('div'); mini.className='mini'; mini.textContent=role==='assistant'?'io':'L';
-  const b=document.createElement('div'); b.className='bubble'; b.textContent=text;
-  d.appendChild(mini); d.appendChild(b); return d;
-}
-function show(userText,reply){
-  if(!chat)return;
-  if(chat.querySelector('.welcome'))chat.innerHTML='';
-  chat.appendChild(bubble('user',userText));
-  chat.appendChild(bubble('assistant',reply));
-  if(localStorage.getItem('io_speak')==='1' && 'speechSynthesis' in window){
-    speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(reply.slice(0,1500)); u.lang='pt-BR'; speechSynthesis.speak(u);
-  }
-  requestAnimationFrame(()=>{if(chatwrap)chatwrap.scrollTop=chatwrap.scrollHeight});
-}
 function setNotice(t){if(notice)notice.textContent=t}
+function bubble(role,text){const d=document.createElement('div');d.className='msg '+role;const m=document.createElement('div');m.className='mini';m.textContent=role==='assistant'?'io':'L';const b=document.createElement('div');b.className='bubble';b.textContent=text;d.append(m,b);return d}
+function show(userText,reply){if(!chat)return;if(chat.querySelector('.welcome'))chat.innerHTML='';if(userText)chat.appendChild(bubble('user',userText));chat.appendChild(bubble('assistant',reply));if(localStorage.getItem('io_speak')==='1'&&'speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(reply.slice(0,1500));u.lang='pt-BR';speechSynthesis.speak(u)}requestAnimationFrame(()=>{if(chatwrap)chatwrap.scrollTop=chatwrap.scrollHeight})}
+async function sessionUser(){const {data:{session}}=await db.auth.getSession();return session?.user||null}
 
-function parseMemory(text){
-  const m=clean(text).match(/^(?:io[\s,.:;\-]*)?(?:lembre|lembra|guarde|guarda|memorize|memoriza)(?:\s+(?:na\s+mem[oó]ria))?\s+(?:que\s+)?(.{2,})$/i);
-  return m?clean(m[1]).slice(0,1200):null;
-}
-function classifyMemory(v){
-  const x=norm(v);
-  if(/\b(gosto|prefiro|favorit|nao gosto)\b/.test(x))return 'preference';
-  if(/\b(projeto|empresa|site|app|aplicativo|negocio)\b/.test(x))return 'project';
-  if(/\b(todo dia|toda semana|rotina|sempre faco)\b/.test(x))return 'routine';
-  if(/\b(mae|pai|irmao|irma|amigo|amiga|esposa|marido|namorada|namorado)\b/.test(x))return 'person';
-  return 'fact';
-}
+function classifyMemory(v){const x=norm(v);if(/\b(gosto|prefiro|favorit|nao gosto)\b/.test(x))return'preference';if(/\b(projeto|empresa|site|app|aplicativo|negocio)\b/.test(x))return'project';if(/\b(todo dia|toda semana|rotina|sempre faco)\b/.test(x))return'routine';if(/\b(mae|pai|irmao|irma|amigo|amiga|esposa|marido|namorada|namorado)\b/.test(x))return'person';return'fact'}
+function parseMemory(text){const m=clean(text).match(/^(?:io[\s,.:;\-]*)?(?:lembre|lembra|guarde|guarda|memorize|memoriza)(?:\s+(?:na\s+mem[oó]ria))?\s+(?:que\s+)?(.{2,})$/i);return m?{tool:'memory.save',args:{content:clean(m[1]).slice(0,1200)}}:null}
+function parseList(text){const t=clean(text);let m;if(/^(?:io[\s,.:;\-]*)?(?:quais|qual).*(?:minhas|minha)\s+listas?$/i.test(t)||/^(?:io[\s,.:;\-]*)?(?:mostre|mostra|liste|lista)\s+(?:minhas\s+)?listas$/i.test(t))return{tool:'list.list',args:{}};m=t.match(/^(?:io[\s,.:;\-]*)?(?:adicione|adiciona|adicionar|coloque|coloca|bote|bota)\s+(.+?)\s+(?:na|à|a)\s+(?:minha\s+)?lista(?:\s+de)?\s+(.+)$/i);if(m)return{tool:'list.add',args:{item:itemName(m[1]),list:listName(m[2])}};m=t.match(/^(?:io[\s,.:;\-]*)?(?:remova|remove|retire|tire|tira|apague|apaga)\s+(.+?)\s+(?:da|de)\s+(?:minha\s+)?lista(?:\s+de)?\s+(.+)$/i);if(m)return{tool:'list.remove',args:{item:itemName(m[1]),list:listName(m[2])}};m=t.match(/^(?:io[\s,.:;\-]*)?(?:marque|marca|conclua|conclui)\s+(.+?)\s+(?:como\s+)?(?:feito|feita|conclu[ií]do|conclu[ií]da)\s+(?:na|da)\s+(?:minha\s+)?lista(?:\s+de)?\s+(.+)$/i);if(m)return{tool:'list.complete',args:{item:itemName(m[1]),list:listName(m[2])}};m=t.match(/^(?:io[\s,.:;\-]*)?(?:o\s+que\s+tem|mostre|mostra|liste|lista|ver)\s+(?:na\s+|a\s+)?(?:minha\s+)?lista(?:\s+de)?\s+(.+)$/i);if(m)return{tool:'list.show',args:{list:listName(m[1])}};return null}
+function parseTool(text){return parseMemory(text)||parseList(text)}
 
-function parseList(text){
-  const t=clean(text);
-  let m;
-  if(/^(?:io[\s,.:;\-]*)?(?:quais|qual).*(?:minhas|minha)\s+listas?$/i.test(t) || /^(?:io[\s,.:;\-]*)?(?:mostre|mostra|liste|lista)\s+(?:minhas\s+)?listas$/i.test(t)) return {op:'lists'};
-  m=t.match(/^(?:io[\s,.:;\-]*)?(?:adicione|adiciona|adicionar|coloque|coloca|bote|bota)\s+(.+?)\s+(?:na|à|a)\s+(?:minha\s+)?lista(?:\s+de)?\s+(.+)$/i);
-  if(m)return {op:'add',item:itemName(m[1]),list:listName(m[2])};
-  m=t.match(/^(?:io[\s,.:;\-]*)?(?:remova|remove|retire|tire|tira|apague|apaga)\s+(.+?)\s+(?:da|de)\s+(?:minha\s+)?lista(?:\s+de)?\s+(.+)$/i);
-  if(m)return {op:'remove',item:itemName(m[1]),list:listName(m[2])};
-  m=t.match(/^(?:io[\s,.:;\-]*)?(?:marque|marca|conclua|conclui)\s+(.+?)\s+(?:como\s+)?(?:feito|feita|conclu[ií]do|conclu[ií]da)\s+(?:na|da)\s+(?:minha\s+)?lista(?:\s+de)?\s+(.+)$/i);
-  if(m)return {op:'done',item:itemName(m[1]),list:listName(m[2])};
-  m=t.match(/^(?:io[\s,.:;\-]*)?(?:o\s+que\s+tem|mostre|mostra|liste|lista|ver)\s+(?:na\s+|a\s+)?(?:minha\s+)?lista(?:\s+de)?\s+(.+)$/i);
-  if(m)return {op:'show',list:listName(m[1])};
-  return null;
-}
+async function logIssue(user,tool,status,error,metadata={}){if(!user?.id)return;try{await db.from('io_action_logs').insert({user_id:user.id,tool_name:tool,status,error_code:error?.code||null,message:String(error?.message||error||'').slice(0,500)||null,metadata})}catch{}}
+async function cleanupLogs(user){if(!user?.id)return;try{const cutoff=new Date(Date.now()-30*86400000).toISOString();await db.from('io_action_logs').delete().eq('user_id',user.id).lt('created_at',cutoff)}catch{}}
+async function permissionFor(user,tool){const {data,error}=await db.from('io_tool_permissions').select('allowed,confirm_required').eq('user_id',user.id).eq('tool_name',tool).maybeSingle();if(error)throw error;return data||{allowed:false,confirm_required:false}}
+async function requirePermission(user,tool){const p=await permissionFor(user,tool);if(!p.allowed){const e=new Error('Você não tem permissão para usar este comando.');e.code='permission_denied';await logIssue(user,tool,'denied',e);throw e}if(p.confirm_required&&!confirm('A io precisa da sua confirmação para executar: '+(TOOL_REGISTRY[tool]?.label||tool)+'. Continuar?')){const e=new Error('Comando cancelado por você.');e.code='confirmation_cancelled';await logIssue(user,tool,'warning',e);throw e}return p}
 
-async function sessionUser(){const {data:{session}}=await db.auth.getSession(); return session?.user||null}
-async function getList(userId,name){
-  const {data,error}=await db.from('io_lists').select('id,name').eq('user_id',userId).eq('name',name).maybeSingle();
-  if(error)throw error; return data||null;
-}
-async function ensureList(userId,name){
-  let list=await getList(userId,name); if(list)return list;
-  const {data,error}=await db.from('io_lists').insert({user_id:userId,name}).select('id,name').single();
-  if(error)throw error; return data;
-}
-async function itemsOf(userId,listId){
-  const {data,error}=await db.from('io_list_items').select('id,content,done,created_at').eq('user_id',userId).eq('list_id',listId).order('done',{ascending:true}).order('created_at',{ascending:true}).limit(200);
-  if(error)throw error; return data||[];
-}
-async function runList(cmd,user){
-  if(cmd.op==='lists'){
-    const {data,error}=await db.from('io_lists').select('name').eq('user_id',user.id).order('name',{ascending:true});
-    if(error)throw error; const names=(data||[]).map(x=>x.name);
-    return names.length?'Suas listas são: '+names.join(', ')+'.':'Você ainda não tem nenhuma lista.';
-  }
-  if(!cmd.list)throw new Error('Diga o nome da lista');
-  if(cmd.op==='add'){
-    const list=await ensureList(user.id,cmd.list); const items=await itemsOf(user.id,list.id);
-    if(items.some(x=>!x.done&&norm(x.content)===norm(cmd.item)))return '“'+cmd.item+'” já está na lista de '+cmd.list+'.';
-    const {error}=await db.from('io_list_items').insert({list_id:list.id,user_id:user.id,content:cmd.item,done:false}); if(error)throw error;
-    return 'Pronto. Adicionei “'+cmd.item+'” à lista de '+cmd.list+'.';
-  }
-  const list=await getList(user.id,cmd.list);
-  if(!list)return 'A lista de '+cmd.list+' ainda não existe.';
-  const items=await itemsOf(user.id,list.id);
-  if(cmd.op==='show'){
-    if(!items.length)return 'A lista de '+cmd.list+' está vazia.';
-    const pending=items.filter(x=>!x.done), done=items.filter(x=>x.done);
-    let out='Lista de '+cmd.list+': ';
-    out+=pending.length?pending.map((x,i)=>(i+1)+'. '+x.content).join('; '):'nenhum item pendente';
-    if(done.length)out+=' — concluídos: '+done.map(x=>x.content).join(', ');
-    return out+'.';
-  }
-  const target=items.find(x=>norm(x.content)===norm(cmd.item));
-  if(!target)return 'Não encontrei “'+cmd.item+'” na lista de '+cmd.list+'.';
-  if(cmd.op==='remove'){
-    const {error}=await db.from('io_list_items').delete().eq('id',target.id).eq('user_id',user.id); if(error)throw error;
-    return 'Removi “'+target.content+'” da lista de '+cmd.list+'.';
-  }
-  if(cmd.op==='done'){
-    const {error}=await db.from('io_list_items').update({done:true,updated_at:new Date().toISOString()}).eq('id',target.id).eq('user_id',user.id); if(error)throw error;
-    return 'Marquei “'+target.content+'” como concluído na lista de '+cmd.list+'.';
-  }
-}
+async function getList(userId,name){const {data,error}=await db.from('io_lists').select('id,name').eq('user_id',userId).eq('name',name).maybeSingle();if(error)throw error;return data||null}
+async function ensureList(userId,name){let list=await getList(userId,name);if(list)return list;const {data,error}=await db.from('io_lists').insert({user_id:userId,name}).select('id,name').single();if(error)throw error;return data}
+async function itemsOf(userId,listId){const {data,error}=await db.from('io_list_items').select('id,content,done,created_at').eq('user_id',userId).eq('list_id',listId).order('done',{ascending:true}).order('created_at',{ascending:true}).limit(200);if(error)throw error;return data||[]}
 
-async function saveMemory(memory,user){
-  const {data:existing,error:findError}=await db.from('alex_memories').select('id').eq('user_id',user.id).eq('content',memory).limit(1); if(findError)throw findError;
-  if(existing?.length){const {error}=await db.from('alex_memories').update({importance:4,source:'user',updated_at:new Date().toISOString()}).eq('id',existing[0].id).eq('user_id',user.id); if(error)throw error;}
-  else {const {error}=await db.from('alex_memories').insert({user_id:user.id,kind:classifyMemory(memory),content:memory,importance:4,source:'user'}); if(error)throw error;}
-  return 'Pronto. Guardei isso na minha memória permanente: "'+memory+'".';
-}
+const TOOLS={
+  async 'memory.save'({content},user){const {data:existing,error:findError}=await db.from('alex_memories').select('id').eq('user_id',user.id).eq('content',content).limit(1);if(findError)throw findError;if(existing?.length){const {error}=await db.from('alex_memories').update({importance:4,source:'user',updated_at:new Date().toISOString()}).eq('id',existing[0].id).eq('user_id',user.id);if(error)throw error}else{const {error}=await db.from('alex_memories').insert({user_id:user.id,kind:classifyMemory(content),content,importance:4,source:'user'});if(error)throw error}return'Pronto. Guardei isso na minha memória permanente: "'+content+'".'},
+  async 'list.list'(_,user){const {data,error}=await db.from('io_lists').select('name').eq('user_id',user.id).order('name',{ascending:true});if(error)throw error;const names=(data||[]).map(x=>x.name);return names.length?'Suas listas são: '+names.join(', ')+'.':'Você ainda não tem nenhuma lista.'},
+  async 'list.add'({list,item},user){if(!list||!item)throw new Error('Diga o item e o nome da lista.');const l=await ensureList(user.id,list);const items=await itemsOf(user.id,l.id);if(items.some(x=>!x.done&&norm(x.content)===norm(item)))return'“'+item+'” já está na lista de '+list+'.';const {error}=await db.from('io_list_items').insert({list_id:l.id,user_id:user.id,content:item,done:false});if(error)throw error;return'Pronto. Adicionei “'+item+'” à lista de '+list+'.'},
+  async 'list.show'({list},user){const l=await getList(user.id,list);if(!l)return'A lista de '+list+' ainda não existe.';const items=await itemsOf(user.id,l.id);if(!items.length)return'A lista de '+list+' está vazia.';const pending=items.filter(x=>!x.done),done=items.filter(x=>x.done);let out='Lista de '+list+': '+(pending.length?pending.map((x,i)=>(i+1)+'. '+x.content).join('; '):'nenhum item pendente');if(done.length)out+=' — concluídos: '+done.map(x=>x.content).join(', ');return out+'.'},
+  async 'list.remove'({list,item},user){const l=await getList(user.id,list);if(!l)return'A lista de '+list+' ainda não existe.';const items=await itemsOf(user.id,l.id);const target=items.find(x=>norm(x.content)===norm(item));if(!target)return'Não encontrei “'+item+'” na lista de '+list+'.';const {error}=await db.from('io_list_items').delete().eq('id',target.id).eq('user_id',user.id);if(error)throw error;return'Removi “'+target.content+'” da lista de '+list+'.'},
+  async 'list.complete'({list,item},user){const l=await getList(user.id,list);if(!l)return'A lista de '+list+' ainda não existe.';const items=await itemsOf(user.id,l.id);const target=items.find(x=>norm(x.content)===norm(item));if(!target)return'Não encontrei “'+item+'” na lista de '+list+'.';const {error}=await db.from('io_list_items').update({done:true,updated_at:new Date().toISOString()}).eq('id',target.id).eq('user_id',user.id);if(error)throw error;return'Marquei “'+target.content+'” como concluído na lista de '+list+'.'},
+  async 'backup.export'(_,user){const [{data:memories,error:mErr},{data:lists,error:lErr},{data:items,error:iErr},{data:permissions,error:pErr}]=await Promise.all([db.from('alex_memories').select('kind,content,importance,source,created_at,updated_at').eq('user_id',user.id).order('updated_at',{ascending:false}),db.from('io_lists').select('id,name,created_at,updated_at').eq('user_id',user.id).order('name'),db.from('io_list_items').select('list_id,content,done,created_at,updated_at').eq('user_id',user.id).order('created_at'),db.from('io_tool_permissions').select('tool_name,allowed,confirm_required').eq('user_id',user.id).order('tool_name')]);if(mErr||lErr||iErr||pErr)throw(mErr||lErr||iErr||pErr);const payload={format:'io-backup-v1',generated_at:new Date().toISOString(),user:{id:user.id,email:user.email||null},memories:memories||[],lists:(lists||[]).map(l=>({...l,items:(items||[]).filter(i=>i.list_id===l.id).map(({list_id,...rest})=>rest)})),permissions:permissions||[]};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='io-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return'Backup criado. Salvei suas memórias, listas e permissões em um arquivo JSON.'}
+};
 
-if(form&&input){
-  form.addEventListener('submit',async ev=>{
-    const original=input.value.trim(); if(!original)return;
-    const memory=parseMemory(original); const cmd=parseList(original);
-    if(!memory&&!cmd)return;
-    ev.preventDefault(); ev.stopImmediatePropagation(); input.value=''; input.style.height='auto';
-    setNotice(memory?'Salvando memória permanente...':'Executando comando da lista...');
-    try{
-      const user=await sessionUser(); if(!user)throw new Error('Entre na sua conta da io primeiro');
-      const reply=memory?await saveMemory(memory,user):await runList(cmd,user);
-      show(original,reply); setNotice(memory?'🧠 Memória permanente salva.':'✅ Comando executado sem enviar ao Qwen.');
-    }catch(err){const reply='Não consegui executar: '+(err?.message||'erro desconhecido')+'.'; show(original,reply); setNotice(reply);}
-  },true);
-}
+async function executeTool(call,user){if(!TOOL_REGISTRY[call.tool]||!TOOLS[call.tool])throw new Error('Ferramenta desconhecida.');await requirePermission(user,call.tool);return TOOLS[call.tool](call.args||{},user)}
+
+function injectUi(){if(document.querySelector('#ioOpsBtn'))return;const host=document.querySelector('.sidefoot')||document.querySelector('.toptools');if(!host)return;const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:7px;flex-wrap:wrap;margin-top:10px';const status=document.createElement('button');status.id='ioOpsBtn';status.className='btn';status.type='button';status.textContent='🩺 Status';const backup=document.createElement('button');backup.id='ioBackupBtn';backup.className='btn';backup.type='button';backup.textContent='💾 Backup';wrap.append(status,backup);host.prepend(wrap);status.onclick=openStatus;backup.onclick=async()=>{const user=await sessionUser();if(!user)return setNotice('Entre na sua conta da io primeiro.');try{setNotice('Criando backup...');const reply=await executeTool({tool:'backup.export',args:{}},user);show('',reply);setNotice('✅ Backup concluído.')}catch(err){await logIssue(user,'backup.export','error',err);setNotice('Não consegui criar o backup: '+err.message)}}}
+
+async function getStatus(user){const s={brain:false,supabase:false,memory:false,commands:false,voice:false};try{const r=await fetch(OLLAMA+'/api/tags',{cache:'no-store'});s.brain=r.ok}catch{}try{const {error}=await db.from('alex_access').select('enabled').eq('user_id',user.id).eq('enabled',true).maybeSingle();s.supabase=!error}catch{}try{const {error}=await db.from('alex_memories').select('id',{head:true,count:'exact'}).eq('user_id',user.id);s.memory=!error}catch{}try{const {data,error}=await db.from('io_tool_permissions').select('tool_name,allowed').eq('user_id',user.id);s.commands=!error&&(data||[]).some(x=>x.allowed)}catch{}s.voice='speechSynthesis'in window;return s}
+async function openStatus(){const user=await sessionUser();if(!user)return setNotice('Entre na sua conta da io primeiro.');setNotice('Verificando a io...');const s=await getStatus(user);let modal=document.querySelector('#ioStatusModal');if(modal)modal.remove();modal=document.createElement('div');modal.id='ioStatusModal';modal.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(3,5,10,.82);display:grid;place-items:center;padding:18px';const card=document.createElement('div');card.style.cssText='width:min(460px,100%);background:#111521;border:1px solid #272c3b;border-radius:22px;padding:22px;color:#fff';const rows=[['Cérebro local',s.brain],['Supabase',s.supabase],['Memória',s.memory],['Comandos/permissões',s.commands],['Saída de voz',s.voice]];card.innerHTML='<h2 style="margin-top:0">Status da io</h2>'+rows.map(([n,ok])=>'<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #272c3b"><span>'+n+'</span><strong>'+(ok?'✅ OK':'⚠️ Verificar')+'</strong></div>').join('')+'<p style="color:#9ca4b8;font-size:13px;line-height:1.45">Logs guardam apenas erros, bloqueios e avisos técnicos por até 30 dias; não salvam o conteúdo completo das suas conversas.</p><button id="ioStatusClose" class="btn" style="width:100%">Fechar</button>';modal.appendChild(card);document.body.appendChild(modal);card.querySelector('#ioStatusClose').onclick=()=>modal.remove();modal.onclick=e=>{if(e.target===modal)modal.remove()};setNotice('🩺 Diagnóstico concluído.')}
+
+if(form&&input){form.addEventListener('submit',async ev=>{const original=input.value.trim();if(!original)return;const call=parseTool(original);if(!call)return;ev.preventDefault();ev.stopImmediatePropagation();input.value='';input.style.height='auto';setNotice('Executando '+(TOOL_REGISTRY[call.tool]?.label||'comando')+'...');let user=null;try{user=await sessionUser();if(!user)throw new Error('Entre na sua conta da io primeiro.');const reply=await executeTool(call,user);show(original,reply);setNotice('✅ '+(TOOL_REGISTRY[call.tool]?.label||'Comando')+' concluído.')}catch(err){if(user&&err?.code!=='permission_denied'&&err?.code!=='confirmation_cancelled')await logIssue(user,call.tool,'error',err);const reply='Não consegui executar: '+(err?.message||'erro desconhecido')+'.';show(original,reply);setNotice(reply)}},true)}
+
+injectUi();
+setTimeout(injectUi,800);
+sessionUser().then(user=>cleanupLogs(user));
