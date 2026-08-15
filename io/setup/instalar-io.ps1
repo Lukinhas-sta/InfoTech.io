@@ -54,7 +54,7 @@ if (-not (Test-Path $ollamaExe)) {
 
 Step 'Aplicando protecoes para o seu PC'
 $settings = @{
-  'OLLAMA_ORIGINS' = 'https://infotech-io.com.br'
+  'OLLAMA_ORIGINS' = 'https://infotech-io.com.br,http://127.0.0.1:8765,http://localhost:8765'
   'OLLAMA_NO_CLOUD' = '1'
   'OLLAMA_NUM_PARALLEL' = '1'
   'OLLAMA_MAX_LOADED_MODELS' = '1'
@@ -71,9 +71,9 @@ Write-Host ' - somente 1 modelo carregado'
 Write-Host ' - somente 1 resposta processada por vez'
 Write-Host ' - contexto padrao limitado a 4096 tokens'
 Write-Host ' - recursos de nuvem do Ollama desativados'
-Write-Host ' - acesso web permitido apenas para o site da io'
+Write-Host ' - a tela da io roda localmente no proprio PC'
 
-Step 'Reiniciando o servidor local'
+Step 'Reiniciando o cerebro local'
 Get-Process -Name 'ollama' -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 Start-Sleep -Seconds 2
 Start-Process -FilePath $ollamaExe -ArgumentList 'serve' -WindowStyle Hidden
@@ -89,14 +89,14 @@ for ($i = 0; $i -lt 30; $i++) {
   }
 }
 if (-not $ready) {
-  Fail 'O Ollama foi instalado, mas o servidor local ainda nao iniciou.'
+  Fail 'O Ollama esta instalado, mas o servidor local ainda nao iniciou.'
 }
 
-Step 'Baixando o cerebro Qwen3 4B Instruct'
-Write-Host 'O modelo ocupa aproximadamente 2,5 GB. O tempo depende da sua internet.' -ForegroundColor Yellow
+Step 'Conferindo o cerebro Qwen3 4B Instruct'
+Write-Host 'Se o modelo ja estiver instalado, esta etapa termina rapidamente.' -ForegroundColor Yellow
 & $ollamaExe pull 'qwen3:4b-instruct'
 if ($LASTEXITCODE -ne 0) {
-  Fail 'O download do modelo nao terminou corretamente.'
+  Fail 'O modelo nao ficou disponivel corretamente.'
 }
 
 Step 'Fazendo um teste em Modo Leve'
@@ -118,18 +118,42 @@ try {
   Write-Host ('Teste concluido: ' + $test.message.content.Trim()) -ForegroundColor Green
   Write-Host 'O modelo foi descarregado depois do teste para liberar memoria.' -ForegroundColor Green
 } catch {
-  Write-Host 'O modelo foi instalado, mas o teste automatico nao terminou. Vamos testar pela tela da io.' -ForegroundColor Yellow
+  Write-Host 'O modelo esta instalado, mas o teste automatico nao terminou. Vamos testar pela tela da io.' -ForegroundColor Yellow
 }
 
-Step 'Criando atalho da io na Area de Trabalho'
+Step 'Preparando a tela local da io'
+$appDir = Join-Path $env:LOCALAPPDATA 'io'
+New-Item -ItemType Directory -Force -Path $appDir | Out-Null
+
+$files = @{
+  'local.html' = 'https://raw.githubusercontent.com/Lukinhas-sta/InfoTech.io/main/io/local.html'
+  'io-local-server.ps1' = 'https://raw.githubusercontent.com/Lukinhas-sta/InfoTech.io/main/io/setup/io-local-server.ps1'
+  'io-launch.ps1' = 'https://raw.githubusercontent.com/Lukinhas-sta/InfoTech.io/main/io/setup/io-launch.ps1'
+}
+
+foreach ($fileName in $files.Keys) {
+  try {
+    Invoke-WebRequest -UseBasicParsing -Uri $files[$fileName] -OutFile (Join-Path $appDir $fileName)
+  } catch {
+    Fail ("Nao consegui preparar a tela local da io: " + $fileName)
+  }
+}
+
+Step 'Criando o atalho da io na Area de Trabalho'
 try {
   $desktop = [Environment]::GetFolderPath('Desktop')
-  $shortcut = Join-Path $desktop 'io.url'
-  @"
-[InternetShortcut]
-URL=https://infotech-io.com.br/io/local.html
-IconIndex=0
-"@ | Set-Content -Path $shortcut -Encoding ASCII
+  $oldShortcut = Join-Path $desktop 'io.url'
+  if (Test-Path $oldShortcut) { Remove-Item $oldShortcut -Force }
+
+  $launcher = Join-Path $appDir 'io-launch.ps1'
+  $shortcutPath = Join-Path $desktop 'io.lnk'
+  $shell = New-Object -ComObject WScript.Shell
+  $shortcut = $shell.CreateShortcut($shortcutPath)
+  $shortcut.TargetPath = 'powershell.exe'
+  $shortcut.Arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $launcher + '"'
+  $shortcut.WorkingDirectory = $appDir
+  if (Test-Path $ollamaExe) { $shortcut.IconLocation = $ollamaExe + ',0' }
+  $shortcut.Save()
 } catch {
   Write-Host 'Nao consegui criar o atalho, mas a instalacao principal esta pronta.' -ForegroundColor Yellow
 }
@@ -140,15 +164,14 @@ Write-Host '             IO PRONTA' -ForegroundColor Green
 Write-Host '=========================================' -ForegroundColor Green
 Write-Host 'Modelo: qwen3:4b-instruct'
 Write-Host 'Modo inicial recomendado: LEVE'
-Write-Host 'Endereco do cerebro: http://127.0.0.1:11434'
-Write-Host 'Tela da io: https://infotech-io.com.br/io/local.html'
+Write-Host 'Cerebro: http://127.0.0.1:11434'
+Write-Host 'Tela local: http://127.0.0.1:8765/'
 Write-Host ''
-Write-Host 'Na tela voce tera:' -ForegroundColor Cyan
-Write-Host '  Modo Leve       - recomendado para o seu PC'
-Write-Host '  Modo Inteligente - mais contexto quando o PC estiver livre'
-Write-Host '  Modo Jogo       - descarrega a IA e libera memoria'
+Write-Host 'IMPORTANTE: use o atalho io da Area de Trabalho.' -ForegroundColor Cyan
+Write-Host 'A pagina publica infotech-io.com.br continua sendo o site, mas a conversa local abre pelo localhost.'
 Write-Host ''
-Write-Host 'Abrindo a io no navegador...' -ForegroundColor Cyan
-Start-Process 'https://infotech-io.com.br/io/local.html'
+Write-Host 'Abrindo a io local...' -ForegroundColor Cyan
+$launcher = Join-Path $appDir 'io-launch.ps1'
+Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',('"' + $launcher + '"'))
 Write-Host ''
-Read-Host 'Quando a tela abrir, pressione ENTER para fechar o instalador'
+Read-Host 'Quando a tela da io abrir, pressione ENTER para fechar o instalador'
