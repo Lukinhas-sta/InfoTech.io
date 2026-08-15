@@ -1,7 +1,0 @@
-INFOTECH.IO — VERSÃO 5.1.5
-
-- Corrigido o erro: column reference "request_id" is ambiguous.
-- A função de salvamento agora retorna JSON e não usa request_id como variável de retorno.
-- O UPSERT usa a constraint request_projects_pkey.
-- Corrigido também o fallback de UUID no JavaScript.
-- Mantidas todas as funções da versão 5.1.4.
