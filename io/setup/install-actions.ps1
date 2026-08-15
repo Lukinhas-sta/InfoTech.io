@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 
 $AppDir = Join-Path $env:LOCALAPPDATA 'io'
 $HtmlPath = Join-Path $AppDir 'local.html'
-$ActionsUrl = 'https://raw.githubusercontent.com/Lukinhas-sta/InfoTech.io/main/io/actions.js'
+$ActionsUrl = 'https://raw.githubusercontent.com/lucasjanoca/InfoTech.io/main/io/actions.js'
 $ActionsPath = Join-Path $env:TEMP 'io-actions.js'
 $Launcher = Join-Path $AppDir 'io-launch.ps1'
 
