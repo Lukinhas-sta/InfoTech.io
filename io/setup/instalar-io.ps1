@@ -126,9 +126,9 @@ $appDir = Join-Path $env:LOCALAPPDATA 'io'
 New-Item -ItemType Directory -Force -Path $appDir | Out-Null
 
 $files = @{
-  'local.html' = 'https://raw.githubusercontent.com/Lukinhas-sta/InfoTech.io/main/io/local.html'
-  'io-local-server.ps1' = 'https://raw.githubusercontent.com/Lukinhas-sta/InfoTech.io/main/io/setup/io-local-server.ps1'
-  'io-launch.ps1' = 'https://raw.githubusercontent.com/Lukinhas-sta/InfoTech.io/main/io/setup/io-launch.ps1'
+  'local.html' = 'https://raw.githubusercontent.com/lucasjanoca/InfoTech.io/main/io/local.html'
+  'io-local-server.ps1' = 'https://raw.githubusercontent.com/lucasjanoca/InfoTech.io/main/io/setup/io-local-server.ps1'
+  'io-launch.ps1' = 'https://raw.githubusercontent.com/lucasjanoca/InfoTech.io/main/io/setup/io-launch.ps1'
 }
 
 foreach ($fileName in $files.Keys) {
