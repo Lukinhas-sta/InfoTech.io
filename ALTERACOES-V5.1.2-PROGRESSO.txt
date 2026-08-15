@@ -1,8 +1,0 @@
-Infotech.io 5.1.2 — Salvamento definitivo do andamento
-
-- Criada tabela exclusiva request_projects para prazo, etapas, histórico e porcentagem.
-- Salvamento realizado por função administrativa segura.
-- Confirmação imediata após salvar: a tela relê o banco antes de mostrar sucesso.
-- Cliente e administrador consultam a mesma fonte de dados.
-- Mantida compatibilidade com o campo project das versões anteriores.
-- Atualização em tempo real ligada à tabela de andamento.
