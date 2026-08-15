@@ -13,10 +13,10 @@ if (-not (Test-Path $Launcher)) {
     throw 'O iniciador local da io nao foi encontrado.'
 }
 
-Write-Host '[1/4] Baixando os novos comandos...' -ForegroundColor Cyan
+Write-Host '[1/4] Baixando ferramentas e protecoes...' -ForegroundColor Cyan
 Invoke-WebRequest -UseBasicParsing -Uri $ActionsUrl -OutFile $ActionsPath
 
-Write-Host '[2/4] Instalando o modulo de listas...' -ForegroundColor Cyan
+Write-Host '[2/4] Instalando comandos, status, backup e permissoes...' -ForegroundColor Cyan
 $html = [System.IO.File]::ReadAllText($HtmlPath, [System.Text.Encoding]::UTF8)
 $actions = [System.IO.File]::ReadAllText($ActionsPath, [System.Text.Encoding]::UTF8)
 
@@ -46,5 +46,5 @@ Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile','-Executio
 
 Write-Host ''
 Write-Host 'Atualizacao concluida.' -ForegroundColor Green
-Write-Host 'Teste: io, adiciona arroz na minha lista de compras'
-Write-Host 'Depois: io, o que tem na minha lista de compras?'
+Write-Host 'Novidades: Status, Backup, permissoes por ferramenta e logs leves de erro.'
+Write-Host 'Comandos de listas e memoria continuam funcionando.'
