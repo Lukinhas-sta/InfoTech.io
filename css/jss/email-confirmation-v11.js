@@ -198,10 +198,10 @@
         : 'O link é inválido, já foi usado ou não pôde ser verificado. Tente entrar; se necessário, solicite um novo e-mail de confirmação.';
       markError(message);
 
-      if(status){
-        const keep=()=>{if(normalize(status.textContent)!==message)status.textContent=message};
-        new MutationObserver(keep).observe(status,{childList:true,characterData:true,subtree:true});
-      }
+      // O script principal do site procura especificamente #confirmation-root.
+      // Em URLs que já chegam do Auth com erro, removemos esse alvo para impedir
+      // que uma sessão antiga seja confundida com a confirmação deste link.
+      root.id='confirmation-root-error';
       return;
     }
 
